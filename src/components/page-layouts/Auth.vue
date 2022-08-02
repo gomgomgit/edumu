@@ -3,7 +3,7 @@
     class="row h-100 m-0"
   >
     <!--begin::Content-->
-    <div class="col-5 d-flex flex-column justify-content-center bg-white p-0">
+    <div class="col-12 col-md-7 col-lg-5 d-flex flex-column justify-content-center bg-white p-0">
       <div>  
         <div class="text-center mb-6">
           <a href="#" class="">
@@ -19,7 +19,7 @@
     <!--end::Content-->
 
     <!--begin::Footer-->
-    <div class="col-7 bg-image p-0">
+    <div class="col-0 col-md-5 col-lg-7 bg-image p-0">
       <canvas id="stars" width="300" height="300">
       </canvas>
 
@@ -57,7 +57,7 @@ var particleCount = 40,
   particleSizeMultiplier = 0.5,
   flareSizeBase = 100,
   flareSizeMultiplier = 100,
-  lineWidth = 1,
+  lineWidth = 4,
   linkChance = 75, // chance per frame of link, higher = smaller chance
   linkLengthMin = 5, // min linked vertices
   linkLengthMax = 7, // max linked vertices
