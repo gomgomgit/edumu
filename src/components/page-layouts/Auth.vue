@@ -3,7 +3,7 @@
     class="row h-100 m-0"
   >
     <!--begin::Content-->
-    <div class="col-12 col-md-7 col-lg-5 d-flex flex-column justify-content-center bg-white p-0">
+    <div class="col-12 col-md-7 col-lg-5 d-flex flex-column justify-content-center bg-white p-3 p-md-5 p-lg-10">
       <div>  
         <div class="text-center mb-6">
           <a href="#" class="">
@@ -11,7 +11,7 @@
           </a>
         </div>
 
-        <div class="mw-400px m-auto">
+        <div class="mw-300px mw-md-300px mw-lg-400px m-auto">
           <router-view></router-view>
         </div>
       </div>
