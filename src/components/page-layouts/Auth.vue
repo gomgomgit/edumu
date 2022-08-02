@@ -607,8 +607,8 @@ if (canvas) init();
 
 <style>
 .bg-image {
-  background-color: #31102F;
-  background: radial-gradient(ellipse at center, rgba(49,16,47,1) 0%, rgba(40,11,41,1) 100%);
+  background-color: #1c3e87;
+  background: radial-gradient(ellipse at center, rgb(17, 16, 49) 0%, rrgb(11, 12, 41)100%);
 }
 
 #stars {
