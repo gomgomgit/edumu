@@ -3,34 +3,35 @@
     class="row h-100 m-0"
   >
     <!--begin::Content-->
-    <div class="col-12 col-md-7 col-lg-5 d-flex justify-content-center align-items-center bg-none p-3 p-md-5 p-lg-10">
-      <div class="position-relative z-index-2">
-        <div class="bg-white py-6 px-16 px-md-0 m-4 rounded mw-100">
+    <div class="col-12 col-md-6 col-lg-5 d-flex justify-content-center align-items-center bg-none p-3 p-md-5 p-lg-10">
+      <div id="loginForm" class="position-relative z-index-2">
+        <div class="bg-white py-6 px-10 px-md-0 m-4 rounded mw-100">
           <div class="text-center mb-6">
             <a href="#" class="">
               <img alt="Logo" src="media/logos/logo-full.png" class="h-70px" />
             </a>
           </div>
 
-          <div class="mw-100 w-300px w-md-300px w-lg-400px m-auto">
+          <div class="mw-100 w-250px w-md-300px w-lg-400px m-auto">
             <router-view></router-view>
           </div>
         </div>  
       </div>
       
-      <div class="d-block d-md-none bg-image position-fixed top-0 start-0 end-0 bottom-0 z-index-1">
+      <!-- <div class="d-block d-md-none bg-image position-fixed top-0 start-0 end-0 bottom-0 z-index-1">
         <canvas class="stars" width="300" height="300">
         </canvas>
-      </div>
+      </div> -->
     </div>
-    <!--end::Content-->
 
-    <!--begin::Footer-->
-    <div class="col-0 col-md-5 col-lg-7 bg-image p-0 d-none d-md-block">
+    <div id="starsCanvas" class="col-0 col-md-6 col-lg-7 bg-image position-fixed position-md-relative top-0 start-0 end-0 bottom-0 z-index-1">
       <canvas class="stars" width="300" height="300">
       </canvas>
     </div>
-    <!--end::Footer-->
+    <!-- <div class="col-0 col-md-5 col-lg-7 bg-image p-0 d-none d-md-block">
+      <canvas id="starsCanvas" class="stars" width="300" height="300">
+      </canvas>
+    </div> -->
   </div>
 </template>
 
@@ -52,12 +53,24 @@ onUnmounted(() => {
   store.dispatch(Actions.REMOVE_BODY_CLASSNAME, "bg-body");
 });
 
-
+function isMobile() {
+  if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    return true
+  } else {
+    return false
+  }
+}
 
 function setCanvas() {
   var canvas = document.getElementsByClassName('stars')
   animate(canvas[0])
-  animate(canvas[1])
+
+  if (isMobile()) {
+    const div1 = document.getElementById("loginForm");
+    const div2 = document.getElementById("starsCanvas");
+    
+    div2.after(div1);
+  }
 }
 
 function animate(canvas) {
