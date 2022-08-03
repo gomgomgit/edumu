@@ -3,26 +3,32 @@
     class="row h-100 m-0"
   >
     <!--begin::Content-->
-    <div class="col-12 col-md-7 col-lg-5 d-flex flex-column justify-content-center bg-white p-3 p-md-5 p-lg-10">
-      <div>  
-        <div class="text-center mb-6">
-          <a href="#" class="">
-            <img alt="Logo" src="media/logos/logo-full.png" class="h-70px" />
-          </a>
-        </div>
+    <div class="col-12 col-md-7 col-lg-5 d-flex justify-content-center align-items-center bg-none p-3 p-md-5 p-lg-10">
+      <div class="position-relative z-index-2">
+        <div class="bg-white py-6 px-16 px-md-0 m-4 rounded mw-100">
+          <div class="text-center mb-6">
+            <a href="#" class="">
+              <img alt="Logo" src="media/logos/logo-full.png" class="h-70px" />
+            </a>
+          </div>
 
-        <div class="mw-300px mw-md-300px mw-lg-400px m-auto">
-          <router-view></router-view>
-        </div>
+          <div class="mw-100 w-300px w-md-300px w-lg-400px m-auto">
+            <router-view></router-view>
+          </div>
+        </div>  
+      </div>
+      
+      <div class="d-block d-md-none bg-image position-fixed top-0 start-0 end-0 bottom-0 z-index-1">
+        <canvas class="stars" width="300" height="300">
+        </canvas>
       </div>
     </div>
     <!--end::Content-->
 
     <!--begin::Footer-->
-    <div class="col-0 col-md-5 col-lg-7 bg-image p-0">
-      <canvas id="stars" width="300" height="300">
+    <div class="col-0 col-md-5 col-lg-7 bg-image p-0 d-none d-md-block">
+      <canvas class="stars" width="300" height="300">
       </canvas>
-
     </div>
     <!--end::Footer-->
   </div>
@@ -47,56 +53,62 @@ onUnmounted(() => {
 });
 
 
-function setCanvas() {
-var particleCount = 40,
-  flareCount = 10,
-  motion = 0.05,
-  tilt = 0.05,
-  color = '#FFEED4',
-  particleSizeBase = 3,
-  particleSizeMultiplier = 0.5,
-  flareSizeBase = 100,
-  flareSizeMultiplier = 100,
-  lineWidth = 4,
-  linkChance = 75, // chance per frame of link, higher = smaller chance
-  linkLengthMin = 5, // min linked vertices
-  linkLengthMax = 7, // max linked vertices
-  linkOpacity = 0.25; // number between 0 & 1
-var linkFade = 90, // link fade-out frames
-  linkSpeed = 1, // distance a link travels in 1 frame
-  glareAngle = -60,
-  glareOpacityMultiplier = 0.05,
-  renderParticles = true,
-  renderParticleGlare = true,
-  renderFlares = true,
-  renderLinks = true,
-  renderMesh = false,
-  flicker = true,
-  flickerSmoothing = 15, // higher = smoother flicker
-  blurSize = 0,
-  orbitTilt = true,
-  randomMotion = true,
-  noiseLength = 1000,
-  noiseStrength = 1;
 
-var canvas = document.getElementById('stars'),
-  //orbits = document.getElementById('orbits'),
-  context = canvas.getContext('2d'),
-  mouse = { x: 0, y: 0 },
-  m = {},
-  r = 0,
-  c = 1000, // multiplier for delaunay points, since floats too small can mess up the algorithm
-  n = 0,
-  nAngle = (Math.PI * 2) / noiseLength,
-  nRad = 100,
-  nScale = 0.5,
-  nPos = {x: 0, y: 0},
-  points = [],
-  vertices = [],
-  triangles = [],
-  links = [],
-  particles = [],
-  flares = [];
+function setCanvas() {
+  var canvas = document.getElementsByClassName('stars')
+  animate(canvas[0])
+  animate(canvas[1])
+}
+
+function animate(canvas) {
+  var particleCount = 40,
+    flareCount = 10,
+    motion = 0.05,
+    tilt = 0.05,
+    color = '#FFEED4',
+    particleSizeBase = 3,
+    particleSizeMultiplier = 0.5,
+    flareSizeBase = 100,
+    flareSizeMultiplier = 100,
+    lineWidth = 4,
+    linkChance = 75, // chance per frame of link, higher = smaller chance
+    linkLengthMin = 5, // min linked vertices
+    linkLengthMax = 7, // max linked vertices
+    linkOpacity = 0.25; // number between 0 & 1
+  var linkFade = 90, // link fade-out frames
+    linkSpeed = 1, // distance a link travels in 1 frame
+    glareAngle = -60,
+    glareOpacityMultiplier = 0.05,
+    renderParticles = true,
+    renderParticleGlare = true,
+    renderFlares = true,
+    renderLinks = true,
+    renderMesh = false,
+    flicker = true,
+    flickerSmoothing = 15, // higher = smoother flicker
+    blurSize = 0,
+    orbitTilt = true,
+    randomMotion = true,
+    noiseLength = 1000,
+    noiseStrength = 1;
+
+    // orbits = document.getElementById('orbits'),
+  var context = canvas.getContext('2d'),
+    mouse = { x: 0, y: 0 },
+    m = {},
+    r = 0,
+    c = 1000, // multiplier for delaunay points, since floats too small can mess up the algorithm
+    n = 0,
+    nAngle = (Math.PI * 2) / noiseLength,
+    nRad = 100,
+    nScale = 0.5,
+    nPos = {x: 0, y: 0},
+    points = [],
+    vertices = [],
+    triangles = [],
+    links = [],
+    particles = [],
+    flares = [];
 
 function init() {
   var i, j, k;
@@ -611,7 +623,7 @@ if (canvas) init();
   background: radial-gradient(ellipse at center, rgb(17, 16, 49) 0%, rrgb(11, 12, 41)100%);
 }
 
-#stars {
+.stars {
   display: block;
   position: relative;
   width: 100%;
