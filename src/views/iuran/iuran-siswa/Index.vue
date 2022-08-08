@@ -13,7 +13,10 @@ import PembayaranIuran from './PembayaranIuran.vue';
 import { Doughnut } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, Plugin } from 'chart.js'
 import { computed } from '@vue/reactivity';
+import { useRouter } from 'vue-router';
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale)
+
+const router = useRouter()
 
 const tableRef = ref()
 const formMode = ref('')
@@ -72,11 +75,19 @@ const chartData = computed(() => {
 const chartDataData = ref([12,12])
 const totalChart = ref(0)
 
+const isMobile = () => {
+	if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		return true
+	} else {
+		return false
+	}
+}
+
 const chartOptions = {
 	responsive: true,
 	borderRadius: 6,
 	borderWidth: 2,       
-	cutout: 140,
+	cutout: isMobile() ? 110 : 200,
 	plugins: {
 		legend: {
 			display: false,
@@ -171,6 +182,9 @@ function getLaporan () {
 			jenis: tipeFilter.value,
 			tahun: tahunAjarFilter.value,
 		}
+	}).then(res => {
+		console.log(res.data.data)
+		window.location.assign(res.data.data)
 	})
 }
 

@@ -15,7 +15,6 @@ onMounted(() => {
 
 const router = useRouter()
 const route = useRoute()
-const baseUrl = process.env.VUE_APP_API_URL
 
 const waliId = route.params.id
 
@@ -208,11 +207,11 @@ function post() {
           <div class="d-flex gap-6">
             <div v-if="oldFoto">
               <p class="m-0 fs-4 fw-bold mb-6">Foto</p>
-              <img height="200" width="200" :src="baseUrl + '/public/images/wali/' + oldFoto" alt="">
+              <img height="200" width="200" :src="storagePublic + '/images/wali/' + oldFoto" alt="">
             </div>
             <div class="">
               <p class="m-0 fs-4 fw-bold mb-6">Ganti Foto</p>
-              <ImageInput v-model:fileInputData="form.siswa_foto"></ImageInput>
+              <ImageInput v-model:fileInputData="form.wali_foto"></ImageInput>
             </div>
           </div>
           <div class="d-flex justify-content-end gap-4">

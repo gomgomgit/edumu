@@ -93,6 +93,11 @@ const routes: Array<RouteRecordRaw> = [
           },
         ]
       },
+      {
+        path: "/lms/ujian-online/pantau-ujian/detail/:id",
+        name: "lms-ujian-online-pantau-ujian-detail",
+        component: () => import("@/views/lms/ujian-online/pantau-ujian/Detail.vue"),
+      },
 
       {
         path: "/lms/bank-soal",
@@ -175,6 +180,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/lms/laporan-nilai/tugas-online/detail/:id",
         name: "lms-laporan-nilai-tugas-online-detail",
         component: () => import("@/views/lms/laporan-nilai/tugas-online/Detail.vue"),
+      },
+      {
+        path: "/lms/laporan-nilai/tugas-online/export/:id/:kelas",
+        name: "lms-laporan-nilai-tugas-online-export",
+        component: () => import("@/views/lms/laporan-nilai/tugas-online/Export.vue"),
       },
       {
         path: "/lms/laporan-nilai/tugas-offline/detail/:id",
@@ -280,6 +290,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/sekolah/akademik/kalender-akademik/Index.vue"),
       },
       {
+        path: "/sekolah/akademik/kalender-akademik/import",
+        name: "sekolah-akademik-kalender-akademik-import",
+        component: () => import("@/views/sekolah/akademik/kalender-akademik/Import.vue"),
+      },
+      {
         path: "/sekolah/akademik/kalender-akademik/tambah",
         name: "sekolah-akademik-kalender-akademik-tambah",
         component: () => import("@/views/sekolah/akademik/kalender-akademik/FormData.vue"),
@@ -311,6 +326,12 @@ const routes: Array<RouteRecordRaw> = [
         ],
       },
       {
+        path: "sekolah/mata-pelajaran/jadwal-pelajaran/import",
+        name: "sekolah-mata-pelajaran-jadwal-pelajaran-import",
+        component: () => import("@/views/sekolah/mata-pelajaran/jadwal-pelajaran/Import.vue")
+      },
+      
+      {
         path: "/sekolah/informasi/pengumuman",
         name: "sekolah-informasi-pengumuman",
         component: () => import("@/views/sekolah/informasi/pengumuman/Index.vue"),
@@ -339,6 +360,21 @@ const routes: Array<RouteRecordRaw> = [
         path: "/sekolah/informasi/prestasi/edit/:id",
         name: "sekolah-informasi-prestasi-edit",
         component: () => import("@/views/sekolah/informasi/prestasi/Edit.vue"),
+      },
+      {
+        path: "/sekolah/informasi/event",
+        name: "sekolah-informasi-event",
+        component: () => import("@/views/sekolah/informasi/event/Index.vue"),
+      },
+      {
+        path: "/sekolah/informasi/event/tambah",
+        name: "sekolah-informasi-event-tambah",
+        component: () => import("@/views/sekolah/informasi/event/Tambah.vue"),
+      },
+      {
+        path: "/sekolah/informasi/event/edit/:id",
+        name: "sekolah-informasi-event-edit",
+        component: () => import("@/views/sekolah/informasi/event/Edit.vue"),
       },
       {
         path: "/sekolah/informasi/berita",
@@ -555,9 +591,32 @@ const routes: Array<RouteRecordRaw> = [
         ],
       },
       {
+        path: "/absensi/rekapitulasi/siswa/detail/:id/:start/:end",
+        name: "absensi-rekapitulasi-siswa-detail",
+        component: () =>
+          import("@/views/absensi/rekapitulasi/siswa/Detail.vue"),
+      },
+      {
         path: "/absensi/rekapitulasi/siswa/export",
         name: "absensi-rekapitulasi-siswa-export",
         component: () => import("@/views/absensi/rekapitulasi/siswa/Export.vue"),
+      },
+      {
+        path: "/absensi/rekapitulasi/guru/detail/:id/:start/:end",
+        name: "absensi-rekapitulasi-guru-detail",
+        component: () =>
+          import("@/views/absensi/rekapitulasi/guru/Detail.vue"),
+      },
+      {
+        path: "/absensi/rekapitulasi/guru/export",
+        name: "absensi-rekapitulasi-guru-export",
+        component: () => import("@/views/absensi/rekapitulasi/guru/Export.vue"),
+      },
+      {
+        path: "/absensi/rekapitulasi/mapel/detail/:id",
+        name: "absensi-rekapitulasi-mapel-detail",
+        component: () =>
+          import("@/views/absensi/rekapitulasi/mapel/Detail.vue"),
       },
 
       {

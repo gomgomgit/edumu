@@ -52,11 +52,15 @@ onMounted(() => {
 	<div>
 		<div class="card mb-5 mb-xxl-8">
 			<div class="card-body">
-				<section class="d-flex flex-wrap flex-row-reverse justify-content-between align-items-center mb-5">
+				<section class="d-flex flex-wrap justify-content-between align-items-center">
 					<!-- <FilterSelect placeholder="Pilih Status">
 						<el-option label="Aktif" value="1" />
 						<el-option label="Nonaktif" value="0" />
 					</FilterSelect> -->
+					
+					<div>
+						<h2 class="fs-1 fw-bold py-6">Data Mapel</h2>
+					</div>
 					<button
 						class="btn btn-primary d-flex gap-1 align-items-center"
 						@click="formMode = 'Tambah Data'">
@@ -64,6 +68,7 @@ onMounted(() => {
 						Tambah Mapel
 					</button>
 				</section>
+				<div class="separator border-black-50 border-2 my-6"></div>
 				<ServerSideTable
 					ref="tableRef"
 					:totalRows="tableData.totalRows || 0"

@@ -10,7 +10,9 @@
   import QueryString from 'qs';
   import { useToast } from 'vue-toast-notification';
   import ChangePassword from "@/components/change-password/Index.vue";
+import * as XLSX from 'xlsx';
 import moment from "moment";
+import Swal from "sweetalert2";
 
   onMounted(() => {
     setCurrentPageBreadcrumbs("Mapel", ["Absensi", "Rekapitulasi"]);
@@ -19,12 +21,12 @@ import moment from "moment";
   
   const reportMapel = reactive({
     columns: [
-      { label: 'Nama Lengkap', field: 'user_nama', sortable: false },
+      { label: 'Nama Guru', field: 'user_nama', sortable: false },
       { label: 'Kelas', field: 'kelas_nama', sortable: false },
-      { label: 'Hadir', field: 'tot.hadir', sortable: false },
-      { label: 'Telat', field: 'tot.telat', sortable: false },
-      { label: 'Izin', field: 'tot.izin', sortable: false },
-      { label: 'Alpha', field: 'tot.alpha', sortable: false },
+      { label: 'Mapel', field: 'mapel_nama', sortable: false },
+      { label: 'Siswa Hadir', field: 'siswa_hadir', sortable: false },
+      { label: 'Siswa Tdk Hadir', field: 'siswa_off', sortable: false },
+      { label: 'Tgl Mengajar', field: 'pg_create_date', sortable: false },
       { label: 'ACTION', field: 'action', sortable: false, width: '200px' },
     ],
     rows: [],
@@ -33,10 +35,12 @@ import moment from "moment";
 
   const kelasOption = ref([])
   const mapelOption = ref([])
+  const guruOption = ref([])
 
   const searchMapel = ref('')
   const kelasFilter = ref('')
   const mapelFilter = ref('')
+  const guruFilter = ref('')
   const dateRangeStart = ref(moment().format('YYYY-MM-DD'))
   const dateRangeEnd = ref(moment().format('YYYY-MM-DD'))
   
@@ -44,10 +48,11 @@ import moment from "moment";
     request.post('reportmapel', null, {
       params: {
         cari: searchMapel.value,
+        user: guruFilter.value,
         mapel: mapelFilter.value,
         kelas: kelasFilter.value,
-        dateStart: dateRangeStart.value,
-        dateEnd: dateRangeEnd.value,
+        tglMulai: dateRangeStart.value,
+        tglEnd: dateRangeEnd.value,
         page: payload?.page ?? 1,
         sortby: payload?.sort?.type ?? 'ASC'
       }
@@ -58,6 +63,10 @@ import moment from "moment";
   }
 
   function getData() {
+    request.post('user', null, {params: {level: 'guru'}})
+    .then(res => {
+      guruOption.value = res.data.data
+    })
     request.post('kelas', null)
     .then(res => {
       kelasOption.value = res.data.data
@@ -66,6 +75,39 @@ import moment from "moment";
     .then(res => {
       mapelOption.value = res.data.data
     })
+  }
+
+  function exportData() {
+    if (reportMapel.rows.length > 0) {
+      generateExcel()
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Tidak ada data!'
+      })
+    }
+  }
+
+  function generateExcel() {
+    let row = [["Nama Guru","Kelas","Mapel", "Siswa Hadir", "Siswa tidak hadir", "Tanggal"]]
+
+    reportMapel.rows.map((item,i) => {
+      row.push([
+          item.user_nama,
+          item.kelas_nama,
+          item.mapel_nama,
+          item.siswa_hadir,
+          item.siswa_off,
+          item.pg_create_date,
+      ])
+		})
+
+    const data = XLSX.utils.aoa_to_sheet(row)
+    const wb = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb, data, 'Report')
+
+    var fileName = 'Rekap Data Presensi Mapel per ' 
+    XLSX.writeFile(wb, fileName + moment().format("DD-MMMM-YYYY") +".xlsx")
   }
 </script>
 
@@ -81,7 +123,7 @@ import moment from "moment";
 
             <div class="position-relative d-flex gap-4">
               <div class="d-flex align-items-center">
-                <a class="btn btn-primary d-flex gap-3 align-items-center w-auto">
+                <a @click="exportData()" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
                   <span>
                     Export
                   </span>
@@ -104,9 +146,17 @@ import moment from "moment";
           <div class="d-flex flex-wrap justify-content-between gap-4">
             <div class="d-flex flex-column gap-4">
               <div class="d-flex align-items-center gap-4">
+                <FilterSelect v-model:filterValue="guruFilter" placeholder="Pilih Guru" @changeFilter="getReportMapel()">
+                  <el-option
+                    v-for="guru in guruOption"
+                    :key="guru.user_id"
+                    :label="guru.user_nama"
+                    :value="guru.user_id"
+                  />
+                </FilterSelect>
                 <FilterSelect v-model:filterValue="mapelFilter" placeholder="Pilih Mapel" @changeFilter="getReportMapel()">
                   <el-option
-                    v-for="mapel, index in mapelOption"
+                    v-for="mapel in mapelOption"
                     :key="mapel.mapel_id"
                     :label="mapel.mapel_nama"
                     :value="mapel.mapel_id"
@@ -114,7 +164,7 @@ import moment from "moment";
                 </FilterSelect>
                 <FilterSelect v-model:filterValue="kelasFilter" placeholder="Pilih Kelas" @changeFilter="getReportMapel()">
                   <el-option
-                    v-for="kelas, index in kelasOption"
+                    v-for="kelas in kelasOption"
                     :key="kelas.kelas_id"
                     :label="kelas.kelas_nama"
                     :value="kelas.kelas_id"
@@ -143,6 +193,7 @@ import moment from "moment";
             </div>
             
             <div class="d-flex w-100 w-lg-50 w-xl-25 gap-4">
+              <div>
                 <el-input
                   v-model="searchMapel"
                   @input="getReportMapel"
@@ -154,6 +205,7 @@ import moment from "moment";
                     <el-button aria-disabled="true" class="pe-none" :icon="Search" />
                   </template>
                 </el-input>
+              </div>
             </div>
           </div>
         </div>
@@ -166,7 +218,7 @@ import moment from "moment";
             @loadItems="getReportMapel">
             <template #table-row="{column, row}">
               <div v-if="column.field == 'action'">
-                <router-link :to="'/sekolah/profil-pengguna/siswa/edit-data/' + row.user_id" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
+                <router-link :to="'/absensi/rekapitulasi/mapel/detail/' + row.pg_id" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
                   <span class="svg-icon svg-icon-3">
                     <inline-svg src="media/icons/duotune/files/fil001.svg" />
                   </span>

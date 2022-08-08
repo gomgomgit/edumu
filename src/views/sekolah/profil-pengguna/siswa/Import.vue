@@ -123,7 +123,7 @@ function generate() {
           </div>
           <div class="d-flex justify-content-end gap-4">
             <a @click.prevent="router.push('/sekolah/profil-pengguna/siswa')" href="#" class="btn btn-light">Batal</a>
-            <a @click.prevent="postData" class="btn btn-primary">Simpan</a>
+            <a @click.prevent="postData" class="btn btn-primary">Import</a>
           </div>
         </div>
       </div>

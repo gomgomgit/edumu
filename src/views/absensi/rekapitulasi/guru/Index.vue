@@ -75,12 +75,17 @@ import moment from "moment";
 
             <div class="position-relative d-flex gap-4">
               <div class="d-flex align-items-center">
-                <a class="btn btn-primary d-flex gap-3 align-items-center w-auto">
+                <router-link :to="{
+                    path: '/absensi/rekapitulasi/guru/export',
+                    query: {
+                      level:'guru',user: userFilter, tglMulai: dateRangeStart, tglEnd: dateRangeEnd
+                    }
+                  }" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
                   <span>
                     Export
                   </span>
                   <i class="bi bi-cloud-arrow-up fs-1"></i>
-                </a>
+                </router-link>
               </div>
               <div class="d-flex align-items-center">
                 <a @click="getReportGuru" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
@@ -136,7 +141,7 @@ import moment from "moment";
             @loadItems="getReportGuru">
             <template #table-row="{column, row}">
               <div v-if="column.field == 'action'">
-                <router-link :to="'/sekolah/profil-pengguna/siswa/edit-data/' + row.user_id" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
+                <router-link :to="`/absensi/rekapitulasi/guru/detail/${row.guru_id}/${dateRangeStart}/${dateRangeEnd}`" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
                   <span class="svg-icon svg-icon-3">
                     <inline-svg src="media/icons/duotune/files/fil001.svg" />
                   </span>

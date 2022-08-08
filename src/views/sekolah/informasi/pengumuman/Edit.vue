@@ -17,8 +17,6 @@ onMounted(() => {
   getPengumuman()
 })
 
-const baseUrl = process.env.VUE_APP_API_URL
-
 const router = useRouter()
 const route = useRoute()
 const pengumumanId = route.params.id
@@ -63,7 +61,7 @@ function getPengumuman() {
       form.content_image = result.content_image
       form.content_status = result.content_status
 
-      oldImage.value = (baseUrl + '/public/images/konten/' + result.content_image)
+      oldImage.value = result.content_image
       oldFiles.value = result.file_content
     })
 }
@@ -138,7 +136,7 @@ function postBerita() {
               <p class="m-0 fs-4 fw-bold">Gambar</p>
             </div>
             <div class="col-9 align-items-center d-flex gap-4">
-              <ImageCropper  v-model:fileInputData="form.content_image" :oldImage="oldImage" />
+              <ImageCropper  v-model:fileInputData="form.content_image" :oldImage="storagePublic + '/images/konten/' + oldImage" />
             </div>
           </div>
           <div class="row">
@@ -190,7 +188,7 @@ function postBerita() {
             <div class="col-9 align-items-center">
               <ul>
                 <template v-for="file in oldFiles">
-                  <li><a class="fs-4" target="_blank" :href="baseUrl + '/public/files/' + file.content_file_nama">{{file.content_file_nama}}</a></li>
+                  <li><a class="fs-4" target="_blank" :href="storagePublic + '/files/' + file.content_file_nama">{{file.content_file_nama}}</a></li>
                 </template>
               </ul>
               <FileDrop :multiple="true" v-model:fileInputData="fileDatas"></FileDrop>

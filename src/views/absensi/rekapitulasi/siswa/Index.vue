@@ -157,7 +157,7 @@ import moment from "moment";
             @loadItems="getReportSiswa">
             <template #table-row="{column, row}">
               <div v-if="column.field == 'action'">
-                <router-link :to="'/sekolah/profil-pengguna/siswa/edit-data/' + row.user_id" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
+                <router-link :to="`/absensi/rekapitulasi/siswa/detail/${row.siswa_id}/${dateRangeStart}/${dateRangeEnd}`" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
                   <span class="svg-icon svg-icon-3">
                     <inline-svg src="media/icons/duotune/files/fil001.svg" />
                   </span>

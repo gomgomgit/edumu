@@ -85,8 +85,25 @@ onMounted(() => {
 	<div>
 		<div class="card mb-5 mb-xxl-8">
 			<div class="card-body">
-				<section class="d-flex flex-wrap justify-content-between align-items-center mb-5">
-					<section class="d-flex flex-wrap gap-4">
+				<section>
+					<div class="d-flex flex-wrap justify-content-between align-items-center mb-5">
+						<h2 class="fs-1 fw-bold py-6">Data Jadwal Pelajaran</h2>
+
+						<section class="d-flex flex-wrap gap-4">
+							<router-link :to="'/sekolah/mata-pelajaran/jadwal-pelajaran/import'" class="btn btn-primary d-flex gap-1 align-items-center">
+								<i class="bi bi-cloud-arrow-up fs-1"></i>
+								Import
+							</router-link>
+							<button
+								class="btn btn-primary d-flex gap-1 align-items-center"
+								@click="formMode = 'Tambah Data'">
+								<i class="bi bi-plus fs-1"></i>
+								Tambah Jadwal
+							</button>
+						</section>
+					</div>
+					<div class="separator border-black-50 border-2 my-6"></div>
+					<section class="d-flex flex-wrap gap-4 justify-content-end">
 						<FilterSelect v-model:filterValue="filterData.selected.kelas" placeholder="Pilih Kelas" class="w-150px">
 							<el-option
 								v-for="kelas in filterData.options.kelas"
@@ -116,42 +133,32 @@ onMounted(() => {
 								:label="day" />
 						</FilterSelect>
 					</section>
-					<section class="d-flex flex-wrap gap-4">
-						<button class="btn btn-primary d-flex gap-1 align-items-center">
-							<i class="bi bi-plus fs-1"></i>
-							Import
-						</button>
-						<button
-							class="btn btn-primary d-flex gap-1 align-items-center"
-							@click="formMode = 'Tambah Data'">
-							<i class="bi bi-plus fs-1"></i>
-							Tambah Jadwal
-						</button>
-					</section>
 				</section>
-				<ServerSideTable
-					ref="tableRef"
-					:totalRows="tableData.totalRows || 0"
-					:columns="tableData.columns"
-					:rows="tableData.rows"
-					@loadItems="getTableData">
-					<template #table-row="{column, row}">
-						<div v-if="column.field == 'action'">
-							<button
-								class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2"
-								@click="handleEdit(row)">
-								<span class="svg-icon svg-icon-3">
-									<inline-svg src="media/icons/duotune/art/art005.svg" />
-								</span>
-							</button>
-							<!-- <button class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
-								<span class="svg-icon svg-icon-3">
-									<inline-svg src="media/icons/duotune/general/gen027.svg" />
-								</span>
-							</button> -->
-						</div>
-					</template>
-				</ServerSideTable>
+				<div class="my-5">
+					<ServerSideTable
+						ref="tableRef"
+						:totalRows="tableData.totalRows || 0"
+						:columns="tableData.columns"
+						:rows="tableData.rows"
+						@loadItems="getTableData">
+						<template #table-row="{column, row}">
+							<div v-if="column.field == 'action'">
+								<button
+									class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2"
+									@click="handleEdit(row)">
+									<span class="svg-icon svg-icon-3">
+										<inline-svg src="media/icons/duotune/art/art005.svg" />
+									</span>
+								</button>
+								<!-- <button class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+									<span class="svg-icon svg-icon-3">
+										<inline-svg src="media/icons/duotune/general/gen027.svg" />
+									</span>
+								</button> -->
+							</div>
+						</template>
+					</ServerSideTable>
+				</div>
 			</div>
 		</div>
 

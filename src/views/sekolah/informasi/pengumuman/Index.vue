@@ -13,8 +13,6 @@ import { useToast } from "vue-toast-notification";
     setCurrentPageBreadcrumbs("Pengumuman", ['Sekolah', "Informasi"]);
   })
 
-  const baseUrl = process.env.VUE_APP_API_URL
-
   function getPengumuman (payload) {
       request.post('pengumuman', null, {
         params: {
@@ -119,7 +117,7 @@ import { useToast } from "vue-toast-notification";
               <div v-if="column.field == 'content_image'">
                 <div class="p-2 bg-secondary d-inline-block">
                   <template v-if="row.content_image">
-                    <img class="image-thumbnail"  :src="baseUrl + '/public/images/konten/' + row.content_image" alt="">
+                    <img class="image-thumbnail"  :src="storagePublic + '/images/konten/' + row.content_image" alt="">
                   </template>
                   <template v-if="!row.content_image">
                     <span class="fw-bold fs-6 mx-2">NO IMAGE</span>

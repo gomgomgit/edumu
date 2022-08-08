@@ -12,37 +12,12 @@
   import ChangePassword from "@/components/change-password/Index.vue";
 import * as XLSX from 'xlsx';
 import moment from "moment";
+import Swal from "sweetalert2";
 
   onMounted(() => {
     setCurrentPageBreadcrumbs("Siswa", ['Sekolah', "Profil Pengguna"]);
-    getDataExportSiswa()
+    getKelas()
   })
-
-  function getDataExportSiswa (payload) {
-    request.post('exportsiswa', null, {
-      params: {
-        level: 'siswa',
-        page: payload?.page ?? 1,
-        sortby: payload?.sort?.type ?? 'ASC'
-      }
-    }).then(res => {
-      dataExport.value = res.data.data
-    })
-  }
-  
-  function getSiswa (payload) {
-      request.post('user', null, {
-        params: {
-          level: 'siswa',
-          cari: searchSiswa.value,
-          page: payload?.page ?? 1,
-          sortby: payload?.sort?.type ?? 'ASC'
-        }
-      }).then(res => {
-        siswa.rows = res.data.data.data
-        siswa.totalRows = res.data.data.total
-      })
-    }
   
   const dataExport = ref([])
   const siswa = reactive({
@@ -59,20 +34,53 @@ import moment from "moment";
   })
 
   const searchSiswa = ref('')
+  const kelasFilter = ref('')
+
+  const kelasOption = ref([])
 
   const passwordModal = ref(false)
   const passwordData = ref([])
 
-  const statusOption = [
-    {
-      value: 1,
-      label: 'Aktif',
-    },
-    {
-      value: 0,
-      label: 'Non Aktif',
-    },
-  ]
+  
+  function getDataExportSiswa (payload) {
+    request.post('exportsiswa', null, {
+      params: {
+        level: 'siswa',
+        cari: searchSiswa.value,
+        kelas: kelasFilter.value,
+      }
+    }).then(res => {
+      dataExport.value = res.data.data
+      exportSiswa()
+    }).catch(() => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Tidak Ada Data!'
+      })
+    })
+  }
+  
+  function getSiswa (payload) {
+    request.post('user', null, {
+      params: {
+        level: 'siswa',
+        cari: searchSiswa.value,
+        kelas: kelasFilter.value,
+        page: payload?.page ?? 1,
+        sortby: payload?.sort?.type ?? 'ASC'
+      }
+    }).then(res => {
+      siswa.rows = res.data.data.data
+      siswa.totalRows = res.data.data.total
+    })
+  }
+
+  function getKelas () {
+    request.post('kelas')
+    .then(res => {
+      kelasOption.value = res.data.data
+    })
+  }
 
   function deleteData (userId) {
     deleteConfirmation(function() {
@@ -97,27 +105,38 @@ import moment from "moment";
   }
 
   function exportSiswa() {
-    let row = [["No","Nama Siswa","NISN", "RFID", "Kelas", "Level", "Status", "Nama Wali", "User Wali", "Password Wali"]]
+    let row = [["No","NIS","NISN", "Tahun Angkatan", "Nama Siswa", "JK Siswa L/P", "Tempat Lahir", "Tanggal Lahir", "Alamat Siswa", "Wali", "JK Wali L/K", "Alamat Wali", "Telepon", "Card", "User Wali", "Pass Wali", "User Siswa", "Pass Siswa", "Kelas"]]
 
     dataExport.value.map((item,i) => {
       row.push([
-        i+1, 
-        item.nama_siswa,
-        item.siswa_nisn,  
-        item.siswa_rfid, 
-        item.kelas_nama,
-        item.user_level, 
-        item.user_status === "1" ? "Aktif" : "Non Aktif", 
-        item.nama_wali,
-        item.user_name_wali,
-        item.pass_wali
+          i+1,
+          item.siswa_nis,
+          item.siswa_nisn,
+          item.siswa_tahun,
+          item.nama_siswa,
+          item.siswa_gender,
+          item.siswa_tempat_lahir,
+          item.siswa_tanggal_lahir,
+          item.siswa_alamat,
+          item.nama_wali,
+          item.wali_gender,
+          item.wali_alamat,
+          item.wali_nohp,
+          "",
+          item.user_name_wali,
+          item.pass_wali,
+          item.user_name_siswa,
+          item.pass_siswa,
+          item.kelas_nama,
       ])
 		})
 
-    const data = XLSX.utils.json_to_sheet(row)
+    const data = XLSX.utils.aoa_to_sheet(row)
     const wb = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(wb, data, 'kelas')
-    XLSX.writeFile(wb, "Rekap Data Siswa Aktif-"+ moment().format("DD-MMMM-YYYY") +".xlsx")
+    XLSX.utils.book_append_sheet(wb, data, 'Data Siswa Aktif')
+
+    var fileName = kelasFilter.value ? 'Rekap Data Siswa Aktif-per Kelas-' : 'Rekap Data Siswa Aktif-' 
+    XLSX.writeFile(wb, fileName + moment().format("DD-MMMM-YYYY") +".xlsx")
   }
 </script>
 
@@ -131,17 +150,26 @@ import moment from "moment";
         <div class="separator border-black-50 border-2 my-6"></div>
         <div>
           <div class="d-flex flex-wrap justify-content-between align-items-center gap-4">
-            <div class="d-flex w-100 w-lg-50 w-xl-25 gap-4">
-                <el-input
-                  v-model="searchSiswa"
-                  clearable
-                  class="m-2"
-                  placeholder="Cari Siswa"
-                >
-                  <template #append>
-                    <el-button aria-disabled="true" class="pe-none" :icon="Search" />
-                  </template>
-                </el-input>
+            <div class="d-flex w-100 w-lg-50 w-xl-auto gap-4 align-items-center">
+                  <el-input
+                    v-model="searchSiswa"
+                    clearable
+                    class="me-n6"
+                    placeholder="Cari Siswa"
+                    @input="getSiswa()"
+                  >
+                    <template #append>
+                      <el-button aria-disabled="true" class="pe-none" :icon="Search" />
+                    </template>
+                  </el-input>
+                  <FilterSelect v-model:filterValue="kelasFilter" placeholder="Pilih Kelas" @changeFilter="getSiswa()" class="ms-6">
+                    <el-option
+                      v-for="kelas in kelasOption"
+                      :key="kelas.kelas_id"
+                      :label="kelas.kelas_nama"
+                      :value="kelas.kelas_id"
+                    />
+                  </FilterSelect>
             </div>
 
             <div class="position-relative d-flex flex-wrap gap-4 w-100 w-xl-auto justify-content-end">
@@ -153,7 +181,7 @@ import moment from "moment";
                 </router-link>
               </div>
               <div class="d-flex align-items-center">
-                <a @click="exportSiswa" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
+                <a @click="getDataExportSiswa()" class="btn btn-primary d-flex gap-1 align-items-center w-auto">
                   <span>
                     Export Data
                   </span>
@@ -161,7 +189,7 @@ import moment from "moment";
                 </a>
               </div>
               <div class="d-flex align-items-center">
-                <router-link to="/sekolah/profil-pengguna/siswa/import-data" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
+                <router-link to="/sekolah/profil-pengguna/siswa/import-data" class="btn btn-primary d-flex gap-1 align-items-center w-auto">
                   <span>
                     Import Data
                   </span>
@@ -169,7 +197,7 @@ import moment from "moment";
                 </router-link>
               </div>
               <div class="d-flex align-items-center">
-                <router-link to="/sekolah/profil-pengguna/siswa/tambah-data" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
+                <router-link to="/sekolah/profil-pengguna/siswa/tambah-data" class="btn btn-primary d-flex gap-1 align-items-center w-auto">
                   <i class="bi bi-plus fs-1"></i>
                   <span>
                     Tambah Siswa
@@ -181,7 +209,6 @@ import moment from "moment";
         </div>
         <div class="my-5 mb-xxl-8">
           <ServerSideTable 
-            :key="searchSiswa"
             :totalRows="siswa.totalRows || 0" 
             :columns="siswa.columns" 
             :rows="siswa.rows"
@@ -215,6 +242,5 @@ import moment from "moment";
 			:passwordData="passwordData"
 			@close="handlePasswordClose"
 			@submit="handlePasswordClose" />
-    />
   </div>
 </template>

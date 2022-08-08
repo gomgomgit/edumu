@@ -1,6 +1,6 @@
 <template>
   <!--begin::Wrapper-->
-  <div class="w-lg-500px bg-white rounded shadow-sm p-10 p-lg-15 mx-auto">
+  <div class="">
     <!--begin::Form-->
     <Form
       class="form w-100"
@@ -8,23 +8,19 @@
       @submit="onSubmitLogin"
       :validation-schema="login"
     >
-      <!--begin::Heading-->
-      <div class="text-center mb-10">
-        <!--begin::Title-->
-        <h1 class="text-dark mb-3">Sign In to Metronic</h1>
-        <!--end::Title-->
-      </div>
-      <!--begin::Heading-->
+      <!-- <div class="text-center fw-bold mb-6 fs-1">
+        Masuk ke CMS EDUMU
+      </div> -->
 
       <!--begin::Input group-->
-      <div class="fv-row mb-10">
+      <div class="fv-row mb-6">
         <!--begin::Label-->
-        <label class="form-label fs-6 fw-bolder text-dark">Kode Sekolah</label>
+        <label class="form-label fs-6 fw-medium text-black-50">Kode Sekolah</label>
         <!--end::Label-->
 
         <!--begin::Input-->
         <Field
-          class="form-control form-control-lg form-control-solid"
+          class="form-control form-control-lg form-control-solid bg-white border-secondary border-2"
           type="text"
           name="kode"
           autocomplete="off"
@@ -39,14 +35,14 @@
       <!--end::Input group-->
 
       <!--begin::Input group-->
-      <div class="fv-row mb-10">
+      <div class="fv-row mb-6">
         <!--begin::Label-->
-        <label class="form-label fs-6 fw-bolder text-dark">Username</label>
+        <label class="form-label fs-6 fw-medium text-black-50">Username</label>
         <!--end::Label-->
 
         <!--begin::Input-->
         <Field
-          class="form-control form-control-lg form-control-solid"
+          class="form-control form-control-lg form-control-solid bg-white border-secondary border-2"
           type="text"
           name="username"
           autocomplete="off"
@@ -61,20 +57,14 @@
       <!--end::Input group-->
 
       <!--begin::Input group-->
-      <div class="fv-row mb-10">
+      <div class="fv-row mb-6">
         <!--begin::Wrapper-->
-        <div class="d-flex flex-stack mb-2">
-          <!--begin::Label-->
-          <label class="form-label fw-bolder text-dark fs-6 mb-0"
-            >Password</label
-          >
-          <!--end::Label-->
-        </div>
+        <label class="form-label fw-medium text-black-50 fs-6">Password</label>
         <!--end::Wrapper-->
 
         <!--begin::Input-->
         <Field
-          class="form-control form-control-lg form-control-solid"
+          class="form-control form-control-lg form-control-solid bg-white border-secondary border-2"
           type="password"
           name="password"
           autocomplete="off"
@@ -89,18 +79,19 @@
       <!--end::Input group-->
 
       <!--begin::Actions-->
-      <div class="text-center">
+      <div class="text-center mt-10">
         <!--begin::Submit button-->
         <button
           type="submit"
           ref="submitButton"
           id="kt_sign_in_submit"
           class="btn btn-lg btn-primary w-100 mb-5"
+          style="border-radius: 50px;"
         >
-          <span class="indicator-label"> Continue </span>
+          <span class="indicator-label"> Masuk </span>
 
           <span class="indicator-progress">
-            Please wait...
+            Tunggu Sebentar...
             <span
               class="spinner-border spinner-border-sm align-middle ms-2"
             ></span>

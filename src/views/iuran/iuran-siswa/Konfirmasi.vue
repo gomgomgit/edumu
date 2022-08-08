@@ -1,12 +1,24 @@
 <script setup>
-import { reactive, ref } from "vue"
+import { onMounted, reactive, ref } from "vue"
 import { useRoute } from "vue-router"
 import ServerSideTable from "@/components/ServerSideTable.vue";
 import { request } from "@/util";
+import { useStore } from "vuex";
+import ModalKonfirmasi from "./ModalKonfirmasi.vue"
 
+onMounted(() => {
+  getTransaksi()
+})
 
 const route = useRoute()
 const transaksiId = route.params.id
+
+const store = useStore()
+const currentUser = store.getters.currentUser;
+const imageLink = `https://apistaging.edumu.id/${currentUser.sekolah_kode}/apischool/public`;
+
+const formMode = ref(null)
+const dataKonfirmasi = ref([])
 
 const transaksiDetail = reactive({
   columns: [
@@ -20,7 +32,7 @@ const transaksiDetail = reactive({
 })
 const transaksiConfirm = reactive({
   columns: [
-    { label: 'Bukti', field: 'ptc_image', sortable: false },
+    { label: 'Bukti', field: 'image', sortable: false },
     { label: 'Nominal', field: 'ptc_nominal', sortable: false },
     { label: 'Tanggal', field: 'ptc_created_date', sortable: false },
     { label: 'Opsi', field: 'option', sortable: false, width: '200px' },
@@ -36,12 +48,22 @@ const transaksiData = reactive({
 function getTransaksi (payload) {
 	request.get(`iuran/transaksi/${transaksiId}`)
   .then(res => {
-    transaksiData = res.data.data
+    transaksiData.payment_nominal = res.data.data.payment_nominal
+    transaksiData.payment_status = res.data.data.payment_status
     
     transaksiDetail.rows = res.data.data.detail
     transaksiConfirm.rows = res.data.data.confirm
 	})
 }
+function konfirmasi(data) {
+  dataKonfirmasi.value = data
+  formMode.value = 'konfirmasi'
+}
+function handleFormClose() {
+  dataKonfirmasi.value = []
+  formMode.value = null
+}
+
 </script>
 
 <template>
@@ -57,14 +79,12 @@ function getTransaksi (payload) {
         <div class="separator border-black-50 border-2 my-3"></div>
       </div>
       <ServerSideTable
-        ref="tableRef"
         :totalRows="transaksiDetail.totalRows || 0"
         :columns="transaksiDetail.columns"
         :rows="transaksiDetail.rows"
         :pagination-options="{
           enabled: false
-        }"
-        @loadItems="getTransaksi">
+        }">
         <template #table-row="{column, row}">
           <div v-if="column.field == 'payment_code'">
               #{{row.payment_code}}
@@ -76,12 +96,12 @@ function getTransaksi (payload) {
           </div>
         </template>
       </ServerSideTable>
-      <div>
+      <div class="mt-3 fs-3 ">
         <div>
-          <span class="fw-bold fs-4">Total Bayar : </span><span>{{transaksiData.payment_nominal}}</span>
+          <span class="fw-bold">Total Bayar : </span><span>{{transaksiData.payment_nominal}}</span>
         </div>
         <div>
-          <span class="fw-bold fs-4">Status : </span><span>{{transaksiData.payment_status}}</span>
+          <span class="fw-bold">Status : </span><span :class="`badge badge-${transaksiData.payment_status == 'Berhasil' ? 'success' : 'danger'}`">{{transaksiData.payment_status}}</span>
         </div>
       </div>
     </div>
@@ -97,17 +117,18 @@ function getTransaksi (payload) {
         <div class="separator border-black-50 border-2 my-3"></div>
       </div>
       <ServerSideTable
-        ref="tableRef"
         :totalRows="transaksiConfirm.totalRows || 0"
         :columns="transaksiConfirm.columns"
         :rows="transaksiConfirm.rows"
         :pagination-options="{
           enabled: false
-        }"
-        @loadItems="getTransaksi">
+        }">
         <template #table-row="{column, row}">
+          <div v-if="column.field == 'image'">
+            <img :src="imageLink + '/images/payment/' + row.ptc_image" alt="bukti" style="max-width: 200px">
+          </div>
           <div v-if="column.field == 'option'">
-            <button @click="validate(row.tipe_id)" class="btn btn-icon btn-bg-light btn-active-color-info btn-sm">
+            <button @click="konfirmasi(row)" class="btn btn-icon btn-bg-light btn-active-color-info btn-sm">
               <span class="svg-icon svg-icon-3">
                 <i class="bi bi-clipboard-check-fill"></i>
               </span>
@@ -117,5 +138,12 @@ function getTransaksi (payload) {
       </ServerSideTable>
     </div>
   </div>
+
+  <ModalKonfirmasi 
+    :imageLink="imageLink"
+    :formMode="formMode"
+    :activeData="dataKonfirmasi"
+    @close="handleFormClose()"
+  />
 </div>
 </template>

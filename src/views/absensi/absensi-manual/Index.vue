@@ -271,7 +271,6 @@ import FormModal from'./FormModal'
   <FormModal 
     :mode="formMode"
     :activeData="activeData"
-    :dataOption="{guruOption: guruOption, kelasOption: kelasOption, mapelOption: mapelOption}"
     @close="handleFormClose"
     @submit="handleSubmit()" />
 </div>

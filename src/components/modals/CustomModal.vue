@@ -1,7 +1,7 @@
 <script setup>
   const props = defineProps({
-    show: {type:  [String, Boolean], required: true},
-    title: {type: String, required: true},
+    show: {type:  [String, Boolean]},
+    title: {type: String},
     breadcrumb: {type: Array, required: false}
   })
 
@@ -11,14 +11,21 @@
 <template>
   <div class="modal-wrapper">
       <transition name="fade">
-        <div v-if="props.show" class="modal-overlay" @click="emits('closeModal')"></div>
+        <div v-if="props.show" class="modal-overlay"></div>
       </transition>
 
       <transition name="slide-fade">
         <div v-if="props.show" class="modal-container">
           <div class="modal-header d-block border-bottom border-secondary">
-            <div class="fw-bold fs-1 m-4">
-              <span>{{props.title}}</span>
+            <div class="fw-bold fs-1 m-4 d-flex justify-content-between">
+              <div>
+                <span>{{props.title}}</span>
+              </div>
+              <div @click="emits('closeModal')" class="btn btn-icon btn-sm btn-active-light-danger ms-2">
+                <span class="svg-icon svg-icon-2x">
+                  <i class="bi bi-x fs-1"></i>
+                </span>
+              </div>
             </div>
             <div class="fw-bold fs-4 m-4">
               <template v-if="props.breadcrumb" v-for="bc, index in props.breadcrumb" :key="index">

@@ -14,7 +14,6 @@ onMounted(() => {
   getData()
 })
 
-const baseUrl = process.env.VUE_APP_API_URL
 const router = useRouter()
 const route = useRoute()
 
@@ -248,7 +247,7 @@ function post() {
             <div class="col-9 align-items-center">
               <ul>
                 <template v-for="file in oldFiles">
-                  <li><a class="fs-4" target="_blank" :href="baseUrl + '/public/files/' + file.tugas_file_nama">{{file.tugas_file_nama}}</a></li>
+                  <li><a class="fs-4" target="_blank" :href="storagePublic + '/files/' + file.tugas_file_nama">{{file.tugas_file_nama}}</a></li>
                 </template>
               </ul>
               <FileDrop :multiple="true" v-model:fileInputData="fileDatas"></FileDrop>

@@ -16,8 +16,6 @@ const props = defineProps({
 
 const emits = defineEmits(['close', 'submit'])
 
-const baseUrl = process.env.VUE_APP_API_URL
-
 const initialForm = { 
   materi_id: '',
   kelas_id: '',
@@ -180,7 +178,7 @@ watch(
         <div class="col-9 align-items-center">
           
           <ul v-if="activeData?.materi_file">
-            <li><a class="fs-4" target="_blank" :href="baseUrl + '/public/files/' + activeData?.materi_file">{{activeData?.materi_file}}</a></li>
+            <li><a class="fs-4" target="_blank" :href="storagePublic + '/files/' + activeData?.materi_file">{{activeData?.materi_file}}</a></li>
           </ul>
           <FileDrop v-model:fileInputData="form.materi_file"></FileDrop>
         </div>

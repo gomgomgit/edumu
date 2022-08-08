@@ -8,6 +8,7 @@
   import FilterSelect from '@/components/filter-select'
   import { useToast } from "vue-toast-notification"
 import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
 
   onMounted(() => {
     setCurrentPageBreadcrumbs("Album", ['Sekolah', "Media"]);
@@ -15,7 +16,11 @@ import { useRoute, useRouter } from "vue-router";
   })
   const route = useRoute()
   const kelas_id = route.params.id
-  const baseUrl = process.env.VUE_APP_API_URL
+
+  const store = useStore()
+  const currentUser = store.getters.currentUser;
+  const imageLink = `https://apistaging.edumu.id/${currentUser.sekolah_kode}/apischool/public`;
+
 
   function getKelasMedia () {
       request.post('kelas/media', null, {
@@ -64,7 +69,7 @@ import { useRoute, useRouter } from "vue-router";
           <template v-for="image in album" :key="image.user_id">
             <div class="col-3">
               <div>
-                <img class="image-album" :src="image.user_foto_id ? `${baseUrl}/public/images/identity/siswa/${image.user_foto_id}` : '/media/illustrations/media/frame-media.png'" alt="">
+                <img class="image-album" :src="image.user_foto_id ? `${imageLink}/images/identity/siswa/${image.user_foto_id}` : '/media/illustrations/media/frame-media.png'" alt="">
               </div>
             </div>
           </template>

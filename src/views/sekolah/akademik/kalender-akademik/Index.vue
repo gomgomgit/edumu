@@ -71,11 +71,17 @@ import { deleteConfirmation } from "@/core/helpers/deleteconfirmation";
               </div> -->
             </div>
 
-            <div class="position-relative d-flex ">
+            <div class="position-relative d-flex gap-3">
+              <router-link to="/sekolah/akademik/kalender-akademik/import" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
+                <i class="bi bi-cloud-arrow-down fs-1"></i>
+                <span>
+                  Import Data
+                </span>
+              </router-link>
               <router-link to="/sekolah/akademik/kalender-akademik/tambah" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
                 <i class="bi bi-plus fs-1"></i>
                 <span>
-                  Tambah Kalender Akademik
+                  Tambah Data
                 </span>
               </router-link>
             </div>

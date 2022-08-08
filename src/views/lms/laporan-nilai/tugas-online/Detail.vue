@@ -3,10 +3,11 @@ import { setCurrentPageBreadcrumbs } from '@/core/helpers/breadcrumb';
 import { request } from '@/util';
 import moment from 'moment';
 import { onMounted, reactive, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import FilterSelect from '@/components/filter-select/index.vue';
 import { Search } from '@element-plus/icons-vue'
 import ServerSideTable from '@/components/ServerSideTable.vue';
+import Swal from 'sweetalert2';
 
 onMounted(() => {
   getData()
@@ -15,6 +16,8 @@ onMounted(() => {
 })
 
 const route = useRoute()
+const router = useRouter()
+
 const ujianId = route.params.id
 const detailData = ref([])
 const kelasFilter = ref()
@@ -63,6 +66,17 @@ function formatingDate(date) {
   return {
     date: moment(date).format('DD/MM/Y'),
     time: moment(date).format('LT')
+  }
+}
+
+function exportNilai() {
+  if (kelasFilter.value) {
+    router.push(`/lms/laporan-nilai/tugas-online/export/${ujianId}/${kelasFilter.value}`)
+  } else {
+    Swal.fire({
+      icon: 'error',
+      title: 'Harap Pilih Kelas!'
+    })
   }
 }
 </script>
@@ -145,12 +159,12 @@ function formatingDate(date) {
                 </a>
               </div>
               <div class="d-flex align-items-center">
-                <a class="btn btn-primary d-flex gap-3 align-items-center w-auto">
+                <button @click="exportNilai()" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
                   <i class="bi bi-cloud-arrow-up fs-1"></i>
                   <span>
                     Export Nilai
                   </span>
-                </a>
+                </button>
               </div>
             </div>
           </div>

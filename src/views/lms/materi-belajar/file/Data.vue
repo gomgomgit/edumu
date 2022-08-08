@@ -208,7 +208,7 @@ function post() {
             <div class="col-9 align-items-center">
               
               <ul v-if="oldFiles">
-                <li><a class="fs-4" target="_blank" :href="baseUrl + '/public/files/' + oldFiles">{{oldFiles}}</a></li>
+                <li><a class="fs-4" target="_blank" :href="storagePublic + '/files/' + oldFiles">{{oldFiles}}</a></li>
               </ul>
               <FileDrop v-model:fileInputData="form.materi_file"></FileDrop>
             </div>

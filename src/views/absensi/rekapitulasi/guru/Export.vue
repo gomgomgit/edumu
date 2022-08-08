@@ -11,8 +11,8 @@ import Loading from 'vue3-loading-overlay'
 import * as XLSX from 'xlsx';
 
 onMounted(() => {
-  setCurrentPageBreadcrumbs("Export Presensi", ['Absensi', 'Rekapitulasi', 'Siswa']);
-  getQueue()
+  setCurrentPageBreadcrumbs("Export Presensi", ['Absensi', 'Rekapitulasi', 'Guru']);
+  getDownloadData()
 })
 
 const store = useStore()
@@ -21,13 +21,8 @@ const userId = store.getters.currentUser.user_id
 const router = useRouter()
 const route = useRoute()
 
-const kelasOption = ref()
-
-const reportQueue = ref()
-
 const exportData = ref([])
 const exportDate = ref('')
-const exportKelas = ref('')
 
 const loading = ref(true)
 
@@ -37,55 +32,23 @@ const form = reactive({
   file: null,
 })
 
-function getQueue() {
-  loading.value = true
-  request.post('reportsiswanew', null, {
-    params: {
-      level: 'siswa',
-      cari: route.query.cari,
-      kelas: route.query.kelas,
-      dateStart: route.query.dateStart,
-      dateEnd: route.query.dateEnd
-    }
-  }).then(res => {
-    const resReport = res.data
-    if (resReport.success == true) {
-      reportQueue.value = resReport.data
-      checkQueue()
-    }
-
-  })
-}
-
-function checkQueue() {
-  request.post('checkqueue', null, {
-    params: {
-      level: 'siswa',
-      idqueue: reportQueue.value,
-      dateStart: route.query.dateStart,
-      dateEnd: route.query.dateEnd
-    }
-  }).then(res => {
-    if (res.data.success == true) {
-      getDownloadData()
-    }
-  })
-}
-
 function getDownloadData() {
-  request.post('downloadreportsiswa', null, {
+  console.log(route.query)
+  loading.value = true
+  request.post('downloadreportguru', null, {
     params: {
-      level: 'siswa',
-      cari: route.query.cari,
-      kelas: route.query.kelas,
-      dateStart: route.query.dateStart,
-      dateEnd: route.query.dateEnd
+      level: 'guru',
+      user: route.query.user,
+      tglMulai: route.query.tglMulai,
+      tglEnd: route.query.tglEnd
     }
   }).then(res => {
     if (res.data.success == true) {
       exportData.value = res.data.data
       exportDate.value = res.data.created_at
-      exportKelas.value = res.data.kelas.kelas_nama
+
+      loading.value = false
+    } else {
 
       loading.value = false
     }
@@ -95,13 +58,11 @@ function getDownloadData() {
 function generate() {
     const ws_data = [
       ['Rekap Presensi'],
-      ['Kelas : ' + (exportKelas.value ?? 'Semua')],
-      ['Periode : ' + route.query.dateStart + ' sampai ' + route.query.dateEnd],
+      ['Periode : ' + route.query.tglMulai + ' sampai ' + route.query.tglEnd],
       [''],
-      ['No', 'Nama', 'Kelas', 'In/Out', 'Rekap', 'Rekap', 'Rekap', 'Rekap', 'Total Hadir'],
-      ['No', 'Nama', 'Kelas', 'In/Out', 'Telat', 'Izin', 'Sakit', 'Alpha', 'Keterangan'],
+      ['No', 'Nama', 'In/Out', 'Rekap', 'Rekap', 'Rekap', 'Rekap', 'Total Hadir'],
+      ['No', 'Nama', 'In/Out', 'Telat', 'Izin', 'Sakit', 'Alpha', 'Keterangan'],
     ]
-// return console.log(exportData.value[0].pre[0])
     var presenceDates = exportData.value[0].pre.map((val) => {
       return val.tanggal
     })
@@ -109,21 +70,19 @@ function generate() {
       return 'Tanggal'
     })
 // return console.log(presenceDates)
-    ws_data[4].splice(4, 0, ...tglFormat);
-    ws_data[5].splice(4, 0, ...presenceDates)
+    ws_data[3].splice(3, 0, ...tglFormat);
+    ws_data[4].splice(3, 0, ...presenceDates)
     
     const merges = [
       {s: {r: 0, c: 0}, e: {r: 0, c: 10}},
       {s: {r: 1, c: 0},e: {r: 1, c: 10}},
       {s: {r: 2, c: 0},e: {r: 2, c: 10}},
-      {s: {r: 3, c: 0},e: {r: 3, c: 10}},
-      {s: {r: 4, c: 0},e: {r: 5, c: 0}},
-      {s: {r: 4, c: 1},e: {r: 5, c: 1}},
-      {s: {r: 4, c: 2},e: {r: 5, c: 2}},
-      {s: {r: 4, c: 3},e: {r: 5, c: 3}},
-      {s: {r: 4, c: 4},e: {r: 4, c: 3 + presenceDates.length}},
-      {s: {r: 4, c: 4 + presenceDates.length},e: {r: 4, c: 7 + presenceDates.length}},
-      {s: {r: 4, c: 8 + presenceDates.length},e: {r: 5, c: 8 + presenceDates.length}},
+      {s: {r: 3, c: 0},e: {r: 4, c: 0}},
+      {s: {r: 3, c: 1},e: {r: 4, c: 1}},
+      {s: {r: 3, c: 2},e: {r: 4, c: 2}},
+      {s: {r: 3, c: 3},e: {r: 3, c: 2 + presenceDates.length}},
+      {s: {r: 3, c: 3 + presenceDates.length},e: {r: 3, c: 6 + presenceDates.length}},
+      {s: {r: 3, c: 7 + presenceDates.length},e: {r: 4, c: 7 + presenceDates.length}},
     ];
     
     function getKeyByValue(object, value) {
@@ -134,7 +93,6 @@ function generate() {
       let data = [
         index+1,
         report.user_nama,
-        report.kelas_nama,
         'In/Out',
         report.tot.telat,
         report.tot.izin,
@@ -145,7 +103,7 @@ function generate() {
       let onDays = report.pre.map((val) => {
         return getKeyByValue(val, '1')
       })
-      data.splice(4, 0, ...onDays)
+      data.splice(3, 0, ...onDays)
       ws_data.push(data)
     })
 
@@ -167,7 +125,7 @@ function generate() {
     <div class="card mb-5 mb-xxl-8">
       <div class="card-body py-6">
         <div>
-          <h2 class="fs-1 fw-bold py-6 m-0">Export Absensi Siswa</h2>
+          <h2 class="fs-1 fw-bold py-6 m-0">Export Absensi Guru</h2>
         </div>
         <div class="separator border-black-50 border-2 my-6"></div>
         <div class="bg-light-primary rounded p-6">
