@@ -41,30 +41,36 @@ const tabs = [{
 					</div>
 				</section>
 
-				<section
-					class="col-md-3"
-					v-for="(tab, index) in tabs"
-					:key="index">
-					<router-link
-						class="w-100 d-flex align-items-center py-4 ps-6 border border-2 rounded-3"
-						active-class="border-primary bg-primary shadow-sm"
-						:to="tab.to">
-						<img
-							class="me-5"
-							:src="route.name === tab.route ? tab.iconActive : tab.iconNormal"
-							:alt="tab.title">
-						<div>
-							<div
-								:class="route.name === tab.route ? 'text-white' : 'text-black'"
-								class="fs-4 fw-bold">
-								{{ tab.title }}
-							</div>
-							<div :class="route.name === tab.route ? 'text-white-50' : 'text-muted'">
-								{{ tab.subtitle }}
-							</div>
-						</div>
-					</router-link>
-				</section>
+				<div class="col-md-9 bg-light p-3 rounded-3">
+					<div class="row">
+						<section
+							class="col-md-4"
+							v-for="(tab, index) in tabs"
+							:key="index">
+							<router-link
+								class="w-100 d-block py-4 ps-6 rounded-3"
+								active-class="bg-primary"
+								:to="tab.to">
+								<div class="d-flex align-items-center">
+									<img
+										class="me-5"
+										:src="route.name === tab.route ? tab.iconActive : tab.iconNormal"
+										:alt="tab.title">
+									<div>
+										<div
+											:class="route.name === tab.route ? 'text-white' : 'text-black'"
+											class="fs-4 fw-bold">
+											{{ tab.title }}
+										</div>
+										<div :class="route.name === tab.route ? 'text-white-50' : 'text-muted'">
+											{{ tab.subtitle }}
+										</div>
+									</div>
+								</div>
+							</router-link>
+						</section>
+					</div>
+				</div>
 			</div>
 
 			<div class="separator border-black-50 border-2 mb-3 mt-5"></div>

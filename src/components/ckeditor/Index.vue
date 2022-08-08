@@ -1,9 +1,10 @@
 <script setup>
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { ClassicEditor } from '@/vendor/ckeditor5/ckeditor';
 import { computed } from '@vue/reactivity';
 
 const props = defineProps({
-  editorValue: String
+  editorValue: String,
+  config: { type: Object, default: () => ({}) }
 })
 
 const emits = defineEmits(['update:editorValue'])
@@ -16,7 +17,7 @@ const editorData = computed({
 })
 
 const editorConfig = {
-    // The configuration of the editor.
+  ...props.config
 }
 </script>
 
