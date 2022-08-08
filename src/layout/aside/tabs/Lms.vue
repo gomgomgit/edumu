@@ -38,7 +38,7 @@
               item.title
             }}</a>
 
-            <span class="text-muted fw-bold">{{ item.description }}</span>
+            <span class="text-muted fs-7">{{ item.description }}</span>
           </div>
           <!--end::Text-->
         </div>
