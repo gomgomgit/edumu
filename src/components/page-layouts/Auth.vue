@@ -18,20 +18,18 @@
         </div>  
       </div>
       
-      <!-- <div class="d-block d-md-none bg-image position-fixed top-0 start-0 end-0 bottom-0 z-index-1">
-        <canvas class="stars" width="300" height="300">
-        </canvas>
-      </div> -->
     </div>
 
     <div id="starsCanvas" class="col-0 col-md-6 col-lg-7 bg-image position-fixed position-md-relative top-0 start-0 end-0 bottom-0 z-index-1">
+      <div class="onCanvas d-flex justify-content-center gap-10">
+        <span class="fw-bold">Term of Use</span>
+        <span class="fw-bold">Privacy Policy</span>
+        <span class="fw-bold">Cookie Policy</span>
+        <span class="fw-bold">Accessibility Statement</span>
+      </div>
       <canvas class="stars" width="300" height="300">
       </canvas>
     </div>
-    <!-- <div class="col-0 col-md-5 col-lg-7 bg-image p-0 d-none d-md-block">
-      <canvas id="starsCanvas" class="stars" width="300" height="300">
-      </canvas>
-    </div> -->
   </div>
 </template>
 
@@ -643,5 +641,12 @@ if (canvas) init();
   height: 16rem;
   height: 100vh;
   z-index: 1;
+}
+.onCanvas {
+  position: absolute;
+  padding: 0 30px;
+  bottom: 30px; left: 0; right: 0;
+  z-index: 10;
+  color: #dedede;
 }
 </style>
