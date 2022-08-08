@@ -9,7 +9,7 @@ import QuestionMulti from './components/QuestionMulti.vue'
 import QuestionEssay from './components/QuestionEssay.vue'
 import QuestionMatch from './components/QuestionMatch.vue'
 
-const { questionsData, isNoQuestion, questionTypeLabels, loadQuestionsData } = useQuestionsData()
+const { questionsData, isNoQuestion, questionTypeLabels, loadQuestionsData, cacheQuestionsData } = useQuestionsData()
 
 const questionComponentMap = {
 	single: QuestionSingle,
@@ -36,9 +36,9 @@ function getTypeLabel (questionType) {
 	return questionTypeLabels.find(type => type.key === questionType)
 }
 
-// onMounted(() => {
-// 	loadQuestionsData()
-// })
+onMounted(() => {
+	loadQuestionsData(178)
+})
 </script>
 
 <template>
@@ -122,6 +122,17 @@ function getTypeLabel (questionType) {
 			</section>
 		</div>
 
+		<div class="row mt-8">
+			<div class="col-3 offset-9">
+				<button
+					class="btn btn-primary btn-lg w-100"
+					@click="cacheQuestionsData(true)">
+					SELANJUTNYA
+					<i class="fas fa-angle-double-right ms-2"></i>
+				</button>
+			</div>
+		</div>
+
 		<EditorModal
 			v-bind="{ editorData }"
 			@close-modal="editorData = {}" />
@@ -136,7 +147,8 @@ function getTypeLabel (questionType) {
 
 #soal-ujian .questions-wrapper {
 	max-height: 90vh !important;
-	overflow: scroll;
+	overflow-y: scroll;
+	overflow-x: hidden;
 }
 #soal-ujian .questions-wrapper-header {
 	position: sticky;

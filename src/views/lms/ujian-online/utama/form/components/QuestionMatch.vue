@@ -2,6 +2,7 @@
 import InlineEditor from '@/components/ckeditor-inline/Index.vue'
 import { reactive } from 'vue'
 import QuestionWrapper from './QuestionWrapper.vue'
+import useQuestionsData from '../composables/useQuestionsData.js'
 
 const props = defineProps({
 	orderNumber: Number,
@@ -9,6 +10,8 @@ const props = defineProps({
 	questionIndex: [Number, String],
 	question: { type: Object, default: () => ({}) },
 })
+
+const { isChanged, cacheQuestionsData } = useQuestionsData()
 
 const isShowEditor = reactive({
 	options: [],
@@ -45,7 +48,9 @@ function getMatchIndex (optionId) {
 						<InlineEditor
 							v-else
 							v-model="option.option_text"
-							class="option-editor">
+							class="option-editor"
+							@input="isChanged = true"
+							@blur="$event.type === 'blur' && cacheQuestionsData()">
 						</InlineEditor>
 					</section>
 
@@ -61,7 +66,9 @@ function getMatchIndex (optionId) {
 						<InlineEditor
 							v-else
 							v-model="question.matches[getMatchIndex(option.option_id)].option_match_text"
-							class="option-editor">
+							class="option-editor"
+							@input="isChanged = true"
+							@blur="$event.type === 'blur' && cacheQuestionsData()">
 						</InlineEditor>
 					</section>
 				</div>

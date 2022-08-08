@@ -8,7 +8,7 @@ import useQuestionsData from '../composables/useQuestionsData.js'
 
 const correctOperator = '#jwb#'
 
-const { questionsData, addQuestion } = useQuestionsData()
+const { questionsData, addQuestion, cacheQuestionsData } = useQuestionsData()
 
 const props = defineProps({
 	editorData: { type: Object, default: () => ({})},
@@ -192,7 +192,7 @@ function handleSubmit () {
 			option_text: evaluateOption('option', result.options[optionIndex]),
 			is_correct: result.options[optionIndex]?.indexOf(correctOperator) > -1
 		})),
-		matches: question_type !== 'match' ? null : [...Array(optionCount).keys()].map(optionIndex => ({
+		matches: question_type !== 'match' ? [] : [...Array(optionCount).keys()].map(optionIndex => ({
 			option_match_text: evaluateOption('match', result.options[optionIndex]),
 			match_with_option_id: 'option-dummy-id-' + timestamp + optionIndex,
 		}))
@@ -201,6 +201,8 @@ function handleSubmit () {
 	questionsData.question_types[wrapperIndex].questions = questions
 
 	if (editorResult.length === 0) addQuestion(wrapperIndex, 0)
+
+	cacheQuestionsData(true)
 
 	emit('closeModal')
 }

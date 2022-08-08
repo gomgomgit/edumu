@@ -10,7 +10,7 @@ defineProps({
 	question: { type: Object, default: () => ({}) },
 })
 
-const { addQuestion, removeQuestion } = useQuestionsData()
+const { isChanged, addQuestion, removeQuestion, cacheQuestionsData } = useQuestionsData()
 
 const isShowEditor = ref(false)
 </script>
@@ -28,7 +28,9 @@ const isShowEditor = ref(false)
 				<InlineEditor
 					v-else
 					class="question-editor"
-					v-model="question.question_text">
+					v-model="question.question_text"
+					@input="isChanged = true"
+					@blur="$event.type === 'blur' && cacheQuestionsData()">
 				</InlineEditor>
 			</div>
 			<div class="col-3 d-flex justify-content-between">

@@ -2,6 +2,7 @@
 import InlineEditor from '@/components/ckeditor-inline/Index.vue'
 import { ref } from 'vue'
 import QuestionWrapper from './QuestionWrapper.vue'
+import useQuestionsData from '../composables/useQuestionsData.js'
 
 const props = defineProps({
 	orderNumber: Number,
@@ -9,6 +10,8 @@ const props = defineProps({
 	questionIndex: [Number, String],
 	question: { type: Object, default: () => ({}) },
 })
+
+const { isChanged, cacheQuestionsData } = useQuestionsData()
 
 const isShowEditor = ref([])
 
@@ -22,6 +25,7 @@ function handleOption (selectedIndex) {
 	for (const optionIndex in props.question.options) {
 		props.question.options[optionIndex].is_correct = optionIndex == selectedIndex
 	}
+	cacheQuestionsData(true)
 }
 </script>
 
@@ -41,7 +45,9 @@ function handleOption (selectedIndex) {
 				<InlineEditor
 					v-else
 					v-model="option.option_text"
-					class="option-editor flex-grow-1">
+					class="option-editor flex-grow-1"
+					@input="isChanged = true"
+					@blur="$event.type === 'blur' && cacheQuestionsData()">
 				</InlineEditor>
 			</div>
 

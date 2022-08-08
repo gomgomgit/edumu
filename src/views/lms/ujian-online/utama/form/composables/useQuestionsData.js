@@ -1,4 +1,4 @@
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import qs from 'qs'
 import { useToast } from 'vue-toast-notification';
 
@@ -10,6 +10,8 @@ const questionTypeLabels = [
 	{ key: 'essay', title: 'Esai / Uraian', icon: 'fa-align-left' },
 	{ key: 'match', title: 'Pencocokan', icon: 'fa-wave-square' },
 ]
+
+const isChanged = ref(false)
 
 const questionsData = reactive({
 	exam_id: null,
@@ -34,10 +36,12 @@ function handleRequestError(err) {
 	)
 }
 
-function loadQuestionsData() {
+function loadQuestionsData(examId) {
+	if (questionsData.exam_id !== null || examId == questionsData.exam_id) return
+
 	requestDevel.post(
 		'v2dev/exam/get-soal',
-		qs.stringify({ exam_id: 178 })
+		qs.stringify({ exam_id: examId })
 	).then(res => {
 		const { data } = res.data
 		const formattedExamData = {
@@ -51,6 +55,48 @@ function loadQuestionsData() {
 		if (res.data.status) Object.assign(questionsData, formattedExamData)
 		else throw res.data
 	}).catch(handleRequestError)
+}
+
+async function cacheQuestionsData (immediate) {
+	if (!isChanged.value && immediate !== true) return
+	try {
+		const payload = {
+			...questionsData,
+			question_types: questionsData.question_types.map(type => ({
+				...type,
+				questions: type.questions.map(question => ({
+					...question,
+					options: !question.options ? [] : question.options.map(option => ({
+						...option,
+						is_correct: option.is_correct ? 1 : 0
+					}))
+				}))
+			}))
+		}
+		const params = qs.stringify(payload)
+		const res = await requestDevel.post(
+			'/v2dev/exam/save-soal?'
+			+ params
+			+ (params.includes('question_types') ? '' : '&question_types[]')
+		)
+
+		if (res.data.status === true) {
+			const { data } = res.data
+			Object.assign(questionsData, {
+				...data,
+				question_types: !data.question_types ? [] : data.question_types.map(type => ({
+					...type,
+					optionCount: type.question_type !== 'essay' ? type.questions[0].options.length : null
+				}))
+			})
+
+			isChanged.value = false
+			useToast().success('Autosaved successfully!')
+		}
+		else if (res.data.status === false) throw res.data.text
+	} catch (err) {
+		handleRequestError(err)
+	}
 }
 
 function addQuestion (wrapperIndex, questionIndex) {
@@ -79,6 +125,8 @@ function removeQuestion (wrapperIndex, questionIndex) {
 	questionsData.question_types[wrapperIndex].questions.splice(questionIndex, 1)
 	if (questionsData.question_types[wrapperIndex].questions.length === 0) {
 		removeQuestionType(wrapperIndex)
+	} else {
+		cacheQuestionsData(true)
 	}
 }
 
@@ -95,11 +143,13 @@ function addQuestionType (payload) {
 
 function removeQuestionType (wrapperIndex) {
 	questionsData.question_types.splice(wrapperIndex, 1)
+	cacheQuestionsData(true)
 }
 
 export default function () {
 	return {
-		questionsData, questionTypeLabels, availableTypes, isNoQuestion,
-		loadQuestionsData, addQuestion, removeQuestion, addQuestionType, removeQuestionType
+		questionsData, questionTypeLabels, availableTypes, isNoQuestion, isChanged,
+		loadQuestionsData, cacheQuestionsData,
+		addQuestion, removeQuestion, addQuestionType, removeQuestionType
 	}
 }
