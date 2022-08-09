@@ -9,7 +9,8 @@
     "serve": "vue-cli-service serve --skip-plugins @vue/cli-plugin-eslint"
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-build-classic": "^34.1.0",
+    "@ckeditor/ckeditor5-build-classic": "^34.2.0",
+    "@ckeditor/ckeditor5-build-inline": "^34.2.0",
     "@ckeditor/ckeditor5-vue": "^4.0.1",
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@fullcalendar/core": "^5.9.0",
