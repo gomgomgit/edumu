@@ -30,6 +30,7 @@
       <canvas class="stars" width="300" height="300">
       </canvas>
     </div>
+    <MessageFloating />
   </div>
 </template>
 
@@ -38,6 +39,7 @@ import { defineComponent, onMounted, onUnmounted } from "vue";
 import { useStore } from "vuex";
 import { Actions } from "@/store/enums/StoreEnums";
 import { getIllustrationsPath } from "@/core/helpers/assets";
+import MessageFloating from "@/components/message-floating/Index.vue";
 
 const store = useStore();
 
