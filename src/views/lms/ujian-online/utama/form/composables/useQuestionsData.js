@@ -40,7 +40,7 @@ function loadQuestionsData(examId) {
 	if (questionsData.exam_id !== null || examId == questionsData.exam_id) return
 
 	requestDevel.post(
-		'v2dev/exam/get-soal',
+		'v2dev/exam/get-cached-soal',
 		qs.stringify({ exam_id: examId })
 	).then(res => {
 		const { data } = res.data
@@ -48,7 +48,14 @@ function loadQuestionsData(examId) {
 			...data,
 			question_types: !data.question_types ? [] : data.question_types.map(type => ({
 				...type,
-				optionCount: type.question_type !== 'essay' ? type.questions[0].options.length : 0
+				optionCount: type.question_type !== 'essay' ? type.questions[0].options.length : 0,
+				questions: type.questions.map(question => ({
+					...question,
+					options: !question.options ? [] : question.options.map(option => ({
+						...option,
+						is_correct: parseInt(option.is_correct) ? 1 : 0
+					}))
+				}))
 			}))
 		}
 
@@ -75,7 +82,7 @@ async function cacheQuestionsData (immediate) {
 		}
 		const params = qs.stringify(payload)
 		const res = await requestDevel.post(
-			'/v2dev/exam/save-soal?'
+			'/v2dev/exam/cache-soal?'
 			+ params
 			+ (params.includes('question_types') ? '' : '&question_types[]')
 		)
@@ -86,7 +93,14 @@ async function cacheQuestionsData (immediate) {
 				...data,
 				question_types: !data.question_types ? [] : data.question_types.map(type => ({
 					...type,
-					optionCount: type.question_type !== 'essay' ? type.questions[0].options.length : null
+					optionCount: type.question_type !== 'essay' ? type.questions[0].options.length : 0,
+					questions: type.questions.map(question => ({
+						...question,
+						options: !question.options ? [] : question.options.map(option => ({
+							...option,
+							is_correct: parseInt(option.is_correct) ? 1 : 0
+						}))
+					}))
 				}))
 			})
 

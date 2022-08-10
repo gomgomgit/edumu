@@ -37,7 +37,7 @@ function getTypeLabel (questionType) {
 }
 
 onMounted(() => {
-	loadQuestionsData(178)
+	loadQuestionsData(46)
 })
 </script>
 

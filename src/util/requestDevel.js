@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useToast } from 'vue-toast-notification';
 
 const request = axios.create({
-	baseURL: `http://redesign-exam.sismart.id/devel/apischool`,
+	baseURL: `https://truce-dev.my.id`,
 })
 
 request.interceptors.request.use((config) => {
