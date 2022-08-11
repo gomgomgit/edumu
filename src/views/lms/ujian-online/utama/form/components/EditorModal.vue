@@ -200,9 +200,8 @@ function handleSubmit () {
 
 	questionsData.question_types[wrapperIndex].questions = questions
 
-	cacheQuestionsData(true)
-
 	if (editorResult.length === 0) addQuestion(wrapperIndex, 0)
+	else cacheQuestionsData(true)
 
 	emit('closeModal')
 }

@@ -3,6 +3,7 @@ import qs from 'qs'
 import { useToast } from 'vue-toast-notification';
 
 import { requestDevel } from '@/util'
+import { isEmpty } from 'validate.js';
 
 const questionTypeLabels = [
 	{ key: 'single', title: 'Pilihan Ganda', icon: 'fa-list-ul' },
@@ -12,6 +13,8 @@ const questionTypeLabels = [
 ]
 
 const isChanged = ref(false)
+
+const errorBag = ref({})
 
 const questionsData = reactive({
 	exam_id: null,
@@ -113,6 +116,49 @@ async function cacheQuestionsData (immediate) {
 	}
 }
 
+function validateQuestionsData () {
+	for (const typeIndex in questionsData.question_types) {
+		const type = questionsData.question_types[typeIndex]
+		const typeTitle = questionTypeLabels.find(label => label.key === type.question_type).title
+
+		for (const questionIndex in type.questions) {
+			const question = type.questions[questionIndex]
+			let errorKey = `${typeIndex}-${questionIndex}`
+			let errorMsg = ''
+
+			if (isEmpty(question.question_text)) {
+				errorMsg += 'Pertanyaan harus diisi. '
+			}
+			if (['single', 'multi', 'match'].includes(type.question_type) && question.options?.some(option => isEmpty(option.option_text))) {
+				errorMsg += 'Pilihan jawaban harus diisi. '
+			}
+			if (['single', 'multi'].includes(type.question_type) && question.options?.every(option => parseInt(option.is_correct) === 0)) {
+				errorMsg += 'Jawaban benar harus diisi. '
+			}
+			if (['match'].includes(type.question_type)  && question.matches?.some(match => isEmpty(match.option_match_text))) {
+				errorMsg += 'Pasangan dari pilihan harus diisi. '
+			}
+
+			if (errorMsg.length) {
+				const orderNumber = resolveOrderNumber(typeIndex, questionIndex)
+				const msgPrefix = `${typeTitle} soal no ${orderNumber} : `
+				errorBag.value[errorKey] = msgPrefix + errorMsg
+			}
+			else if (errorBag.value[errorKey]) {
+				delete errorBag.value[errorKey]
+			}
+		}
+	}
+
+	return Object.values(errorBag.value)
+}
+
+function submitQuestionsData () {
+	const errors = validateQuestionsData()
+	if (errors.length) useToast().error(errors[0], { duration: 60000 })
+	else useToast().success('Data will be submitted')
+}
+
 function addQuestion (wrapperIndex, questionIndex) {
 	const timestamp = Date.now()
 	const { question_type, optionCount } = questionsData.question_types[wrapperIndex]
@@ -160,10 +206,23 @@ function removeQuestionType (wrapperIndex) {
 	cacheQuestionsData(true)
 }
 
+function resolveOrderNumber(wrapperIndex, questionIndex) {
+	wrapperIndex = parseInt(wrapperIndex)
+	questionIndex = parseInt(questionIndex)
+	const previousWrapperLastNumber = questionsData.question_types
+		.slice(0, wrapperIndex)
+		.reduce((acc, curr) => acc + curr.questions.length, 0)
+
+	const previousNumber = wrapperIndex === 0 ? 0 : previousWrapperLastNumber
+	const currentNumber = questionIndex + 1
+
+	return previousNumber + currentNumber
+}
+
 export default function () {
 	return {
-		questionsData, questionTypeLabels, availableTypes, isNoQuestion, isChanged,
-		loadQuestionsData, cacheQuestionsData,
-		addQuestion, removeQuestion, addQuestionType, removeQuestionType
+		questionsData, questionTypeLabels, availableTypes, isNoQuestion, isChanged, errorBag,
+		loadQuestionsData, cacheQuestionsData, submitQuestionsData,
+		addQuestion, removeQuestion, addQuestionType, removeQuestionType, resolveOrderNumber
 	}
 }

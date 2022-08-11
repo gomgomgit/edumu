@@ -1,22 +1,26 @@
 <script setup>
 import InlineEditor from '@/components/ckeditor-inline/Index.vue'
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import useQuestionsData from '../composables/useQuestionsData.js'
 
-defineProps({
+const props = defineProps({
 	orderNumber: Number,
 	wrapperIndex: [Number, String],
 	questionIndex: [Number, String],
 	question: { type: Object, default: () => ({}) },
 })
 
-const { isChanged, addQuestion, removeQuestion, cacheQuestionsData } = useQuestionsData()
+const { isChanged, errorBag, addQuestion, removeQuestion, cacheQuestionsData } = useQuestionsData()
 
 const isShowEditor = ref(false)
+
+const isError = computed(() => errorBag.value[`${props.wrapperIndex}-${props.questionIndex}`])
 </script>
 
 <template>
-	<section class="question-item bg-light rounded-3 p-4 d-flex flex-column gap-4">
+	<section
+		class="question-item rounded-3 p-4 d-flex flex-column gap-4"
+		:class="isError ? 'bg-danger bg-opacity-10' : 'bg-light'">
 		<div class="row">
 			<div class="col-9">
 				<textarea

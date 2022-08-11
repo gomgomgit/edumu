@@ -9,7 +9,10 @@ import QuestionMulti from './components/QuestionMulti.vue'
 import QuestionEssay from './components/QuestionEssay.vue'
 import QuestionMatch from './components/QuestionMatch.vue'
 
-const { questionsData, isNoQuestion, questionTypeLabels, loadQuestionsData, cacheQuestionsData } = useQuestionsData()
+const {
+	questionsData, isNoQuestion, questionTypeLabels,
+	loadQuestionsData, cacheQuestionsData, submitQuestionsData, resolveOrderNumber
+} = useQuestionsData()
 
 const questionComponentMap = {
 	single: QuestionSingle,
@@ -20,17 +23,6 @@ const questionComponentMap = {
 
 const editorData = ref({})
 const isShowAddQuestion = ref(false)
-
-function resolveOrderNumber (wrapperIndex, questionIndex) {
-	const previousWrapperLastNumber = questionsData.question_types
-		.slice(0, wrapperIndex)
-		.reduce((acc, curr) => acc + curr.questions.length, 0)
-
-	const previousNumber = wrapperIndex === 0 ? 0 : previousWrapperLastNumber
-	const currentNumber = questionIndex + 1
-
-	return previousNumber + currentNumber
-}
 
 function getTypeLabel (questionType) {
 	return questionTypeLabels.find(type => type.key === questionType)
@@ -126,7 +118,7 @@ onMounted(() => {
 			<div class="col-3 offset-9">
 				<button
 					class="btn btn-primary btn-lg w-100"
-					@click="cacheQuestionsData(true)">
+					@click="submitQuestionsData()">
 					SELANJUTNYA
 					<i class="fas fa-angle-double-right ms-2"></i>
 				</button>
