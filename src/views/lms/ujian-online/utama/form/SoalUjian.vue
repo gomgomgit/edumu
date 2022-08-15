@@ -11,7 +11,7 @@ import QuestionMatch from './components/QuestionMatch.vue'
 
 const {
 	questionsData, isNoQuestion, questionTypeLabels,
-	loadQuestionsData, cacheQuestionsData, submitQuestionsData, resolveOrderNumber
+	loadQuestionsData, submitQuestionsData, resolveOrderNumber
 } = useQuestionsData()
 
 const questionComponentMap = {

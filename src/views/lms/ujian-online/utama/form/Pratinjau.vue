@@ -1,6 +1,14 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import draggable from "vuedraggable";
+
 import PratinjauHeaderItem from './components/PratinjauHeaderItem.vue';
+import useQuestionsData from './composables/useQuestionsData';
+
+const { questionsData, loadQuestionsData } = useQuestionsData();
+
+const mergedQuestions = ref([]);
+const drag = ref(false);
 
 const examTime = 90
 
@@ -9,6 +17,16 @@ const examTimePercentage = computed(() => {
 	const minutesPerhour = 60
 	const percent = Math.ceil((time % minutesPerhour) / minutesPerhour * 100)
 	return percent + 1
+})
+
+watch(
+	questionsData.exam_id,
+	() => mergedQuestions.value = questionsData.question_types.map(type => type.questions).flat(),
+	{ immediate: true }
+)
+
+onMounted(async () => {
+	loadQuestionsData(46)
 })
 </script>
 
@@ -114,6 +132,52 @@ const examTimePercentage = computed(() => {
 				</div>
 			</section>
 		</header>
+
+		<draggable
+			:list="mergedQuestions"
+			tag="transition-group"
+			item-key="questions_id"
+			class="list-group questions-wrapper bg-light rounded-3 px-5 mt-8"
+			ghost-class="opacity-50"
+			handle=".drag-handle"
+			:animation="200"
+			:component-data="{
+				tag: 'section',
+				type: 'transition-group',
+				name: !drag ? 'flip-list' : null
+			}"
+			@start="drag = true"
+			@end="drag = false">
+			<template #item="{ element, index }">
+				<div
+					class="d-flex gap-5 mt-5"
+					:class="{ 'mb-5': mergedQuestions.length === index + 1}">
+					<div class="bg-white rounded-3 align-strecth w-70px fs-2 fw-bold text-black-50 d-flex justify-content-center align-items-center flex-shrink-0">
+						{{ index + 1 }}
+					</div>
+
+					<div class="question-item bg-white rounded-3 flex-grow-1 py-4 d-flex">
+						<div
+							class="flex-grow-1 px-5"
+							v-html="element.question_text">
+						</div>
+						<div class="drag-handle border-start w-70px d-flex align-items-center justify-content-center flex-shrink-0">
+							<i class="uil uil-draggabledots fs-1"></i>
+						</div>
+					</div>
+				</div>
+			</template>
+		</draggable>
+
+		<div class="row mt-8">
+			<div class="col-3 offset-9">
+				<button
+					class="btn btn-primary btn-lg w-100">
+					SUBMIT
+					<i class="fas fa-angle-double-right ms-2"></i>
+				</button>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -128,5 +192,20 @@ const examTimePercentage = computed(() => {
 #pratinjau-ujian :where(.el-progress-circle, .el-progress) {
 	width: 100px !important;
 	height: 100px !important;
+}
+#pratinjau-ujian .questions-wrapper {
+	width: 100%;
+	height: 70vh;
+	max-height: 70vh;
+	overflow-y: scroll;
+}
+#pratinjau-ujian .question-item {
+	min-height: 80px;
+}
+#pratinjau-ujian .drag-handle {
+	cursor: move;
+}
+.flip-list-move {
+	transition: transform 0.5s;
 }
 </style>
