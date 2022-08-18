@@ -144,7 +144,7 @@ import FormModal from "./FormModal";
             <div>
               <FilterSelect v-model:filterValue="kelasFilter" placeholder="Pilih Kelas" @changeFilter="getMateriData()">
                 <el-option
-                  v-for="kelas, index in kelasOption"
+                  v-for="kelas in kelasOption"
                   :key="kelas.kelas_id"
                   :label="kelas.kelas_nama"
                   :value="kelas.kelas_id"
@@ -154,7 +154,7 @@ import FormModal from "./FormModal";
             <div>
               <FilterSelect v-model:filterValue="mapelFilter" placeholder="Pilih Mapel" @changeFilter="getMateriData()">
                 <el-option
-                  v-for="mapel, index in mapelOption"
+                  v-for="mapel in mapelOption"
                   :key="mapel.mapel_id"
                   :label="mapel.mapel_nama"
                   :value="mapel.mapel_id"

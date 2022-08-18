@@ -2,7 +2,8 @@
   const props = defineProps({
     show: {type:  [String, Boolean]},
     title: {type: String},
-    breadcrumb: {type: Array, required: false}
+    breadcrumb: {type: Array, required: false},
+    width: {type:String, required:false}
   })
 
   const emits = defineEmits(['closeModal', 'confirm', 'dismiss'])
@@ -15,7 +16,7 @@
       </transition>
 
       <transition name="slide-fade">
-        <div v-if="props.show" class="modal-container">
+        <div v-if="props.show" class="modal-container" :style="`width: ${props.width ?? '650px'}`">
           <div class="modal-header d-block border-bottom border-secondary">
             <div class="fw-bold fs-1 m-4 d-flex justify-content-between">
               <div>
@@ -75,7 +76,6 @@
     bottom: 0;
     left: 0;
     margin: auto;
-    width: 650px;
     max-width: 90%;
     height: fit-content;
     border-radius: 1rem;
