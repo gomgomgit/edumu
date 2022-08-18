@@ -4,7 +4,7 @@ import { request } from '@/util';
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import ServerSideTable from '@/components/ServerSideTable.vue';
-import FormModal from './FormModal'
+import FormModalAnswer from './FormModalAnswer'
 import { deleteConfirmation } from '@/core/helpers/deleteconfirmation';
 import { useToast } from 'vue-toast-notification';
 
@@ -162,7 +162,7 @@ function deleteData(id) {
       </div>
     </div>
   </div>
-  <FormModal 
+  <FormModalAnswer 
     :mode="mode"
     :activeData="activeData"
     :questionId="questionId"

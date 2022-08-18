@@ -1,5 +1,5 @@
 <script setup>
-import { defineComponent } from "vue";
+import { defineComponent, onMounted } from "vue";
 import KTQuickLinksMenu from "@/layout/header/partials/QuickLinksMenu.vue";
 import KTUserMenu from "@/layout/header/partials/UserMenu.vue";
 import { useStore } from "vuex";
