@@ -17,7 +17,7 @@ request.interceptors.request.use((config) => {
 request.interceptors.response.use(
 	function (response)  {
 		if (response.data?.status === false || response.data?.success === false) {
-			useToast().error(response.data.message)
+			useToast().warning(response.data?.text || response.data?.message || '???')
 			throw response
 		}
 		return response
