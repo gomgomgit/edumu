@@ -43,7 +43,9 @@ function loginProcess() {
 onMounted(async() => {
   await loginProcess()
   
-  router.push({ name: "dashboard" });
-  store.dispatch(Actions.REMOVE_BODY_CLASSNAME, "page-loading");
+  setTimeout(() => {
+    // store.dispatch(Actions.REMOVE_BODY_CLASSNAME, "page-loading");
+    router.push({ name: "dashboard" });
+  }, 500);
 })
 </script>
