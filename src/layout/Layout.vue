@@ -122,8 +122,12 @@ export default defineComponent({
     const route = useRoute();
     const router = useRouter();
 
+    const loginUrl = process.env.VUE_APP_LOGIN_URL
+
     // show page loading
-    store.dispatch(Actions.ADD_BODY_CLASSNAME, "page-loading");
+    if (!loaderEnabled) {
+      store.dispatch(Actions.ADD_BODY_CLASSNAME, "page-loading");
+    }
 
     // initialize html element classes
     HtmlClass.init();
@@ -139,7 +143,7 @@ export default defineComponent({
     onMounted(() => {
       //check if current user is authenticated
       if (!store.getters.isUserAuthenticated) {
-        router.push({ name: "sign-in" });
+          window.location.href = loginUrl;
       }
 
       nextTick(() => {
@@ -160,7 +164,7 @@ export default defineComponent({
 
         // check if current user is authenticated
         if (!store.getters.isUserAuthenticated) {
-          router.push({ name: "sign-in" });
+          window.location.href = loginUrl;
         }
 
         nextTick(() => {

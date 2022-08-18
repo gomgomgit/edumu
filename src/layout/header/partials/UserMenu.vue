@@ -69,6 +69,7 @@ export default defineComponent({
     const store = useStore();
 
     const userData = store.getters.currentUser
+    const loginUrl = process.env.VUE_APP_LOGIN_URL
 
     i18n.locale.value = localStorage.getItem("lang")
       ? (localStorage.getItem("lang") as string)
@@ -100,7 +101,9 @@ export default defineComponent({
     const signOut = () => {
       store
         .dispatch(Actions.LOGOUT)
-        .then(() => router.push({ name: "sign-in" }));
+        .then(() => {
+          window.location.href = loginUrl
+        });
     };
 
     const setLang = (lang) => {
