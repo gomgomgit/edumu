@@ -81,7 +81,7 @@
     border-radius: 1rem;
     box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
     background: #FFF;
-    z-index: 999;
+    z-index: 99;
     transform: none;
   }
   .modal-body {

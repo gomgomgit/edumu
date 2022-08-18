@@ -84,8 +84,8 @@ watch(
 	<Modal
 		:title="props.mode"
 		:show="props.mode"
-		:breadcrumb="Array('LMS', 'Bank Soal', 'Detail Soal', props.mode + ' Soal')"
-		:width="'900px'"
+		:breadcrumb="Array('LMS', 'Bank Soal', props.mode + ' Soal')"
+		:width="'950px'"
 		@closeModal="handleClose"
 		@confirm="handleSubmit"
 		@dismiss="handleClose">
@@ -138,7 +138,6 @@ watch(
           <p class="m-0 fs-4 fw-bold">Gambar</p>
         </div>
         <div class="col-9 align-items-center">
-          <!-- {{props.activeData?.question_pict ? 'data:image/jpeg;base64,' + activeData.question_pict : null}} -->
           <ImageCropper  v-model:fileInputData="form.image" :oldImage="props.activeData?.question_pict ? 'data:image/jpeg;base64,' + activeData.question_pict : null"/>
         </div>
       </div>

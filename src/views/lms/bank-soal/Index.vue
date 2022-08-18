@@ -88,18 +88,18 @@ function handleEditData(data) {
               <h2 class="fs-1 fw-bold py-6">Data Pertanyaan</h2>
             </div>
             <div class="d-flex gap-4">
-              <a @click="mode = 'Tambah Data'" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
+              <!-- <a @click="mode = 'Tambah Data'" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
                 <i class="bi bi-plus fs-1"></i>
                 <span>
                   Tambah Soal
                 </span>
-              </a>
-              <!-- <router-link :to="'/lms/bank-soal/tambah'" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
+              </a> -->
+              <router-link :to="'/lms/bank-soal/tambah'" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
                 <i class="bi bi-plus fs-1"></i>
                 <span>
                   Tambah Soal
                 </span>
-              </router-link> -->
+              </router-link>
               <router-link to="/lms/bank-soal/import" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
                 <i class="bi bi-cloud-arrow-down fs-1"></i>
                 <span>
@@ -181,16 +181,16 @@ function handleEditData(data) {
                   </template>
                 </div>
                 <div v-if="column.field == 'action'">
-                  <a @click="handleEditData(row)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
+                  <!-- <a @click="handleEditData(row)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
                     <span class="svg-icon svg-icon-3">
                       <inline-svg src="media/icons/duotune/art/art005.svg" />
                     </span>
-                  </a>
-                  <!-- <router-link :to="'/lms/bank-soal/edit/' + row.question_id" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
+                  </a> -->
+                  <router-link :to="'/lms/bank-soal/edit/' + row.question_id" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
                     <span class="svg-icon svg-icon-3">
                       <inline-svg src="media/icons/duotune/art/art005.svg" />
                     </span>
-                  </router-link> -->
+                  </router-link>
                   <router-link :to="'/lms/bank-soal/detail/' + (row.question_id)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
                     <span class="svg-icon svg-icon-3">
                       <inline-svg src="media/icons/duotune/files/fil001.svg" />

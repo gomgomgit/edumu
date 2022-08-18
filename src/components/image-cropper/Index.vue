@@ -137,7 +137,7 @@ function cancelCrop() {
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 98;
+    z-index: 100;
     background: #000000;
     opacity: 0.4;
     cursor: pointer;
