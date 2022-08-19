@@ -214,5 +214,6 @@ onUnmounted(() => {
 	font-size: 1em;
 	color: #333;
 	padding: 12px 8px 0 !important;
+	cursor: text;
 }
 </style>

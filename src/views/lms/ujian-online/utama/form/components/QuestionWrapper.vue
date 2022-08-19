@@ -23,12 +23,12 @@ const isError = computed(() => errorBag.value[`${props.wrapperIndex}-${props.que
 		:class="isError ? 'bg-danger bg-opacity-10' : 'bg-light'">
 		<div class="row">
 			<div class="col-9">
-				<textarea
+				<div
 					v-if="!isShowEditor"
 					class="question-editor form-control test"
-					:value="question.question_text.replace(/(<([^>]+)>)/gi, '')"
+					v-html="question.question_text"
 					@click="isShowEditor = true">
-				</textarea>
+				</div>
 				<InlineEditor
 					v-else
 					class="question-editor"

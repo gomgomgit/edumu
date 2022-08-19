@@ -37,12 +37,12 @@ function handleOption (selectedIndex) {
 				<div class="py-5 px-7 fs-5 fw-bolder text-black-50 rounded-2 bg-white">
 					{{ String.fromCharCode(optionIndex + 65) }}
 				</div>
-				<textarea
+				<div
 					v-if="!isShowEditor.includes(optionIndex)"
 					class="option-editor form-control"
-					:value="option.option_text.replace(/(<([^>]+)>)/gi, '')"
+					v-html="option.option_text"
 					@click="showEditor(optionIndex)">
-				</textarea>
+				</div>
 				<InlineEditor
 					v-else
 					v-model="option.option_text"

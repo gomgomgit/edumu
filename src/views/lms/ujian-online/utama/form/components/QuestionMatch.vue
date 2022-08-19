@@ -39,12 +39,12 @@ function getMatchIndex (optionId) {
 
 				<div class="flex-grow-1 d-flex justify-content-between align-items-center h-100">
 					<section class="option-section h-100">
-						<textarea
+						<div
 							v-if="!isShowEditor.options.includes(optionIndex)"
 							class="option-editor form-control"
-							:value="option.option_text.replace(/(<([^>]+)>)/gi, '')"
+							v-html="option.option_text"
 							@click="showEditor('options', optionIndex)">
-						</textarea>
+						</div>
 						<InlineEditor
 							v-else
 							v-model="option.option_text"
@@ -57,12 +57,12 @@ function getMatchIndex (optionId) {
 					<i class="fas fa-arrow-right"></i>
 
 					<section class="option-section h-100">
-						<textarea
+						<div
 							v-if="!isShowEditor.matches.includes(optionIndex)"
 							class="option-editor form-control"
-							:value="question.matches[getMatchIndex(option.option_id)].option_match_text.replace(/(<([^>]+)>)/gi, '')"
+							v-html="question.matches[getMatchIndex(option.option_id)].option_match_text"
 							@click="showEditor('matches', optionIndex)">
-						</textarea>
+						</div>
 						<InlineEditor
 							v-else
 							v-model="question.matches[getMatchIndex(option.option_id)].option_match_text"

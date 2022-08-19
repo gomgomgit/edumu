@@ -6,10 +6,10 @@ ini todo list untuk ujian online:
 # pengaturan
 -/ tukar posisi switch dan helper
 -/ helper hanya muncul saat dihover
-- ganti warna toast validasi ke warning
+-/ ganti warna toast validasi ke warning
 
 # soal ujian
-- ganti textarea pada komponen soal jadi div agar gambar muncul
+-/ ganti textarea pada komponen soal jadi div agar gambar muncul
 -/ sanitize html sebelum diinput dan saat akan ditampilkan
 - hilangkan validasi jumlah opsi jika soal bertipe essay pada modal tambah tipe soal
 - fungsikan kolom label soal pada modal tambah tipe soal
