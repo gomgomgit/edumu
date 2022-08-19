@@ -1,7 +1,7 @@
 ini todo list untuk ujian online:
 
 # general
-- jika user telah mengubah data maka peringatkan user ketika akan pindah halaman jika tidak melalui tombol selanjutnya/submit
+-/ jika user telah mengubah data maka peringatkan user ketika akan pindah halaman jika tidak melalui tombol selanjutnya/submit
 
 # pengaturan
 - tukar posisi switch dan helper

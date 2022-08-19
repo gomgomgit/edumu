@@ -2,9 +2,18 @@
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useToast } from 'vue-toast-notification';
+import Swal from 'sweetalert2';
+
+import useExamData from './form/composables/useExamData';
+import useQuestionsData from './form/composables/useQuestionsData';
+import swalConfig from './form/constants/swalConfig';
 
 const router = useRouter()
 const route = useRoute()
+
+
+const { isChanged: isChangedQuestions } = useQuestionsData();
+const { isChanged: isChangedExam } = useExamData();
 
 const tabs = computed(() => ([{
 	to: '/lms/ujian-online/utama/form/pengaturan/' + route.params?.exam_id,
@@ -29,8 +38,16 @@ const tabs = computed(() => ([{
 	iconActive: 'figma-icon/gallery-favorite-light.png',
 }]))
 
-function handleTabClick (tab) {
+async function handleTabClick (tab) {
 	if (!route.params?.exam_id) return useToast().warning('Buat event ujian online terlebih dahulu!')
+
+	if (isChangedQuestions.value || isChangedExam.value) {
+		const res = await Swal.fire(swalConfig)
+		if (!res.isConfirmed) return
+	}
+
+	isChangedQuestions.value = false
+	isChangedExam.value = false
 	router.push(tab.to)
 }
 </script>

@@ -2,17 +2,19 @@
 import { computed, onMounted, ref, watch, watchEffect } from 'vue';
 import { Sortable } from "sortablejs-vue3";
 import { useRoute, useRouter } from 'vue-router';
+import Swal from 'sweetalert2';
 
+import Spinner from '@/components/Spinner.vue';
 import PratinjauHeaderItem from './components/PratinjauHeaderItem.vue';
 import useQuestionsData from './composables/useQuestionsData';
 import useExamData from './composables/useExamData';
-import Spinner from '@/components/Spinner.vue';
+import swalConfig from './constants/swalConfig.js';
 
 const router = useRouter()
 const route = useRoute()
 
-const { isLoading: isLoadingQuestions, questionsData, loadQuestionsData } = useQuestionsData();
-const { isLoading: isLoadingExam, examData, loadExamData } = useExamData();
+const { isLoading: isLoadingQuestions, isChanged: isChangedQuestions, questionsData, loadQuestionsData } = useQuestionsData();
+const { isLoading: isLoadingExam, isChanged: isChangedExam, examData, loadExamData } = useExamData();
 
 const mergedQuestions = ref([]);
 
@@ -25,10 +27,14 @@ const examTimePercentage = computed(() => {
 	return percent + 1
 })
 
-function handleBack() {
-	if (!confirm('Data yang anda ubah di halaman ini tidak akan tersimpan. Tetap ke halaman sebelumnya?')) {
-		router.back()
+async function handleBack() {
+	if (isChangedQuestions.value) {
+		const res = await Swal.fire(swalConfig)
+		if (!res.isConfirmed) return
 	}
+
+	isChangedQuestions.value = false
+	router.back()
 }
 
 function onDragEnd (event) {
@@ -41,6 +47,8 @@ function onDragEnd (event) {
 		...question,
 		ehq_order: index + 1
 	}))
+
+	isChangedQuestions.value = true
 }
 
 watchEffect(() => {

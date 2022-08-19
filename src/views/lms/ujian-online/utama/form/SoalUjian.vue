@@ -1,8 +1,10 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import Swal from 'sweetalert2'
 
 import Spinner from '@/components/Spinner.vue'
+
 import useQuestionsData from './composables/useQuestionsData.js'
 import EditorModal from './components/EditorModal.vue'
 import AddQuestionWrapperModal from './components/AddQuestionWrapperModal.vue'
@@ -10,12 +12,13 @@ import QuestionSingle from './components/QuestionSingle.vue'
 import QuestionMulti from './components/QuestionMulti.vue'
 import QuestionEssay from './components/QuestionEssay.vue'
 import QuestionMatch from './components/QuestionMatch.vue'
+import swalConfig from './constants/swalConfig'
 
 const router = useRouter()
 const route = useRoute()
 
 const {
-	questionsData, isNoQuestion, isLoading, questionTypeLabels,
+	questionsData, isNoQuestion, isLoading, isChanged, questionTypeLabels,
 	loadQuestionsData, cacheQuestionsData, submitQuestionsData, resolveOrderNumber
 } = useQuestionsData()
 
@@ -34,7 +37,13 @@ function getTypeLabel (questionType) {
 	return questionTypeLabels.find(type => type.key === questionType)
 }
 
-function handleBack () {
+async function handleBack () {
+	if (isChanged.value) {
+		const res = await Swal.fire(swalConfig)
+		if (!res.isConfirmed) return
+	}
+
+	isChanged.value = false
 	router.back()
 }
 

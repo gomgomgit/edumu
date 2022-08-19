@@ -1,12 +1,14 @@
 <script setup>
 import { onMounted, reactive, ref, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
+import { useToast } from 'vue-toast-notification';
+import Swal from 'sweetalert2';
 
 import { requestDevel } from '@/util';
 import Spinner from '@/components/Spinner.vue';
 
 import useExamData from './composables/useExamData.js'
-import { useToast } from 'vue-toast-notification';
+import swalConfig from './constants/swalConfig';
 
 const router = useRouter()
 const route = useRoute()
@@ -36,8 +38,15 @@ const optionData = reactive({
 
 const examIdParam = computed(() => route.params?.exam_id)
 
-function handleChangeTab (tab) {
+async function handleChangeTab (tab) {
 	if (!examIdParam.value) return useToast().warning('Buat event ujian online terlebih dahulu!')
+
+	if (isChanged.value) {
+		const res = await Swal.fire(swalConfig)
+		if (!res.isConfirmed) return
+	}
+
+	isChanged.value = false
 	tabs.active = tab
 }
 
@@ -410,7 +419,7 @@ onMounted(() => {
 						<div class="col-3">
 							<button
 								class="btn btn-secondary btn-lg w-100"
-								@click="tabs.active = 'event'">
+								@click="handleChangeTab('event')">
 								<i class="fas fa-angle-double-left me-2"></i>
 								SEBELUMNYA
 							</button>
