@@ -39,7 +39,7 @@ const optionData = reactive({
 const examIdParam = computed(() => route.params?.exam_id)
 
 async function handleChangeTab (tab) {
-	if (!examIdParam.value) return useToast().warning('Buat event ujian online terlebih dahulu!')
+	if (!examIdParam.value) return useToast().info('Buat event ujian online terlebih dahulu!')
 
 	if (isChanged.value) {
 		const res = await Swal.fire(swalConfig)
@@ -281,7 +281,7 @@ onMounted(() => {
 					</div>
 					-->
 
-					<div class="col-3 offset-9">
+					<div class="col-3 offset-9 pt-8">
 						<button
 							class="btn btn-primary btn-lg w-100"
 							@click="submitEvent">
@@ -317,15 +317,15 @@ onMounted(() => {
 					-->
 
 					<div class="d-flex align-items-center pengaturan-ujian-item">
-						<div class="w-40 fw-bold fs-4">Soal Acak</div>
-						<div class="flex-grow-1 text-muted pengaturan-ujian-note">Atur tampilan soal secara acak pada perangkat siswa</div>
-						<div class="form-check form-switch form-check-custom form-check-solid">
+						<div class="w-35 fw-bold fs-4">Soal Acak</div>
+						<div class="w-20 form-check form-switch form-check-custom form-check-solid">
 							<input
 								v-model="examData.exam_random"
 								@change="isChanged = true"
 								class="form-check-input"
 								type="checkbox">
 						</div>
+						<div class="text-muted pengaturan-ujian-note">Atur tampilan soal secara acak pada perangkat siswa</div>
 					</div>
 
 					<!--
@@ -355,27 +355,27 @@ onMounted(() => {
 					-->
 
 					<div class="d-flex align-items-center pengaturan-ujian-item">
-						<div class="w-40 fw-bold fs-4">Tampilkan Nilai Ujian</div>
-						<div class="flex-grow-1 text-muted pengaturan-ujian-note">Atur tampilan nilai setelah ujian online selesai</div>
-						<div class="form-check form-switch form-check-custom form-check-solid">
+						<div class="w-35 fw-bold fs-4">Tampilkan Nilai Ujian</div>
+						<div class="w-20 form-check form-switch form-check-custom form-check-solid">
 							<input
 								v-model="examData.showNilai"
 								@change="isChanged = true"
 								class="form-check-input"
 								type="checkbox">
 						</div>
+						<div class="text-muted pengaturan-ujian-note">Atur tampilan nilai setelah ujian online selesai</div>
 					</div>
 
 					<div class="d-flex align-items-center pengaturan-ujian-item">
-						<div class="w-40 fw-bold fs-4">Tampilkan Jawaban Soal</div>
-						<div class="flex-grow-1 text-muted pengaturan-ujian-note">Atur tampilan hasil jawaban siswa dan jawaban benar setelah pengerjaan</div>
-						<div class="form-check form-switch form-check-custom form-check-solid">
+						<div class="w-35 fw-bold fs-4">Tampilkan Jawaban Soal</div>
+						<div class="w-20 form-check form-switch form-check-custom form-check-solid">
 							<input
 								v-model="examData.showResult"
 								@change="isChanged = true"
 								class="form-check-input"
 								type="checkbox">
 						</div>
+						<div class="text-muted pengaturan-ujian-note">Atur tampilan hasil jawaban siswa dan jawaban benar setelah pengerjaan</div>
 					</div>
 
 					<!--
@@ -415,7 +415,7 @@ onMounted(() => {
 					</div>
 					-->
 
-					<div class="row">
+					<div class="row mt-8">
 						<div class="col-3">
 							<button
 								class="btn btn-secondary btn-lg w-100"
@@ -443,11 +443,17 @@ onMounted(() => {
 .w-40 {
 	width: 40%;
 }
-/* .pengaturan-ujian-item .pengaturan-ujian-note {
+.w-35 {
+	width: 35%;
+}
+.w-20 {
+	width: 20%;
+}
+.pengaturan-ujian-item .pengaturan-ujian-note {
 	opacity: 0;
-	transition: opacity 0.3s;
+	transition: opacity 0.2s;
 }
 .pengaturan-ujian-item:hover .pengaturan-ujian-note {
 	opacity: 1;
-} */
+}
 </style>

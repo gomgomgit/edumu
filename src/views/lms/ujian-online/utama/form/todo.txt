@@ -4,8 +4,9 @@ ini todo list untuk ujian online:
 -/ jika user telah mengubah data maka peringatkan user ketika akan pindah halaman jika tidak melalui tombol selanjutnya/submit
 
 # pengaturan
-- tukar posisi switch dan helper
-- helper hanya muncul saat dihover
+-/ tukar posisi switch dan helper
+-/ helper hanya muncul saat dihover
+- ganti warna toast validasi ke warning
 
 # soal ujian
 - ganti textarea pada komponen soal jadi div agar gambar muncul
