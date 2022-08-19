@@ -2,7 +2,7 @@
 import { reactive } from 'vue'
 import Modal from '@/components/modals/CustomModal.vue'
 import useQuestionsData from '../composables/useQuestionsData.js'
-import { isEmpty } from 'validate.js';
+import { isEmpty, validate } from 'validate.js';
 import { useToast } from 'vue-toast-notification';
 
 const { availableTypes, addQuestionType } = useQuestionsData()
@@ -20,9 +20,16 @@ const initialForm = {
 const formData = reactive({...initialForm})
 
 function handleSubmit () {
-	if (Object.values(formData).some(val => isEmpty(val))) {
-		return useToast().warning('Lengkapi form yang tersedia!')
-	}
+	const errors = validate(formData, {
+		questionType: { presence: { message: 'Bentuk soal tidak boleh kosong!' } },
+		optionCount: { presence: formData.questionType === 'essay' ? false : { message: 'Jumlah opsi jawaban tidak boleh kosong!' } },
+	}, {
+		fullMessages: false,
+		format: 'flat'
+	})
+
+	if (errors?.length) return useToast().warning(errors[0])
+
 	addQuestionType(formData)
 	Object.assign(formData, initialForm)
 	emit('closeModal')

@@ -11,15 +11,15 @@ ini todo list untuk ujian online:
 # soal ujian
 -/ ganti textarea pada komponen soal jadi div agar gambar muncul
 -/ sanitize html sebelum diinput dan saat akan ditampilkan
-- hilangkan validasi jumlah opsi jika soal bertipe essay pada modal tambah tipe soal
+-/ hilangkan validasi jumlah opsi jika soal bertipe essay pada modal tambah tipe soal
 - fungsikan kolom label soal pada modal tambah tipe soal
 - pindahkan tombol tambah dan hapus soal ke atas wrapper soal
 - tambahkan input bobot
-- tambahkan modul attachment
 -/ ubah autosave menjadi persekian menit jika user telah mengubah data
-- tambahkan import soal
-- tambahkan input soal dari bank soal
 - fungsikan tombol selanjutnya untuk submit soal ke database
+- tambahkan modul attachment
+- tambahkan input soal dari bank soal
+- tambahkan import soal
 
 # pratinjau
 - ambil data dari api pada bagian header
