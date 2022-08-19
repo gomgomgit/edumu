@@ -24,6 +24,8 @@ const initialData = {
 }
 
 const isLoading = ref(false)
+const isChanged = ref(false)
+
 const examData = reactive({ ...initialData })
 
 function resetExamData(customData = {}) {
@@ -88,6 +90,8 @@ async function saveExamData (examId) {
 		if (errors) {
 			useToast().warning(errors[0])
 			throw errors[0]
+		} else if (!isChanged.value) {
+			return examData
 		}
 
 		const payload = {
@@ -110,9 +114,10 @@ async function saveExamData (examId) {
 		return exam
 	} finally {
 		isLoading.value = false
+		isChanged.value = false
 	}
 }
 
 export default function () {
-	return { examData, isLoading, loadExamData, saveExamData, resetExamData }
+	return { examData, isLoading, isChanged, loadExamData, saveExamData, resetExamData }
 }

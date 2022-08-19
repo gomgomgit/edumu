@@ -49,8 +49,8 @@ function getMatchIndex (optionId) {
 							v-else
 							v-model="option.option_text"
 							class="option-editor"
-							@input="isChanged = true"
-							@blur="$event.type === 'blur' && cacheQuestionsData()">
+							@input="isChanged = true">
+							<!-- @blur="$event.type === 'blur' && cacheQuestionsData()" -->
 						</InlineEditor>
 					</section>
 
@@ -67,8 +67,8 @@ function getMatchIndex (optionId) {
 							v-else
 							v-model="question.matches[getMatchIndex(option.option_id)].option_match_text"
 							class="option-editor"
-							@input="isChanged = true"
-							@blur="$event.type === 'blur' && cacheQuestionsData()">
+							@input="isChanged = true">
+							<!-- @blur="$event.type === 'blur' && cacheQuestionsData()" -->
 						</InlineEditor>
 					</section>
 				</div>

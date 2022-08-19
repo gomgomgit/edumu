@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import Spinner from '@/components/Spinner.vue'
@@ -16,7 +16,7 @@ const route = useRoute()
 
 const {
 	questionsData, isNoQuestion, isLoading, questionTypeLabels,
-	loadQuestionsData, submitQuestionsData, resolveOrderNumber
+	loadQuestionsData, cacheQuestionsData, submitQuestionsData, resolveOrderNumber
 } = useQuestionsData()
 
 const questionComponentMap = {
@@ -28,6 +28,7 @@ const questionComponentMap = {
 
 const editorData = ref({})
 const isShowAddQuestion = ref(false)
+const lastCached = ref(new Date())
 
 function getTypeLabel (questionType) {
 	return questionTypeLabels.find(type => type.key === questionType)
@@ -37,8 +38,26 @@ function handleBack () {
 	router.back()
 }
 
+let cacheQuestionsTimeout
+const cachePerMinute = 1
+
+function setCacheTimeout () {
+	cacheQuestionsTimeout = setTimeout(() => {
+		if ((new Date()).getTime() - lastCached.value.getTime() > 60000 * cachePerMinute) {
+			cacheQuestionsData()
+			lastCached.value = new Date()
+		}
+		setCacheTimeout()
+	}, 10000)
+}
+
 onMounted(() => {
 	loadQuestionsData(route.params.exam_id)
+	setCacheTimeout()
+})
+
+onUnmounted(() => {
+	clearTimeout(cacheQuestionsTimeout)
 })
 </script>
 

@@ -11,7 +11,7 @@ import { useToast } from 'vue-toast-notification';
 const router = useRouter()
 const route = useRoute()
 
-const { examData, isLoading, loadExamData, saveExamData, resetExamData } = useExamData()
+const { examData, isLoading, isChanged, loadExamData, saveExamData, resetExamData } = useExamData()
 
 const tabs = reactive({
 	active: 'event',
@@ -61,8 +61,8 @@ async function submitEvent () {
 }
 
 async function submitUjian () {
-	const res = await saveExamData(examIdParam.value)
-	router.push('/lms/ujian-online/utama/form/soal-ujian/' + res.exam_id)
+	await saveExamData(examIdParam.value)
+	router.push('/lms/ujian-online/utama/form/soal-ujian/' + examIdParam.value)
 }
 
 watch(
@@ -110,6 +110,7 @@ onMounted(() => {
 					<div class="col-9">
 						<input
 							v-model="examData.exam_title"
+							@change="isChanged = true"
 							type="text"
 							class="form-control"
 							placeholder="Isi judul ujian online" />
@@ -119,6 +120,7 @@ onMounted(() => {
 					<div class="col-9">
 						<el-select
 							v-model="examData.exam_cat_id"
+							@change="isChanged = true"
 							class="w-100"
 							placeholder="Pilih kategori">
 							<el-option
@@ -133,6 +135,7 @@ onMounted(() => {
 					<div class="col-9">
 						<el-select
 							v-model="examData.user_id"
+							@change="isChanged = true"
 							class="w-100"
 							placeholder="Pilih Guru">
 							<el-option
@@ -147,6 +150,7 @@ onMounted(() => {
 					<div class="col-9">
 						<el-select
 							v-model="examData.mapel_id"
+							@change="isChanged = true"
 							class="w-100"
 							placeholder="Pilih Mata Pelajaran">
 							<el-option
@@ -161,6 +165,7 @@ onMounted(() => {
 					<div class="col-9">
 						<input
 							v-model="examData.exam_desc"
+							@change="isChanged = true"
 							type="text"
 							class="form-control"
 							placeholder="Isi keterangan ujian online" />
@@ -170,6 +175,7 @@ onMounted(() => {
 					<div class="col-9">
 						<el-select
 							v-model="examData.exam_type"
+							@change="isChanged = true"
 							class="w-100"
 							placeholder="Pilih skema waktu ujian online">
 							<el-option
@@ -187,6 +193,7 @@ onMounted(() => {
 							<div class="fw-bold fs-5">Mulai</div>
 							<input
 								v-model="examData.exam_start_date"
+								@change="isChanged = true"
 								type="datetime-local"
 								class="form-control flex-grow-1"
 								onfocus="this.showPicker()" />
@@ -195,6 +202,7 @@ onMounted(() => {
 							<div class="fw-bold fs-5">Selesai</div>
 							<input
 								v-model="examData.exam_end_date"
+								@change="isChanged = true"
 								type="datetime-local"
 								class="form-control flex-grow-1"
 								onfocus="this.showPicker()" />
@@ -203,6 +211,7 @@ onMounted(() => {
 							<div class="fw-bold fs-5">Pengerjaan</div>
 							<input
 								v-model="examData.exam_time_limit"
+								@change="isChanged = true"
 								type="number"
 								step="5"
 								class="form-control"
@@ -214,6 +223,7 @@ onMounted(() => {
 					<div class="col-9">
 						<el-select
 							v-model="examData.kelas"
+							@change="isChanged = true"
 							multiple
 							placeholder="Penetapan kelas peserta ujian online"
 							class="w-100">
@@ -303,6 +313,7 @@ onMounted(() => {
 						<div class="form-check form-switch form-check-custom form-check-solid">
 							<input
 								v-model="examData.exam_random"
+								@change="isChanged = true"
 								class="form-check-input"
 								type="checkbox">
 						</div>
@@ -340,6 +351,7 @@ onMounted(() => {
 						<div class="form-check form-switch form-check-custom form-check-solid">
 							<input
 								v-model="examData.showNilai"
+								@change="isChanged = true"
 								class="form-check-input"
 								type="checkbox">
 						</div>
@@ -351,6 +363,7 @@ onMounted(() => {
 						<div class="form-check form-switch form-check-custom form-check-solid">
 							<input
 								v-model="examData.showResult"
+								@change="isChanged = true"
 								class="form-check-input"
 								type="checkbox">
 						</div>

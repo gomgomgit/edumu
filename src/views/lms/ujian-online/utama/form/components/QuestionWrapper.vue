@@ -33,8 +33,8 @@ const isError = computed(() => errorBag.value[`${props.wrapperIndex}-${props.que
 					v-else
 					class="question-editor"
 					v-model="question.question_text"
-					@input="isChanged = true"
-					@blur="$event.type === 'blur' && cacheQuestionsData()">
+					@input="isChanged = true">
+					<!-- @blur="$event.type === 'blur' && cacheQuestionsData()" -->
 				</InlineEditor>
 			</div>
 			<div class="col-3 d-flex justify-content-between">

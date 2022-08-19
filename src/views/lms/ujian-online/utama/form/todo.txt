@@ -1,0 +1,29 @@
+ini todo list untuk ujian online:
+
+# general
+- jika user telah mengubah data maka peringatkan user ketika akan pindah halaman jika tidak melalui tombol selanjutnya/submit
+
+# pengaturan
+- tukar posisi switch dan helper
+- helper hanya muncul saat dihover
+
+# soal ujian
+- ganti textarea pada komponen soal jadi div agar gambar muncul
+-/ sanitize html sebelum diinput dan saat akan ditampilkan
+- hilangkan validasi jumlah opsi jika soal bertipe essay pada modal tambah tipe soal
+- fungsikan kolom label soal pada modal tambah tipe soal
+- pindahkan tombol tambah dan hapus soal ke atas wrapper soal
+- tambahkan input bobot
+- tambahkan modul attachment
+-/ ubah autosave menjadi persekian menit jika user telah mengubah data
+- tambahkan import soal
+- tambahkan input soal dari bank soal
+- fungsikan tombol selanjutnya untuk submit soal ke database
+
+# pratinjau
+- ambil data dari api pada bagian header
+- fungsikan tombol submit untuk menyimpan urutan soal ke database
+
+# list ujian online
+- sembunyikan tombol remedial, ubah status, dan atur ulang waktu, kedalam tombol opsi dengan icon titik 3
+- tambahkan tombol untuk aktifkan/nonaktifkan ujian

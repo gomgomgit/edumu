@@ -15,7 +15,6 @@ const { isLoading: isLoadingQuestions, questionsData, loadQuestionsData } = useQ
 const { isLoading: isLoadingExam, examData, loadExamData } = useExamData();
 
 const mergedQuestions = ref([]);
-const drag = ref(false);
 
 const examTime = 90
 
@@ -170,7 +169,7 @@ onMounted(() => {
 
 			<sortable
 				v-if="mergedQuestions?.length"
-				class="list-group questions-wrapper bg-light rounded-3 px-5 pb-5 mt-8"
+				class="questions-wrapper bg-light rounded-3 px-5 pb-5 mt-8"
 				:list="mergedQuestions"
 				item-key="question_id"
 				:options="{

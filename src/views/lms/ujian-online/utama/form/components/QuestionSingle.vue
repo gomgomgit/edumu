@@ -25,7 +25,8 @@ function handleOption (selectedIndex) {
 	for (const optionIndex in props.question.options) {
 		props.question.options[optionIndex].is_correct = optionIndex == selectedIndex
 	}
-	cacheQuestionsData(true)
+	isChanged.value = true
+	// cacheQuestionsData(true)
 }
 </script>
 
@@ -46,8 +47,8 @@ function handleOption (selectedIndex) {
 					v-else
 					v-model="option.option_text"
 					class="option-editor flex-grow-1"
-					@input="isChanged = true"
-					@blur="$event.type === 'blur' && cacheQuestionsData()">
+					@input="isChanged = true">
+					<!-- @blur="$event.type === 'blur' && cacheQuestionsData()" -->
 				</InlineEditor>
 			</div>
 

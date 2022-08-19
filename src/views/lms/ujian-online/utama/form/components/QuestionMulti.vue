@@ -23,7 +23,8 @@ function showEditor(optionIndex) {
 
 function handleOption (selectedOption) {
 	selectedOption.is_correct = !selectedOption.is_correct
-	cacheQuestionsData(true)
+	isChanged.value = true
+	// cacheQuestionsData(true)
 }
 </script>
 
@@ -44,8 +45,8 @@ function handleOption (selectedOption) {
 					v-else
 					v-model="option.option_text"
 					class="option-editor flex-grow-1"
-					@input="isChanged = true"
-					@blur="$event.type === 'blur' && cacheQuestionsData()">
+					@input="isChanged = true">
+					<!-- @blur="$event.type === 'blur' && cacheQuestionsData()" -->
 				</InlineEditor>
 			</div>
 

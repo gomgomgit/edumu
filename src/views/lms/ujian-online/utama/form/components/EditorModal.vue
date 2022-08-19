@@ -8,7 +8,7 @@ import useQuestionsData from '../composables/useQuestionsData.js'
 
 const correctOperator = '#jwb#'
 
-const { questionsData, addQuestion, cacheQuestionsData } = useQuestionsData()
+const { questionsData, addQuestion, isChanged, cacheQuestionsData } = useQuestionsData()
 
 const props = defineProps({
 	editorData: { type: Object, default: () => ({})},
@@ -199,9 +199,10 @@ function handleSubmit () {
 	}))
 
 	questionsData.question_types[wrapperIndex].questions = questions
+	isChanged.value = true
 
 	if (editorResult.length === 0) addQuestion(wrapperIndex, 0)
-	else cacheQuestionsData(true)
+	// else cacheQuestionsData(true)
 
 	emit('closeModal')
 }

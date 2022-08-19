@@ -1,9 +1,10 @@
 import { computed, reactive, ref } from 'vue'
-import qs from 'qs'
 import { useToast } from 'vue-toast-notification';
+import { isEmpty } from 'validate.js';
+import qs from 'qs'
+import sanitizeHtml from 'sanitize-html';
 
 import { requestDevel } from '@/util'
-import { isEmpty } from 'validate.js';
 
 const questionTypeLabels = [
 	{ key: 'single', title: 'Pilihan Ganda', icon: 'fa-list-ul' },
@@ -57,9 +58,15 @@ function loadQuestionsData(examId) {
 				optionCount: type.question_type !== 'essay' ? type.questions[0].options.length : 0,
 				questions: type.questions.map(question => ({
 					...question,
+					question_text: sanitizeHtml(question.question_text),
 					options: !question.options ? [] : question.options.map(option => ({
 						...option,
+						option_text: sanitizeHtml(option.option_text),
 						is_correct: parseInt(option.is_correct) ? 1 : 0
+					})),
+					matches: !question.matches ? [] : question.matches.map(match => ({
+						...match,
+						option_match_text: sanitizeHtml(match.option_match_text)
 					}))
 				}))
 			}))
@@ -190,9 +197,10 @@ function removeQuestion (wrapperIndex, questionIndex) {
 	questionsData.question_types[wrapperIndex].questions.splice(questionIndex, 1)
 	if (questionsData.question_types[wrapperIndex].questions.length === 0) {
 		removeQuestionType(wrapperIndex)
-	} else {
-		cacheQuestionsData(true)
 	}
+	// else {
+	// 	cacheQuestionsData(true)
+	// }
 }
 
 function addQuestionType (payload) {
@@ -208,7 +216,7 @@ function addQuestionType (payload) {
 
 function removeQuestionType (wrapperIndex) {
 	questionsData.question_types.splice(wrapperIndex, 1)
-	cacheQuestionsData(true)
+	// cacheQuestionsData(true)
 }
 
 function resolveOrderNumber(wrapperIndex, questionIndex) {
