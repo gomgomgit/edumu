@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Swal from 'sweetalert2'
 
@@ -19,7 +19,7 @@ const route = useRoute()
 
 const {
 	questionsData, isNoQuestion, isLoading, isChanged, questionTypeLabels,
-	loadQuestionsData, cacheQuestionsData, submitQuestionsData, resolveOrderNumber
+	addQuestion, removeQuestion, loadQuestionsData, cacheQuestionsData, submitQuestionsData, resolveOrderNumber
 } = useQuestionsData()
 
 const questionComponentMap = {
@@ -30,6 +30,7 @@ const questionComponentMap = {
 }
 
 const editorData = ref({})
+const wrapperRefs = ref([])
 const isShowAddQuestion = ref(false)
 const lastCached = ref(new Date())
 
@@ -45,6 +46,18 @@ async function handleBack () {
 
 	isChanged.value = false
 	router.back()
+}
+
+function handleAction (type, wrapperIndex) {
+	switch (type) {
+		case 'remove': removeQuestion(wrapperIndex, questionsData.question_types[wrapperIndex].questions.length - 1); break
+		case 'add': addQuestion(wrapperIndex, questionsData.question_types[wrapperIndex].questions.length - 1); break
+	}
+
+	nextTick(() => {
+		const el = wrapperRefs.value[wrapperIndex]
+		el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
+	})
 }
 
 let cacheQuestionsTimeout
@@ -109,12 +122,14 @@ onUnmounted(() => {
 				<section
 					v-for="(questionsWrapper, wrapperIndex) in questionsData.question_types"
 					:key="wrapperIndex"
+					:ref="templateRef => wrapperRefs[wrapperIndex] = templateRef"
 					class="border border-2 rounded-3 px-5 pb-6 questions-wrapper">
 					<header class="d-flex justify-content-between align-items-center bg-white py-8 questions-wrapper-header">
 						<div class="d-flex align-items-center">
 							<div class="fw-bold fs-5 me-20">
 								Tipe Soal
 							</div>
+
 							<div class="d-flex align-items-center gap-10">
 								<div class="border border-2 border-secondary py-3 px-4 rounded-3 fw-bolder">
 									{{ getTypeLabel(questionsWrapper.question_type).title }}
@@ -124,22 +139,36 @@ onUnmounted(() => {
 											class="fas fa-fw text-white"></i>
 									</span>
 								</div>
+
 								<div
 									v-if="['single', 'multi'].includes(questionsWrapper.question_type)"
 									class="py-3 px-8 rounded-3 fw-bold bg-light">
 									{{ questionsWrapper.optionCount}} Opsi
 								</div>
+
 								<div class="py-3 px-8 rounded-3 fw-bold bg-light">
 									Bobot Soal Manual
 								</div>
 							</div>
 						</div>
-						<button
-							class="btn btn-primary"
-							@click="editorData = questionsWrapper">
-							<i class="fas fa-list me-1"></i>
-							EDITOR
-						</button>
+
+						<div class="d-flex gap-6">
+							<button
+								class="btn btn-primary"
+								@click="editorData = questionsWrapper">
+								<i class="fas fa-list me-1"></i>
+								EDITOR
+							</button>
+
+							<div class="question-action">
+								<div class="question-remove" role="button" @click="handleAction('remove', wrapperIndex)">
+									<img src="figma-icon/question-remove.png" alt="" />
+								</div>
+								<div class="question-add" role="button" @click="handleAction('add', wrapperIndex)">
+									<img src="figma-icon/question-add.png" alt="" />
+								</div>
+							</div>
+						</div>
 					</header>
 
 					<hr class="border border-light opacity-100 mb-8 mt-0">
@@ -187,27 +216,31 @@ onUnmounted(() => {
 </template>
 
 <style>
-
 #soal-ujian .questions-wrapper {
 	max-height: 90vh !important;
 	overflow-y: scroll;
 	overflow-x: hidden;
 }
+
 #soal-ujian .questions-wrapper-header {
 	position: sticky;
 	top: 0;
 	z-index: 5;
 }
+
 #soal-ujian .question-editor {
 	min-height: 140px;
 }
+
 #soal-ujian .option-editor {
 	min-height: 35px;
 }
+
 #soal-ujian .pulse-ring {
 	left: 6.5px;
 	top: 2px;
 }
+
 #soal-ujian .option-editor.form-control,
 #soal-ujian .question-editor.form-control {
 	font-weight: normal;
@@ -215,5 +248,53 @@ onUnmounted(() => {
 	color: #333;
 	padding: 12px 8px 0 !important;
 	cursor: text;
+}
+
+#soal-ujian .question-action {
+	width: 50px;
+	height: 50px;
+	position: relative;
+	transform: rotate(-45deg);
+	/* background: slateblue; */
+}
+
+#soal-ujian .question-remove {
+	width: 50px;
+	height: 25px;
+	cursor: pointer;
+	overflow: hidden;
+	transform-origin: bottom;
+	transition: transform ease .25s;
+	/* background: khaki; */
+}
+
+#soal-ujian .question-remove img {
+	transform: rotate(45deg);
+	position: relative;
+	width: 35px;
+	top: 4px;
+	left: 8px;
+}
+
+#soal-ujian .question-add {
+	width: 50px;
+	height: 25px;
+	cursor: pointer;
+	overflow: hidden;
+	transform-origin: top;
+	transition: transform ease .25s;
+	/* background: salmon; */
+}
+
+#soal-ujian .question-add img {
+	transform: rotate(45deg);
+	position: relative;
+	width: 35px;
+	bottom: 13px;
+	left: 7.5px;
+}
+
+#soal-ujian .question-action :where(.question-add, .question-remove):hover {
+	transform: scale(1.2);
 }
 </style>

@@ -9,13 +9,13 @@ ini todo list untuk ujian online:
 -/ ganti warna toast validasi ke warning
 
 # soal ujian
+-/ ubah autosave menjadi persekian menit jika user telah mengubah data
 -/ ganti textarea pada komponen soal jadi div agar gambar muncul
 -/ sanitize html sebelum diinput dan saat akan ditampilkan
 -/ hilangkan validasi jumlah opsi jika soal bertipe essay pada modal tambah tipe soal
-- fungsikan kolom label soal pada modal tambah tipe soal
-- pindahkan tombol tambah dan hapus soal ke atas wrapper soal
+-/ pindahkan tombol tambah dan hapus soal ke atas wrapper soal
 - tambahkan input bobot
--/ ubah autosave menjadi persekian menit jika user telah mengubah data
+- fungsikan kolom label soal pada modal tambah tipe soal
 - fungsikan tombol selanjutnya untuk submit soal ke database
 - tambahkan modul attachment
 - tambahkan input soal dari bank soal
