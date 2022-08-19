@@ -12,6 +12,7 @@ const questionTypeLabels = [
 	{ key: 'match', title: 'Pencocokan', icon: 'fa-wave-square' },
 ]
 
+const isLoading = ref(false)
 const isChanged = ref(false)
 
 const errorBag = ref({})
@@ -42,6 +43,8 @@ function handleRequestError(err) {
 function loadQuestionsData(examId) {
 	if (questionsData.exam_id !== null || examId == questionsData.exam_id) return
 
+	isLoading.value = true
+
 	requestDevel.post(
 		'v2dev/exam/get-cached-soal',
 		qs.stringify({ exam_id: examId })
@@ -64,7 +67,9 @@ function loadQuestionsData(examId) {
 
 		if (res.data.status) Object.assign(questionsData, formattedExamData)
 		else throw res.data
-	}).catch(handleRequestError)
+	})
+	.catch(handleRequestError)
+	.finally(() => isLoading.value = false)
 }
 
 async function cacheQuestionsData (immediate) {
@@ -221,8 +226,8 @@ function resolveOrderNumber(wrapperIndex, questionIndex) {
 
 export default function () {
 	return {
-		questionsData, questionTypeLabels, availableTypes, isNoQuestion, isChanged, errorBag,
+		questionsData, questionTypeLabels, availableTypes, isNoQuestion, isChanged, isLoading, errorBag,
+		addQuestion, removeQuestion, addQuestionType, removeQuestionType, resolveOrderNumber,
 		loadQuestionsData, cacheQuestionsData, submitQuestionsData,
-		addQuestion, removeQuestion, addQuestionType, removeQuestionType, resolveOrderNumber
 	}
 }

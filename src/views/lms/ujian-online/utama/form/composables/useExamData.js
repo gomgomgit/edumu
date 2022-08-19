@@ -34,6 +34,7 @@ function resetExamData(customData = {}) {
 }
 
 async function loadExamData (examId) {
+	if (examData.exam_id) return
 	try {
 		isLoading.value = true
 		const res = await requestDevel.post(`ujian/${examId}?exam_id=${examId}`)
