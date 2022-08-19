@@ -652,7 +652,7 @@ const routes: Array<RouteRecordRaw> = [
     ],
   },
   {
-    path: "/sign-in-process/:data",
+    path: "/sign-in-process",
     name: "sign-in-process",
     component: () =>
       import("@/views/crafted/authentication/basic-flow/SignInProcess.vue"),

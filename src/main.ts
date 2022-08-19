@@ -20,6 +20,7 @@ import CKEditor from '@ckeditor/ckeditor5-vue';
 import "@/core/plugins/prismjs";
 import "bootstrap";
 import 'vue-toast-notification/dist/theme-default.css';
+import VueCryptojs from 'vue-cryptojs'
 
 const app = createApp(App);
 
@@ -32,6 +33,7 @@ app.use(router);
 app.use(ElementPlus);
 app.use(VueToast);
 app.use(CKEditor);
+app.use(VueCryptojs);
 
 ApiService.init(app);
 initApexCharts(app);
