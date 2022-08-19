@@ -28,12 +28,12 @@ const loginData = route.query.data;
 store.dispatch(Actions.ADD_BODY_CLASSNAME, "page-loading");
 
 function loginProcess() {
-  console.log('encrypt', loginData)
+  // console.log('encrypt', loginData)
 
-  var bytes = cryoptojs.AES.decrypt(loginData.replace(/\s+/g, '+'), "edumuv2").toString(cryoptojs.enc.Utf8)
+  var bytes = cryoptojs.AES.decrypt(loginData.replace(/ /g, '+'), "edumuv2").toString(cryoptojs.enc.Utf8)
   var data = QueryString.parse(bytes);
 
-  console.log('data', data)
+  // console.log('data', data)
 
   store.dispatch(Actions.LOGIN, data)
 

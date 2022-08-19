@@ -173,13 +173,13 @@ import Swal from "sweetalert2";
             </div>
 
             <div class="position-relative d-flex flex-wrap gap-4 w-100 w-xl-auto justify-content-end">
-              <div class="d-flex align-items-center">
+              <!-- <div class="d-flex align-items-center">
                 <router-link to="/absensi/skema-absensi/siswa" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
                   <span>
                     Siswa Absen GPS
                   </span>
                 </router-link>
-              </div>
+              </div> -->
               <div class="d-flex align-items-center">
                 <a @click="getDataExportSiswa()" class="btn btn-primary d-flex gap-1 align-items-center w-auto">
                   <span>
