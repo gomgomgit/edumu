@@ -100,13 +100,13 @@ function handlePasswordClose() {
             </div>
 
             <div class="position-relative d-flex w-100 w-lg-50 w-xl-auto gap-4 justify-content-end">
-              <div class="d-flex align-items-center">
+              <!-- <div class="d-flex align-items-center">
                 <router-link to="/absensi/skema-absensi/guru" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
                   <span>
                     Guru Absen GPS
                   </span>
                 </router-link>
-              </div>
+              </div> -->
               <div class="d-flex align-items-center">
                 <router-link to="/sekolah/profil-pengguna/guru/import-data" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
                   <span>
