@@ -30,7 +30,7 @@ const availableTypes = computed(() => questionTypeLabels.filter(
 ))
 
 function handleRequestError(err) {
-	useToast().error(
+	useToast().warning(
 		typeof err === 'string'
 			? err
 			: err.hasOwnProperty('message')
@@ -155,7 +155,7 @@ function validateQuestionsData () {
 
 function submitQuestionsData () {
 	const errors = validateQuestionsData()
-	if (errors.length) useToast().error(errors[0], { duration: 60000 })
+	if (errors.length) useToast().warning(errors[0], { duration: 60000 })
 	else useToast().success('Data will be submitted')
 }
 

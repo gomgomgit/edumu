@@ -63,17 +63,17 @@ const routes: Array<RouteRecordRaw> = [
                     redirect: "/lms/ujian-online/utama/form/pengaturan"
                   },
                   {
-                    path: "pengaturan/:id?",
+                    path: "pengaturan/:exam_id?",
                     name: "lms-ujian-online-utama-form-pengaturan",
                     component: () => import("@/views/lms/ujian-online/utama/form/Pengaturan.vue")
                   },
                   {
-                    path: "soal-ujian/:id?",
+                    path: "soal-ujian/:exam_id",
                     name: "lms-ujian-online-utama-form-soal-ujian",
                     component: () => import("@/views/lms/ujian-online/utama/form/SoalUjian.vue"),
                   },
                   {
-                    path: "pratinjau/:id?",
+                    path: "pratinjau/:exam_id",
                     name: "lms-ujian-online-utama-form-pratinjau",
                     component: () => import("@/views/lms/ujian-online/utama/form/Pratinjau.vue"),
                   },
@@ -330,7 +330,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "sekolah-mata-pelajaran-jadwal-pelajaran-import",
         component: () => import("@/views/sekolah/mata-pelajaran/jadwal-pelajaran/Import.vue")
       },
-      
+
       {
         path: "/sekolah/informasi/pengumuman",
         name: "sekolah-informasi-pengumuman",

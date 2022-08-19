@@ -58,15 +58,15 @@ function postData() {
 
 function generate() {
   if (form.question_type === '') {
-			useToast().error("Type soal wajib dipilih!");return false;
+			useToast().warning("Type soal wajib dipilih!");return false;
 		}
 
 		if (form.mapel_id === '') {
-			useToast().error("Mapel wajib dipilih!");return false;
+			useToast().warning("Mapel wajib dipilih!");return false;
 		}
 
 		if (form.question_type !== 'essay' && form.option_count === '') {
-			useToast().error("Jumlah opsi harus diisi!");return false;
+			useToast().warning("Jumlah opsi harus diisi!");return false;
 		}
 
 		if (form.question_type == 'single') {
@@ -163,7 +163,7 @@ function generate() {
             </a>
           </div>
         </div>
-        
+
         <div class="mt-4">
 
           <div class="mt-4">

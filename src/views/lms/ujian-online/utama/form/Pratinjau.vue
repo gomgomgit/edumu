@@ -173,7 +173,7 @@ onMounted(async () => {
 			<div class="col-3 offset-9">
 				<button
 					class="btn btn-primary btn-lg w-100">
-					SUBMIT
+					SIMPAN
 					<i class="fas fa-angle-double-right ms-2"></i>
 				</button>
 			</div>

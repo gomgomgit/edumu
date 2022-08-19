@@ -1,30 +1,38 @@
 <script setup>
-import { useRoute } from 'vue-router'
+import { computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useToast } from 'vue-toast-notification';
 
+const router = useRouter()
 const route = useRoute()
 
-const tabs = [{
-	to: '/lms/ujian-online/utama/form/pengaturan',
+const tabs = computed(() => ([{
+	to: '/lms/ujian-online/utama/form/pengaturan/' + route.params?.exam_id,
 	title: 'Pengaturan',
 	subtitle: 'Ujian Online',
 	route: 'lms-ujian-online-utama-form-pengaturan',
 	iconNormal: 'figma-icon/favorite-chart-dark.png',
 	iconActive: 'figma-icon/favorite-chart-light.png',
 },{
-	to: '/lms/ujian-online/utama/form/soal-ujian',
+	to: '/lms/ujian-online/utama/form/soal-ujian/' + route.params?.exam_id,
 	title: 'Soal Ujian',
 	subtitle: 'Buat soal dan jawaban',
 	route: 'lms-ujian-online-utama-form-soal-ujian',
 	iconNormal: 'figma-icon/message-add-1-dark.png',
 	iconActive: 'figma-icon/message-add-1-light.png',
 },{
-	to: '/lms/ujian-online/utama/form/pratinjau',
+	to: '/lms/ujian-online/utama/form/pratinjau/' + route.params?.exam_id,
 	title: 'Pratinjau',
 	subtitle: 'Ujian Online',
 	route: 'lms-ujian-online-utama-form-pratinjau',
 	iconNormal: 'figma-icon/gallery-favorite-dark.png',
 	iconActive: 'figma-icon/gallery-favorite-light.png',
-}]
+}]))
+
+function handleTabClick (tab) {
+	if (!route.params?.exam_id) return useToast().warning('Buat event ujian online terlebih dahulu!')
+	router.push(tab.to)
+}
 </script>
 
 <template>
@@ -47,10 +55,11 @@ const tabs = [{
 							class="col-md-4"
 							v-for="(tab, index) in tabs"
 							:key="index">
-							<router-link
+							<div
+								role="button"
 								class="w-100 d-block py-4 ps-6 rounded-3"
-								active-class="bg-primary"
-								:to="tab.to">
+								:class="{ 'bg-primary': route.name === tab.route }"
+								@click="handleTabClick(tab)">
 								<div class="d-flex align-items-center">
 									<img
 										class="me-5"
@@ -67,7 +76,7 @@ const tabs = [{
 										</div>
 									</div>
 								</div>
-							</router-link>
+							</div>
 						</section>
 					</div>
 				</div>

@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 
 import useQuestionsData from './composables/useQuestionsData.js'
 import EditorModal from './components/EditorModal.vue'
@@ -8,6 +9,8 @@ import QuestionSingle from './components/QuestionSingle.vue'
 import QuestionMulti from './components/QuestionMulti.vue'
 import QuestionEssay from './components/QuestionEssay.vue'
 import QuestionMatch from './components/QuestionMatch.vue'
+
+const route = useRoute()
 
 const {
 	questionsData, isNoQuestion, questionTypeLabels,
@@ -29,7 +32,7 @@ function getTypeLabel (questionType) {
 }
 
 onMounted(() => {
-	loadQuestionsData(46)
+	loadQuestionsData(route.params.exam_id)
 })
 </script>
 

@@ -21,7 +21,7 @@ const formData = reactive({...initialForm})
 
 function handleSubmit () {
 	if (Object.values(formData).some(val => isEmpty(val))) {
-		return useToast().error('Lengkapi form yang tersedia!')
+		return useToast().warning('Lengkapi form yang tersedia!')
 	}
 	addQuestionType(formData)
 	Object.assign(formData, initialForm)
