@@ -93,12 +93,12 @@ import moment from "moment";
     })
   }
   
-  function handleCloseForm() {
-    mode.value = null
+  function handleClose() {
+    formMode.value = null
     activeData.value = null
   }
-  function handleSubmitForm() {
-    mode.value = null
+  function handleSubmit() {
+    formMode.value = null
     activeData.value = null
     getTugasData()
   }
@@ -220,7 +220,7 @@ import moment from "moment";
       :mode="formMode"
       :activeData="activeData"
       :dataOption="{guruOption: guruOption, kelasOption: kelasOption, mapelOption: mapelOption}"
-      @close="handleFormClose"
-      @submit="tableRef.loadItems()" />
+      @close="handleClose"
+      @submit="handleSubmit" />
   </div>
 </template>
