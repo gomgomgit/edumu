@@ -7,23 +7,38 @@
   import ServerSideTable from '@/components/ServerSideTable.vue'
   import FilterSelect from '@/components/filter-select'
   import { useToast } from "vue-toast-notification"
-import { deleteConfirmation } from "@/core/helpers/deleteconfirmation";
+  import { deleteConfirmation } from "@/core/helpers/deleteconfirmation";
+  import FormModal from './FormModal.vue'
 
   onMounted(() => {
     setCurrentPageBreadcrumbs("Kalender Akademik", ['Sekolah', "Akademik"]);
+    getKelas()
   })
 
   function getKalender (payload) {
-      request.post('libur', null, {
-        params: {
-          page: payload?.page ?? 1,
-          sortby: payload?.sort?.type ?? 'ASC'
-        }
-      }).then(res => {
-        kalender.rows = res.data.data.data
-        kalender.totalRows = res.data.data.total
-      })
-    }
+    request.post('libur', null, {
+      params: {
+        page: payload?.page ?? 1,
+        sortby: payload?.sort?.type ?? 'ASC'
+      }
+    }).then(res => {
+      kalender.rows = res.data.data.data
+      kalender.totalRows = res.data.data.total
+    })
+  }
+ 
+  function getKelas() {
+    request.post('kelas', null, {
+      params: {
+      }
+    }).then(res => {
+      kelas.value = res.data.data
+    })
+  }
+
+  const kelas = ref()
+  const formMode = ref()
+  const activeData = ref()
 
   const kalender = reactive({
     columns: [
@@ -49,6 +64,20 @@ import { deleteConfirmation } from "@/core/helpers/deleteconfirmation";
         getKalender()
       })
     })
+  }
+  
+  function handleClose() {
+    formMode.value = null
+    activeData.value = null
+  }
+  function handleSubmit() {
+    formMode.value = null
+    activeData.value = null
+    getKalender()
+  }
+  function handleEdit(row) {
+    formMode.value = 'Edit Data'
+    activeData.value = row
   }
 </script>
 
@@ -78,12 +107,18 @@ import { deleteConfirmation } from "@/core/helpers/deleteconfirmation";
                   Import Data
                 </span>
               </router-link>
-              <router-link to="/sekolah/akademik/kalender-akademik/tambah" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
+              <a @click="formMode = 'Tambah Data'" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
                 <i class="bi bi-plus fs-1"></i>
                 <span>
                   Tambah Data
                 </span>
-              </router-link>
+              </a>
+              <!-- <router-link to="/sekolah/akademik/kalender-akademik/tambah" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
+                <i class="bi bi-plus fs-1"></i>
+                <span>
+                  Tambah Data
+                </span>
+              </router-link> -->
             </div>
           </div>
           <div class="separator border-black-50 border-2 my-3"></div>
@@ -104,11 +139,16 @@ import { deleteConfirmation } from "@/core/helpers/deleteconfirmation";
                 <span :class="'badge badge-light-' + (row.thn_ajar_status == 1 ? 'success' : 'danger')">{{row.thn_ajar_status == 1 ? 'Aktif' : 'Non Aktif'}}</span>
               </div>
               <div v-if="column.field == 'action'">
-                <router-link :to="`/sekolah/akademik/kalender-akademik/edit/${row.libur_id}`" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
+                <a @click="handleEdit(row)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
                   <span class="svg-icon svg-icon-3">
                     <inline-svg src="media/icons/duotune/art/art005.svg" />
                   </span>
-                </router-link>
+                </a>
+                <!-- <router-link :to="`/sekolah/akademik/kalender-akademik/edit/${row.libur_id}`" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
+                  <span class="svg-icon svg-icon-3">
+                    <inline-svg src="media/icons/duotune/art/art005.svg" />
+                  </span>
+                </router-link> -->
                 <button @click="deleteData(row.libur_id)" class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm">
                   <span class="svg-icon svg-icon-3">
                     <inline-svg src="media/icons/duotune/general/gen027.svg"/>
@@ -119,6 +159,12 @@ import { deleteConfirmation } from "@/core/helpers/deleteconfirmation";
         </ServerSideTable>
       </div>
     </div>
-
+    
+		<FormModal
+			:mode="formMode"
+			:activeData="activeData"
+      :kelas="kelas"
+			@close="handleClose"
+			@submit="handleSubmit" />
   </div>
 </template>
