@@ -380,7 +380,6 @@ onMounted(() => {
 							<input class="form-check-input" type="checkbox">
 						</div>
 					</div>
-					-->
 
 					<div class="d-flex align-items-center pengaturan-ujian-item">
 						<div class="w-40 fw-bold fs-4">Status Ujian Online</div>
@@ -392,6 +391,7 @@ onMounted(() => {
 								type="checkbox">
 						</div>
 					</div>
+					-->
 
 					<div class="row">
 						<div class="col-3">

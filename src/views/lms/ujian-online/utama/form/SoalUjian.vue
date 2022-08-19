@@ -1,7 +1,8 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
+import Spinner from '@/components/Spinner.vue'
 import useQuestionsData from './composables/useQuestionsData.js'
 import EditorModal from './components/EditorModal.vue'
 import AddQuestionWrapperModal from './components/AddQuestionWrapperModal.vue'
@@ -10,10 +11,11 @@ import QuestionMulti from './components/QuestionMulti.vue'
 import QuestionEssay from './components/QuestionEssay.vue'
 import QuestionMatch from './components/QuestionMatch.vue'
 
+const router = useRouter()
 const route = useRoute()
 
 const {
-	questionsData, isNoQuestion, questionTypeLabels,
+	questionsData, isNoQuestion, isLoading, questionTypeLabels,
 	loadQuestionsData, submitQuestionsData, resolveOrderNumber
 } = useQuestionsData()
 
@@ -31,6 +33,10 @@ function getTypeLabel (questionType) {
 	return questionTypeLabels.find(type => type.key === questionType)
 }
 
+function handleBack () {
+	router.back()
+}
+
 onMounted(() => {
 	loadQuestionsData(route.params.exam_id)
 })
@@ -38,103 +44,117 @@ onMounted(() => {
 
 <template>
 	<div id="soal-ujian" class="pt-5">
-		<header class="d-flex justify-content-between align-items-start mb-10">
-			<div>
-				<h2>Buat Soal Manual</h2>
-				<div class="text-muted">Buat soal dan jawaban apda editor text</div>
-			</div>
-			<div class="d-flex gap-4">
-				<button class="btn btn-success" onclick="alert('in development')">
-					<i class="fas fa-book me-1"></i>
-					Ambil Soal
-				</button>
-				<button
-					class="btn btn-primary pulse-white"
-					:class="{ pulse: isNoQuestion }"
-					@click="isShowAddQuestion = true">
-					<span v-if="isNoQuestion" class="pulse-ring"></span>
-					<i class="fas fa-plus me-1"></i>
-					Tambah Bentuk Soal
-				</button>
-			</div>
-		</header>
-
-		<div
-			v-if="isNoQuestion"
-			class="d-flex flex-column align-items-center gap-5 py-10">
-			<h2>Belum ada soal yang dibuat</h2>
-			<img src="figma-icon/no-data.png">
+		<div v-if="isLoading" class="my-10 d-flex justify-content-center align-items-center">
+			<Spinner />
 		</div>
 
-		<div class="d-flex flex-column gap-15">
-			<section
-				v-for="(questionsWrapper, wrapperIndex) in questionsData.question_types"
-				:key="wrapperIndex"
-				class="border border-2 rounded-3 px-5 pb-6 questions-wrapper">
-				<header class="d-flex justify-content-between align-items-center bg-white py-8 questions-wrapper-header">
-					<div class="d-flex align-items-center">
-						<div class="fw-bold fs-5 me-20">
-							Tipe Soal
-						</div>
-						<div class="d-flex align-items-center gap-10">
-							<div class="border border-2 border-secondary py-3 px-4 rounded-3 fw-bolder">
-								{{ getTypeLabel(questionsWrapper.question_type).title }}
-								<span class="bg-dark p-1 rounded-2 ms-10">
-									<i
-										:class="getTypeLabel(questionsWrapper.question_type).icon"
-										class="fas fa-fw text-white"></i>
-								</span>
-							</div>
-							<div
-								v-if="['single', 'multi'].includes(questionsWrapper.question_type)"
-								class="py-3 px-8 rounded-3 fw-bold bg-light">
-								{{ questionsWrapper.optionCount}} Opsi
-							</div>
-							<div class="py-3 px-8 rounded-3 fw-bold bg-light">
-								Bobot Soal Manual
-							</div>
-						</div>
-					</div>
-					<button
-						class="btn btn-primary"
-						@click="editorData = questionsWrapper">
-						<i class="fas fa-list me-1"></i>
-						EDITOR
-					</button>
-				</header>
-
-				<hr class="border border-light opacity-100 mb-8 mt-0">
-
-				<div class="d-flex flex-column gap-8">
-					<template v-for="(question, questionIndex) in questionsWrapper.questions" :key="question.question_id">
-						<component
-							v-if="questionComponentMap.hasOwnProperty(questionsWrapper.question_type)"
-							:is="questionComponentMap[questionsWrapper.question_type]"
-							:order-number="resolveOrderNumber(wrapperIndex, questionIndex)"
-							v-bind="{ question, wrapperIndex, questionIndex }" />
-					</template>
+		<div v-else>
+			<header class="d-flex justify-content-between align-items-start mb-10">
+				<div>
+					<h2>Buat Soal Manual</h2>
+					<div class="text-muted">Buat soal dan jawaban apda editor text</div>
 				</div>
-			</section>
-		</div>
+				<div class="d-flex gap-4">
+					<button class="btn btn-success" onclick="alert('in development')">
+						<i class="fas fa-book me-1"></i>
+						Ambil Soal
+					</button>
+					<button
+						class="btn btn-primary pulse-white"
+						:class="{ pulse: isNoQuestion }"
+						@click="isShowAddQuestion = true">
+						<span v-if="isNoQuestion" class="pulse-ring"></span>
+						<i class="fas fa-plus me-1"></i>
+						Tambah Bentuk Soal
+					</button>
+				</div>
+			</header>
 
-		<div class="row mt-8">
-			<div class="col-3 offset-9">
-				<button
-					class="btn btn-primary btn-lg w-100"
-					@click="submitQuestionsData()">
-					SELANJUTNYA
-					<i class="fas fa-angle-double-right ms-2"></i>
-				</button>
+			<div
+				v-if="isNoQuestion"
+				class="d-flex flex-column align-items-center gap-5 py-10">
+				<h2>Belum ada soal yang dibuat</h2>
+				<img src="figma-icon/no-data.png">
 			</div>
+
+			<div class="d-flex flex-column gap-15">
+				<section
+					v-for="(questionsWrapper, wrapperIndex) in questionsData.question_types"
+					:key="wrapperIndex"
+					class="border border-2 rounded-3 px-5 pb-6 questions-wrapper">
+					<header class="d-flex justify-content-between align-items-center bg-white py-8 questions-wrapper-header">
+						<div class="d-flex align-items-center">
+							<div class="fw-bold fs-5 me-20">
+								Tipe Soal
+							</div>
+							<div class="d-flex align-items-center gap-10">
+								<div class="border border-2 border-secondary py-3 px-4 rounded-3 fw-bolder">
+									{{ getTypeLabel(questionsWrapper.question_type).title }}
+									<span class="bg-dark p-1 rounded-2 ms-10">
+										<i
+											:class="getTypeLabel(questionsWrapper.question_type).icon"
+											class="fas fa-fw text-white"></i>
+									</span>
+								</div>
+								<div
+									v-if="['single', 'multi'].includes(questionsWrapper.question_type)"
+									class="py-3 px-8 rounded-3 fw-bold bg-light">
+									{{ questionsWrapper.optionCount}} Opsi
+								</div>
+								<div class="py-3 px-8 rounded-3 fw-bold bg-light">
+									Bobot Soal Manual
+								</div>
+							</div>
+						</div>
+						<button
+							class="btn btn-primary"
+							@click="editorData = questionsWrapper">
+							<i class="fas fa-list me-1"></i>
+							EDITOR
+						</button>
+					</header>
+
+					<hr class="border border-light opacity-100 mb-8 mt-0">
+
+					<div class="d-flex flex-column gap-8">
+						<template v-for="(question, questionIndex) in questionsWrapper.questions" :key="question.question_id">
+							<component
+								v-if="questionComponentMap.hasOwnProperty(questionsWrapper.question_type)"
+								:is="questionComponentMap[questionsWrapper.question_type]"
+								:order-number="resolveOrderNumber(wrapperIndex, questionIndex)"
+								v-bind="{ question, wrapperIndex, questionIndex }" />
+						</template>
+					</div>
+				</section>
+			</div>
+
+			<div class="row mt-8">
+				<div class="col-3">
+					<button
+						class="btn btn-secondary btn-lg w-100"
+						@click="handleBack">
+						<i class="fas fa-angle-double-left me-2"></i>
+						SEBELUMNYA
+					</button>
+				</div>
+				<div class="col-3 offset-6">
+					<button
+						class="btn btn-primary btn-lg w-100"
+						@click="submitQuestionsData()">
+						SELANJUTNYA
+						<i class="fas fa-angle-double-right ms-2"></i>
+					</button>
+				</div>
+			</div>
+
+			<EditorModal
+				v-bind="{ editorData }"
+				@close-modal="editorData = {}" />
+
+			<AddQuestionWrapperModal
+				:show="isShowAddQuestion"
+				@close-modal="isShowAddQuestion = false" />
 		</div>
-
-		<EditorModal
-			v-bind="{ editorData }"
-			@close-modal="editorData = {}" />
-
-		<AddQuestionWrapperModal
-			:show="isShowAddQuestion"
-			@close-modal="isShowAddQuestion = false" />
 	</div>
 </template>
 
