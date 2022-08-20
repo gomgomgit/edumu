@@ -14,18 +14,62 @@ const router = useRouter()
 const route = useRoute()
 
 const { isLoading: isLoadingQuestions, isChanged: isChangedQuestions, questionsData, loadQuestionsData } = useQuestionsData();
-const { isLoading: isLoadingExam, isChanged: isChangedExam, examData, loadExamData } = useExamData();
+const { isLoading: isLoadingExam, isChanged: isChangedExam, examData, rawExamData, loadExamData } = useExamData();
 
 const mergedQuestions = ref([]);
 
-const examTime = 90
+const currentTimezone = computed(() => {
+	const dateStr = new Date().toTimeString()
+	const zoneTypeMap = {
+		'(Western Indonesia Time)': 'WIB',
+		'(Central Indonesia Time)': 'WITA',
+		'(Eastern Indonesia Time)': 'WIT',
+	}
+
+	const zoneName = Intl.DateTimeFormat().resolvedOptions().timeZone
+	const gmt = 'GMT +' + dateStr.substring(13, 15) + ':00'
+	const zoneType = dateStr.substring(17).trim()
+
+	return `${zoneName}, ${zoneTypeMap[zoneType]} (${gmt})`
+})
 
 const examTimePercentage = computed(() => {
-	const time = examTime - 1
+	if (!examData.exam_time_limit) return 1
+
+	const time = parseInt(examData.exam_time_limit) - 1
 	const minutesPerhour = 60
 	const percent = Math.ceil((time % minutesPerhour) / minutesPerhour * 100)
 	return percent + 1
 })
+
+const questionCountByType = computed(() => {
+	const label = {
+		single: 'PG',
+		multi: 'PGK',
+		essay: 'essay',
+		match: 'pencocokan',
+	}
+	const res = []
+
+	for (const wrapper of questionsData.question_types) {
+		res.push(wrapper.questions.length + ' ' + label[wrapper.question_type])
+	}
+
+	return res.join(', ')
+})
+
+function reformatDate (val) {
+	if (!val) return ''
+	const dateObj = new Date(val)
+	return dateObj.toLocaleDateString('id-ID', {
+		weekday: 'long',
+		year: 'numeric',
+		month: '2-digit',
+		day: '2-digit',
+		hour: '2-digit',
+		minute: '2-digit'
+	})
+}
 
 async function handleBack() {
 	if (isChangedQuestions.value) {
@@ -81,18 +125,23 @@ onMounted(() => {
 							<PratinjauHeaderItem
 								color="warning"
 								icon="uil-atom"
-								content="Tryout Kimia Dasar Semester Genap 2022 Kelas IPA" />
+								:content="examData.exam_title" />
 
-							<section class="d-flex align-items-center">
+							<PratinjauHeaderItem
+								color="danger"
+								icon="uil-user-circle"
+								:content="rawExamData.user_nama" />
+
+							<!-- <section class="d-flex align-items-center">
 								<img
 									src="https://architecture.ou.edu/wp-content/uploads/2018/07/ANGELAPERSON-1447-300x300.jpg"
 									alt="foto guru"
 									class="rounded-circle w-40px h-40px me-4 flex-shrink-0">
 								<div>Linda Merryana Saputri S.Pd</div>
-							</section>
+							</section> -->
 
 							<section class="bg-primary bg-opacity-25 py-3 px-6 rounded-3 text-primary fw-bold align-self-start">
-								Kimia Dasar
+								{{ rawExamData.mapel_nama }}
 							</section>
 						</div>
 
@@ -101,13 +150,13 @@ onMounted(() => {
 								color="info"
 								icon="uil-edit"
 								title="Jumlah Soal"
-								content="25 Soal" />
+								:content="mergedQuestions.length + ' Soal'" />
 
 							<PratinjauHeaderItem
 								color="success"
 								icon="uil-clipboard-notes"
 								title="Bentuk Soal"
-								content="20 PG, 5 Essay" />
+								:content="questionCountByType" />
 
 							<PratinjauHeaderItem
 								color="danger"
@@ -127,20 +176,20 @@ onMounted(() => {
 										color="primary"
 										icon="uil-stopwatch"
 										title="Waktu Mulai"
-										content="Rabu, 03/04/2022 09:00" />
+										:content="reformatDate(examData.exam_start_date)" />
 
 									<PratinjauHeaderItem
 										color="info"
 										icon="uil-clock"
 										title="Waktu Selesai"
-										content="Kamis, 04/04/2022 12:00" />
+										:content="reformatDate(examData.exam_end_date)" />
 								</div>
 
 								<el-progress
 									type="circle"
 									:percentage="examTimePercentage"
 									:stroke-width="10">
-									<div class="text-black-50 text-center fs-1 fw-light">{{ examTime }}</div>
+									<div class="text-black-50 text-center fs-1 fw-light">{{ examData.exam_time_limit || 0 }}</div>
 									<div class="text-black-50 text-center small">menit</div>
 								</el-progress>
 							</section>
@@ -150,7 +199,8 @@ onMounted(() => {
 									<i class="uil uil-globe text-muted h1 mb-0"></i>
 								</div>
 								<div class="h-40px px-3 bg-secondary bg-opacity-25 rounded-end d-flex align-items-center flex-grow-1 text-muted">
-									Jakarta - Indonesia, WIB (GMT +07:00)
+									<!-- Jakarta - Indonesia, WIB (GMT +07:00) -->
+									{{ currentTimezone }}
 								</div>
 							</section>
 						</div>
@@ -158,16 +208,17 @@ onMounted(() => {
 						<div class="header-section-item-right p-5 d-flex flex-column gap-8">
 							<PratinjauHeaderItem
 								color="success"
-								icon="uil-user-circle"
+								icon="uil-users-alt"
 								title="Kelas Peserta" />
 
-							<section class="d-flex flex-wrap gap-3">
+							<section
+								v-if="rawExamData?.kelas?.length"
+								class="d-flex flex-wrap gap-3">
 								<el-tag
-									v-for="n in 5"
-									:key="n"
-									size="small"
-									closable>
-									XII IPA {{ n }}
+									v-for="kelas in rawExamData.kelas"
+									:key="kelas.kelas_id"
+									size="small">
+									{{ kelas.kelas_nama }}
 								</el-tag>
 							</section>
 						</div>

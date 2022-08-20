@@ -26,9 +26,11 @@ const initialData = {
 const isLoading = ref(false)
 const isChanged = ref(false)
 
+const rawExamData = reactive({})
 const examData = reactive({ ...initialData })
 
 function resetExamData(customData = {}) {
+	Object.assign(rawExamData, { ...customData })
 	Object.assign(examData, {
 		...initialData,
 		...customData,
@@ -60,6 +62,7 @@ async function loadExamData (examId) {
 		}
 
 		Object.assign(examData, formattedData)
+		Object.assign(rawExamData, { ...data, kelas: part })
 		return formattedData
 	} finally {
 		isLoading.value = false
@@ -119,5 +122,5 @@ async function saveExamData (examId) {
 }
 
 export default function () {
-	return { examData, isLoading, isChanged, loadExamData, saveExamData, resetExamData }
+	return { examData, rawExamData, isLoading, isChanged, loadExamData, saveExamData, resetExamData }
 }
