@@ -200,7 +200,12 @@ function postLogin(data, sekolah) {
     user_kodesekolah: data.kode,
     user_namasekolah: sekolah.sekolah_nama,
   }
-  axios.post('https://apiedumu.edumu.id/demo/apischool/login', QueryString.stringify(formData))
+
+  const loginUrl = data.kode === process.vue.VUE_APP_REVAMP_SCHOOL
+    ? `${process.vue.VUE_APP_REVAMP_API_URL}/login`
+    : `${process.env.VUE_APP_API_URL}/${data.kode}/apischool/login`
+
+  axios.post(loginUrl, QueryString.stringify(formData))
   .then(res => {
     if (res.data.success) {
       store.dispatch(Actions.LOGIN, {...res.data.data, ...sekolah})
@@ -216,7 +221,7 @@ function postLogin(data, sekolah) {
       }).then(function () {
         router.push({ name: "dashboard" });
       });
-        
+
     } else {
       useToast().error(res.data.message)
     }
