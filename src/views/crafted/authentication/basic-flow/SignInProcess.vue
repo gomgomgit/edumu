@@ -28,27 +28,11 @@ const loginData = route.query.data;
 store.dispatch(Actions.ADD_BODY_CLASSNAME, "page-loading");
 
 function loginProcess() {
-  // console.log('encrypt', loginData)
 
   var bytes = cryoptojs.AES.decrypt(loginData.replace(/ /g, '+'), "edumuv2").toString(cryoptojs.enc.Utf8)
   var data = QueryString.parse(bytes);
 
-  // console.log('data', data)
-
   store.dispatch(Actions.LOGIN, data)
-
-
-  // Swal.fire({
-  //   text: "You have successfully logged in!",
-  //   icon: "success",
-  //   buttonsStyling: false,
-  //   confirmButtonText: "Ok, got it!",
-  //   customClass: {
-  //     confirmButton: "btn fw-bold btn-light-primary",
-  //   },
-  //   }).then(function () {
-  //     router.push({ name: "dashboard" });
-  // });
 }
 onMounted(async() => {
   await loginProcess()
