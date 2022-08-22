@@ -1,6 +1,6 @@
 <template>
   <!--begin::Footer-->
-  <div class="footer py-4 d-flex flex-lg-column" id="kt_footer">
+  <div class="footer pt-4 pb-6 d-flex flex-lg-column" id="kt_footer">
     <!--begin::Container-->
     <div
       class="d-flex flex-column flex-md-row align-items-center justify-content-between"
@@ -11,12 +11,10 @@
     >
       <!--begin::Copyright-->
       <div class="text-dark order-2 order-md-1">
-        <span class="text-muted fw-bold me-1">2021&copy;</span>
+        <span class="text-muted fw-bold me-1">2018 - 2022 &copy;</span>
         <a
-          href="https://keenthemes.com/"
-          target="_blank"
           class="text-gray-800 text-hover-primary"
-          >Keenthemes</a
+          >Majelis Dikdasmen PP Muhammadiyah</a
         >
       </div>
       <!--end::Copyright-->
