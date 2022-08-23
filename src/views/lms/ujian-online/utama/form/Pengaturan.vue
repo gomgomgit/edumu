@@ -13,7 +13,7 @@ import swalConfig from './constants/swalConfig';
 const router = useRouter()
 const route = useRoute()
 
-const { examData, isLoading, isChanged, loadExamData, saveExamData, resetExamData } = useExamData()
+const { examData, isLoading, isSaving, isChanged, loadExamData, saveExamData, resetExamData } = useExamData()
 
 const tabs = reactive({
 	active: 'event',
@@ -282,7 +282,11 @@ onMounted(() => {
 					-->
 
 					<div class="col-3 offset-9 pt-8">
+						<div v-if="isSaving" class="d-flex justify-content-center">
+							<Spinner />
+						</div>
 						<button
+							v-else
 							class="btn btn-primary btn-lg w-100"
 							@click="submitEvent">
 							SELANJUTNYA
@@ -425,7 +429,11 @@ onMounted(() => {
 							</button>
 						</div>
 						<div class="col-3 offset-6">
+							<div v-if="isSaving" class="d-flex justify-content-center">
+								<Spinner />
+							</div>
 							<button
+								v-else
 								class="btn btn-primary btn-lg w-100"
 								@click="submitUjian">
 								SELANJUTNYA

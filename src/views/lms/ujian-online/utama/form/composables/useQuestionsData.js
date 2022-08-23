@@ -14,14 +14,17 @@ const questionTypeLabels = [
 ]
 
 const isLoading = ref(false)
+const isSaving = ref(false)
 const isChanged = ref(false)
 
 const errorBag = ref({})
 
-const questionsData = reactive({
+const initialData = {
 	exam_id: null,
 	question_types: []
-})
+}
+
+const questionsData = reactive({ ...initialData })
 
 const isNoQuestion = computed(() => questionsData.question_types.length === 0)
 
@@ -41,6 +44,34 @@ function handleRequestError(err) {
 	)
 }
 
+function formatQuestionsData (data) {
+	return {
+		...data,
+		question_types: !data.question_types ? [] : data.question_types.map(type => ({
+			...type,
+			optionCount: type.question_type !== 'essay' ? type.questions[0].options.length : 0,
+			questions: type.questions.map(question => ({
+				...question,
+				question_text: sanitizeHtml(question.question_text),
+				options: !question.options ? [] : question.options.map(option => ({
+					...option,
+					option_text: sanitizeHtml(option.option_text),
+					is_correct: typeof option.is_correct === 'string' ? parseInt(option.is_correct) : option.is_correct
+				})),
+				matches: !question.matches ? [] : question.matches.map(match => ({
+					...match,
+					option_match_text: sanitizeHtml(match.option_match_text),
+					is_correct: 1
+				}))
+			}))
+		}))
+	}
+}
+
+function resetQuestionsData () {
+	Object.assign(questionsData, {...initialData})
+}
+
 function loadQuestionsData(examId) {
 	if (questionsData.exam_id !== null || examId == questionsData.exam_id) return
 
@@ -51,28 +82,9 @@ function loadQuestionsData(examId) {
 		qs.stringify({ exam_id: examId })
 	).then(res => {
 		const { data } = res.data
-		const formattedExamData = {
-			...data,
-			question_types: !data.question_types ? [] : data.question_types.map(type => ({
-				...type,
-				optionCount: type.question_type !== 'essay' ? type.questions[0].options.length : 0,
-				questions: type.questions.map(question => ({
-					...question,
-					question_text: sanitizeHtml(question.question_text),
-					options: !question.options ? [] : question.options.map(option => ({
-						...option,
-						option_text: sanitizeHtml(option.option_text),
-						is_correct: parseInt(option.is_correct) ? 1 : 0
-					})),
-					matches: !question.matches ? [] : question.matches.map(match => ({
-						...match,
-						option_match_text: sanitizeHtml(match.option_match_text)
-					}))
-				}))
-			}))
-		}
+		const formattedQuestionsData = formatQuestionsData(data)
 
-		if (res.data.status) Object.assign(questionsData, formattedExamData)
+		if (res.data.status) Object.assign(questionsData, formattedQuestionsData)
 		else throw res.data
 	})
 	.catch(handleRequestError)
@@ -104,27 +116,16 @@ async function cacheQuestionsData (immediate) {
 
 		if (res.data.status === true) {
 			const { data } = res.data
-			Object.assign(questionsData, {
-				...data,
-				question_types: !data.question_types ? [] : data.question_types.map(type => ({
-					...type,
-					optionCount: type.question_type !== 'essay' ? type.questions[0].options.length : 0,
-					questions: type.questions.map(question => ({
-						...question,
-						options: !question.options ? [] : question.options.map(option => ({
-							...option,
-							is_correct: parseInt(option.is_correct) ? 1 : 0
-						}))
-					}))
-				}))
-			})
+			Object.assign(questionsData, formatQuestionsData(data))
 
 			isChanged.value = false
-			useToast().success('Autosaved successfully!')
+			useToast().info('Autosaved successfully!')
 		}
 		else if (res.data.status === false) throw res.data.text
 	} catch (err) {
-		handleRequestError(err)
+		// handleRequestError(err)
+		console.error(err.message)
+		console.error(err.response)
 	}
 }
 
@@ -144,7 +145,9 @@ function validateQuestionsData () {
 			if (['single', 'multi', 'match'].includes(type.question_type) && question.options?.some(option => isEmpty(option.option_text))) {
 				errorMsg += 'Pilihan jawaban harus diisi. '
 			}
-			if (['single', 'multi'].includes(type.question_type) && question.options?.every(option => parseInt(option.is_correct) === 0)) {
+			if (['single', 'multi'].includes(type.question_type) && question.options?.every(
+				option => option.is_correct === 'string' ? !parseInt(option.is_correct) : !option.is_correct
+			)) {
 				errorMsg += 'Jawaban benar harus diisi. '
 			}
 			if (['match'].includes(type.question_type)  && question.matches?.some(match => isEmpty(match.option_match_text))) {
@@ -165,10 +168,51 @@ function validateQuestionsData () {
 	return Object.values(errorBag.value)
 }
 
-function submitQuestionsData () {
-	const errors = validateQuestionsData()
-	if (errors.length) useToast().warning(errors[0], { duration: 60000 })
-	else useToast().success('Data will be submitted')
+async function submitQuestionsData () {
+
+	try {
+		isSaving.value = true
+
+		const errors = validateQuestionsData()
+		if (errors.length) {
+			useToast().warning(errors[0], { duration: 60000 })
+			throw false
+		}
+
+		const payload = {
+			...questionsData,
+			question_types: questionsData.question_types.map((type, typeIndex) => ({
+				...type,
+				questions: type.questions.map((question, questionIndex) => ({
+					...question,
+					ehq_order: resolveOrderNumber(typeIndex, questionIndex),
+					keterangan: question?.keterangan ?? null,
+					score: question?.score ?? 0,
+					attachment_id: question?.attachment_id ?? null,
+					options: !question.options ? [] : question.options.map(option => ({
+						...option,
+						is_correct: option.is_correct ? 1 : 0
+					}))
+				}))
+			}))
+		}
+		const params = qs.stringify(payload)
+		const res = await requestDevel.post('/v2dev/exam/save-soal?', params)
+
+		if (res.data.status === true) {
+			const { data } = res.data
+			Object.assign(questionsData, formatQuestionsData(data))
+
+			isSaving.value = false
+			isChanged.value = false
+			useToast().info('Soal ujian berhasil disimpan!')
+		}
+		else if (res.data.status === false) throw res.data.text
+	} catch (err) {
+		isSaving.value = false
+		if (err !== false) handleRequestError(err)
+		throw err
+	}
 }
 
 function addQuestion (wrapperIndex, questionIndex) {
@@ -185,7 +229,8 @@ function addQuestion (wrapperIndex, questionIndex) {
 		})),
 		matches: question_type !== 'match' ? [] : [...Array(optionCount).keys()].map((matchIndex) => ({
 			option_match_text: '',
-			match_with_option_id: 'option-dummy-id-' + timestamp + matchIndex
+			match_with_option_id: 'option-dummy-id-' + timestamp + matchIndex,
+			is_correct: 1
 		}))
 	}
 
@@ -234,8 +279,8 @@ function resolveOrderNumber(wrapperIndex, questionIndex) {
 
 export default function () {
 	return {
-		questionsData, questionTypeLabels, availableTypes, isNoQuestion, isChanged, isLoading, errorBag,
+		questionsData, questionTypeLabels, availableTypes, isNoQuestion, isChanged, isLoading, isSaving, errorBag,
 		addQuestion, removeQuestion, addQuestionType, removeQuestionType, resolveOrderNumber,
-		loadQuestionsData, cacheQuestionsData, submitQuestionsData,
+		loadQuestionsData, cacheQuestionsData, submitQuestionsData, resetQuestionsData
 	}
 }

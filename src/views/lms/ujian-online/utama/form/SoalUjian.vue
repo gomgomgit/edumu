@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Swal from 'sweetalert2'
 
@@ -18,8 +18,8 @@ const router = useRouter()
 const route = useRoute()
 
 const {
-	questionsData, isNoQuestion, isLoading, isChanged, questionTypeLabels,
-	addQuestion, removeQuestion, loadQuestionsData, cacheQuestionsData, submitQuestionsData, resolveOrderNumber
+	questionsData, isNoQuestion, isLoading, isChanged, isSaving, questionTypeLabels,
+	addQuestion, removeQuestion, loadQuestionsData, cacheQuestionsData, submitQuestionsData, resetQuestionsData, resolveOrderNumber
 } = useQuestionsData()
 
 const questionComponentMap = {
@@ -60,6 +60,11 @@ function handleAction (type, wrapperIndex) {
 	})
 }
 
+async function handleSubmit () {
+	await submitQuestionsData()
+	router.push('/lms/ujian-online/utama/form/pratinjau/' + route.params.exam_id)
+}
+
 let cacheQuestionsTimeout
 const cachePerMinute = 1
 
@@ -73,8 +78,18 @@ function setCacheTimeout () {
 	}, 10000)
 }
 
+const examIdParam = computed(() => route.params?.exam_id)
+
+watch(
+	examIdParam,
+	function (examId) {
+		resetQuestionsData()
+		loadQuestionsData(examId)
+	},
+	{ immediate: true }
+)
+
 onMounted(() => {
-	loadQuestionsData(route.params.exam_id)
 	setCacheTimeout()
 })
 
@@ -195,9 +210,15 @@ onUnmounted(() => {
 					</button>
 				</div>
 				<div class="col-3 offset-6">
+					<div
+						v-if="isSaving"
+						class="d-flex justify-content-center">
+						<Spinner />
+					</div>
 					<button
+						v-else
 						class="btn btn-primary btn-lg w-100"
-						@click="submitQuestionsData()">
+						@click="handleSubmit">
 						SELANJUTNYA
 						<i class="fas fa-angle-double-right ms-2"></i>
 					</button>

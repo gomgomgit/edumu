@@ -46,7 +46,7 @@
     "socicon": "^3.0.5",
     "sortablejs": "^1.15.0",
     "sortablejs-vue3": "^1.2.0",
-    "sweetalert2": "^9.17.2",
+    "sweetalert2": "^11.4.29",
     "v-viewer": "^1.6.4",
     "validate.js": "^0.13.1",
     "vee-validate": "^4.5.2",
