@@ -14,7 +14,7 @@
         <span class="text-muted fw-bold me-1">2018 - 2022 &copy;</span>
         <a
           class="text-gray-800 text-hover-primary"
-          >Majelis Dikdasmen PP Muhammadiyah</a
+          >eduMU | Majelis Dikdasmen PP Muhammadiyah</a
         >
       </div>
       <!--end::Copyright-->
