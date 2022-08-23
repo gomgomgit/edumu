@@ -2,6 +2,7 @@ ini todo list untuk ujian online:
 
 # general
 -/ jika user telah mengubah data maka peringatkan user ketika akan pindah halaman jika tidak melalui tombol selanjutnya/submit
+- tombol back pakai method push ke route tujuan
 
 # pengaturan
 -/ tukar posisi switch dan helper
@@ -14,14 +15,13 @@ ini todo list untuk ujian online:
 -/ sanitize html sebelum diinput dan saat akan ditampilkan
 -/ hilangkan validasi jumlah opsi jika soal bertipe essay pada modal tambah tipe soal
 -/ pindahkan tombol tambah dan hapus soal ke atas wrapper soal
+-/ fungsikan tombol selanjutnya untuk submit soal ke database
+-/ hitung ehq_order sebelum submit ke database
 -- tambahkan input bobot
 -- fungsikan kolom label soal pada modal tambah tipe soal // keterangan: bambang#yudoyono
-- hitung ehq_order sebelum submit ke database
--x perbaiki return pada validasi di api
--/ fungsikan tombol selanjutnya untuk submit soal ke database
 -- tambahkan modul attachment
-- tambahkan input soal dari bank soal
-- tambahkan import soal
+-? tambahkan input soal dari bank soal
+-? tambahkan import soal
 
 # pratinjau
 -/ ambil data dari api pada bagian header
@@ -30,17 +30,3 @@ ini todo list untuk ujian online:
 # list ujian online
 - sembunyikan tombol remedial, ubah status, dan atur ulang waktu, kedalam tombol opsi dengan icon titik 3
 - tambahkan tombol untuk aktifkan/nonaktifkan ujian
-
-# catatan untuk bobot/score
-- score disimpan di exam_answer_score
-
-
-
-# _exam_attachments
-- exam_id
-- title
-- content
-
-# _exam_question_has_attachment
-- question_id
-- attachment_id

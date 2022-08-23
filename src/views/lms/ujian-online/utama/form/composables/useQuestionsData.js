@@ -42,6 +42,30 @@ function handleRequestError(err) {
 	)
 }
 
+function formatQuestionsData (data) {
+	return {
+		...data,
+		question_types: !data.question_types ? [] : data.question_types.map(type => ({
+			...type,
+			optionCount: type.question_type !== 'essay' ? type.questions[0].options.length : 0,
+			questions: type.questions.map(question => ({
+				...question,
+				question_text: sanitizeHtml(question.question_text),
+				options: !question.options ? [] : question.options.map(option => ({
+					...option,
+					option_text: sanitizeHtml(option.option_text),
+					is_correct: typeof option.is_correct === 'string' ? parseInt(option.is_correct) : option.is_correct
+				})),
+				matches: !question.matches ? [] : question.matches.map(match => ({
+					...match,
+					option_match_text: sanitizeHtml(match.option_match_text),
+					is_correct: 1
+				}))
+			}))
+		}))
+	}
+}
+
 function loadQuestionsData(examId) {
 	if (questionsData.exam_id !== null || examId == questionsData.exam_id) return
 
@@ -52,29 +76,9 @@ function loadQuestionsData(examId) {
 		qs.stringify({ exam_id: examId })
 	).then(res => {
 		const { data } = res.data
-		const formattedExamData = {
-			...data,
-			question_types: !data.question_types ? [] : data.question_types.map(type => ({
-				...type,
-				optionCount: type.question_type !== 'essay' ? type.questions[0].options.length : 0,
-				questions: type.questions.map(question => ({
-					...question,
-					question_text: sanitizeHtml(question.question_text),
-					options: !question.options ? [] : question.options.map(option => ({
-						...option,
-						option_text: sanitizeHtml(option.option_text),
-						is_correct: typeof option.is_correct === 'string' ? parseInt(option.is_correct) : option.is_correct
-					})),
-					matches: !question.matches ? [] : question.matches.map(match => ({
-						...match,
-						option_match_text: sanitizeHtml(match.option_match_text),
-						is_correct: 1
-					}))
-				}))
-			}))
-		}
+		const formattedQuestionsData = formatQuestionsData(data)
 
-		if (res.data.status) Object.assign(questionsData, formattedExamData)
+		if (res.data.status) Object.assign(questionsData, formattedQuestionsData)
 		else throw res.data
 	})
 	.catch(handleRequestError)
@@ -106,27 +110,16 @@ async function cacheQuestionsData (immediate) {
 
 		if (res.data.status === true) {
 			const { data } = res.data
-			Object.assign(questionsData, {
-				...data,
-				question_types: !data.question_types ? [] : data.question_types.map(type => ({
-					...type,
-					optionCount: type.question_type !== 'essay' ? type.questions[0].options.length : 0,
-					questions: type.questions.map(question => ({
-						...question,
-						options: !question.options ? [] : question.options.map(option => ({
-							...option,
-							is_correct: parseInt(option.is_correct) ? 1 : 0
-						}))
-					}))
-				}))
-			})
+			Object.assign(questionsData, formatQuestionsData(data))
 
 			isChanged.value = false
 			useToast().info('Autosaved successfully!')
 		}
 		else if (res.data.status === false) throw res.data.text
 	} catch (err) {
-		handleRequestError(err)
+		// handleRequestError(err)
+		console.error(err.message)
+		console.error(err.response)
 	}
 }
 
@@ -146,7 +139,9 @@ function validateQuestionsData () {
 			if (['single', 'multi', 'match'].includes(type.question_type) && question.options?.some(option => isEmpty(option.option_text))) {
 				errorMsg += 'Pilihan jawaban harus diisi. '
 			}
-			if (['single', 'multi'].includes(type.question_type) && question.options?.every(option => parseInt(option.is_correct) === 0)) {
+			if (['single', 'multi'].includes(type.question_type) && question.options?.every(
+				option => option.is_correct === 'string' ? !parseInt(option.is_correct) : !option.is_correct
+			)) {
 				errorMsg += 'Jawaban benar harus diisi. '
 			}
 			if (['match'].includes(type.question_type)  && question.matches?.some(match => isEmpty(match.option_match_text))) {
@@ -168,17 +163,23 @@ function validateQuestionsData () {
 }
 
 async function submitQuestionsData () {
-	const errors = validateQuestionsData()
-	if (errors.length) useToast().warning(errors[0], { duration: 60000 })
 
 	try {
 		isSaving.value = true
+
+		const errors = validateQuestionsData()
+		if (errors.length) {
+			useToast().warning(errors[0], { duration: 60000 })
+			throw false
+		}
+
 		const payload = {
 			...questionsData,
-			question_types: questionsData.question_types.map(type => ({
+			question_types: questionsData.question_types.map((type, typeIndex) => ({
 				...type,
-				questions: type.questions.map(question => ({
+				questions: type.questions.map((question, questionIndex) => ({
 					...question,
+					ehq_order: resolveOrderNumber(typeIndex, questionIndex),
 					keterangan: question?.keterangan ?? null,
 					score: question?.score ?? 0,
 					attachment_id: question?.attachment_id ?? null,
@@ -193,6 +194,9 @@ async function submitQuestionsData () {
 		const res = await requestDevel.post('/v2dev/exam/save-soal?', params)
 
 		if (res.data.status === true) {
+			const { data } = res.data
+			Object.assign(questionsData, formatQuestionsData(data))
+
 			isSaving.value = false
 			isChanged.value = false
 			useToast().info('Soal ujian berhasil disimpan!')
@@ -200,7 +204,8 @@ async function submitQuestionsData () {
 		else if (res.data.status === false) throw res.data.text
 	} catch (err) {
 		isSaving.value = false
-		handleRequestError(err)
+		if (err !== false) handleRequestError(err)
+		throw err
 	}
 }
 

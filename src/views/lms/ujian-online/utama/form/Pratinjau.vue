@@ -9,12 +9,13 @@ import PratinjauHeaderItem from './components/PratinjauHeaderItem.vue';
 import useQuestionsData from './composables/useQuestionsData';
 import useExamData from './composables/useExamData';
 import swalConfig from './constants/swalConfig.js';
+import { useToast } from 'vue-toast-notification';
 
 const router = useRouter()
 const route = useRoute()
 
-const { isLoading: isLoadingQuestions, isChanged: isChangedQuestions, questionsData, loadQuestionsData } = useQuestionsData();
-const { isLoading: isLoadingExam, isChanged: isChangedExam, examData, rawExamData, loadExamData } = useExamData();
+const { isLoading: isLoadingQuestions, isSaving: isSavingQuestions, isChanged: isChangedQuestions, questionsData, loadQuestionsData, submitQuestionsData } = useQuestionsData();
+const { isLoading: isLoadingExam, isSaving: isSavingExam, isChanged: isChangedExam, examData, rawExamData, loadExamData, saveExamData } = useExamData();
 
 const mergedQuestions = ref([]);
 
@@ -95,15 +96,102 @@ function onDragEnd (event) {
 	isChangedQuestions.value = true
 }
 
-watchEffect(() => {
-	mergedQuestions.value = questionsData.question_types
-		.map(type => type.questions)
-		.flat()
-		.map((question, index) => ({
-			...question,
-			ehq_order: index + 1
-		}))
-})
+async function submitReorderedQuestions () {
+	for (const question of mergedQuestions.value) {
+		questionsData
+			.question_types[question.originalWrapperIndex]
+			.questions[question.originalQuestionIndex]
+			.ehq_order = question.ehq_order
+	}
+
+	await submitQuestionsData()
+}
+
+async function openSubmitPopup () {
+	const swalConfirm = Swal.mixin({
+		customClass: {
+			confirmButton: 'btn btn-lg btn-info',
+			denyButton: 'btn btn-lg btn-primary'
+		},
+		buttonsStyling: false
+	})
+
+	const confirmRes = await swalConfirm.fire({
+		title: 'Simpan dan Aktifkan Ujian?',
+		html: `<p class="lh-lg">Ujian yang telah diaktifkan akan terlihat oleh siswa dan tidak dapat diubah lagi.</p>
+			<p class="lh-lg mb-0">Ujian juga dapat diaktifkan melalui halaman daftar ujian</p>`,
+		icon: 'question',
+		showDenyButton: true,
+		confirmButtonText: 'Simpan dan Aktifkan',
+		denyButtonText: 'Hanya Simpan',
+		// reverseButtons: true,
+	})
+
+	if (confirmRes.isDismissed) return
+
+	try {
+		await submitReorderedQuestions()
+
+		if (confirmRes.isConfirmed) {
+			examData.exam_status = 1
+			await saveExamData(route.params.exam_id, true)
+		}
+
+		await Swal.fire(
+			'SELAMAT!',
+			`<p class="lh-lg">${examData.exam_title}</p>
+			<div class="text-success fs-1 fw-bold">Berhasil Dibuat!</div>`,
+			'success'
+		)
+
+		router.push('/lms/ujian-online/utama')
+	} catch (err) {
+		console.log(err)
+		useToast().error('terjadi masalah saat menyimpan ujian')
+	}
+}
+
+const watchDeps = computed(() => questionsData.exam_id + '-' + questionsData.question_types.length)
+
+watch(
+	watchDeps,
+	() => {
+		const formattedQuestions = []
+
+		for (const originalWrapperIndex in questionsData.question_types) {
+			const wrapper = questionsData.question_types[originalWrapperIndex]
+			for (const originalQuestionIndex in wrapper.questions) {
+				const question = wrapper.questions[originalQuestionIndex]
+				formattedQuestions.push({
+					...question,
+					originalWrapperIndex,
+					originalQuestionIndex
+				})
+			}
+		}
+
+		mergedQuestions.value = formattedQuestions
+	},
+	{ immediate: true, deep: true }
+)
+
+/* watchEffect(() => {
+	const formattedQuestions = []
+
+	for (const originalWrapperIndex in questionsData.question_types) {
+		const wrapper = questionsData.question_types[originalWrapperIndex]
+		for (const originalQuestionIndex in wrapper.questions) {
+			const question = wrapper.questions[originalQuestionIndex]
+			formattedQuestions.push({
+				...question,
+				originalWrapperIndex,
+				originalQuestionIndex
+			})
+		}
+	}
+
+	mergedQuestions.value = formattedQuestions
+}) */
 
 onMounted(() => {
 	loadQuestionsData(route.params.exam_id)
@@ -266,8 +354,12 @@ onMounted(() => {
 					</button>
 				</div>
 				<div class="col-3 offset-6">
+					<div v-if="isSavingQuestions || isSavingExam" class="d-flex justify-content-center">
+						<Spinner />
+					</div>
 					<button
-						class="btn btn-primary btn-lg w-100">
+						class="btn btn-primary btn-lg w-100"
+						@click="openSubmitPopup">
 						SIMPAN
 						<i class="fas fa-angle-double-right ms-2"></i>
 					</button>

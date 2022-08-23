@@ -24,6 +24,7 @@ const initialData = {
 }
 
 const isLoading = ref(false)
+const isSaving = ref(false)
 const isChanged = ref(false)
 
 const rawExamData = reactive({})
@@ -69,9 +70,9 @@ async function loadExamData (examId) {
 	}
 }
 
-async function saveExamData (examId) {
+async function saveExamData (examId, immediate = false) {
 	try {
-		isLoading.value = true
+		isSaving.value = true
 		const rules = {
 			exam_title: { presence: { message: 'Judul ujian tidak boleh kosong!' } },
 			exam_cat_id: { presence: { message: 'Kategori tidak boleh kosong!' } },
@@ -93,7 +94,7 @@ async function saveExamData (examId) {
 		if (errors) {
 			useToast().warning(errors[0])
 			throw errors[0]
-		} else if (!isChanged.value) {
+		} else if (!isChanged.value && !immediate) {
 			return examData
 		}
 
@@ -116,11 +117,11 @@ async function saveExamData (examId) {
 		const { exam } = res.data.data
 		return exam
 	} finally {
-		isLoading.value = false
+		isSaving.value = false
 		isChanged.value = false
 	}
 }
 
 export default function () {
-	return { examData, rawExamData, isLoading, isChanged, loadExamData, saveExamData, resetExamData }
+	return { examData, rawExamData, isLoading, isSaving, isChanged, loadExamData, saveExamData, resetExamData }
 }

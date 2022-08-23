@@ -48,4 +48,9 @@ export default defineComponent({
 
 //RTL version styles
 //@import "assets/css/style.rtl.css";
+
+// custom global css
+.swal2-popup {
+  border-radius: 3em !important;
+}
 </style>
