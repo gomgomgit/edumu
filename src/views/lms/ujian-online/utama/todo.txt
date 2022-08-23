@@ -32,3 +32,4 @@ ini todo list untuk ujian online:
 # list ujian online
 - sembunyikan tombol remedial, ubah status, dan atur ulang waktu, kedalam tombol opsi dengan icon titik 3
 - tambahkan tombol untuk aktifkan/nonaktifkan ujian
+- fungsikan summary dan ganti warnanya
