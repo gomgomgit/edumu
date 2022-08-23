@@ -50,6 +50,7 @@ function formatQuestionsData (data) {
 		question_types: !data.question_types ? [] : data.question_types.map(type => ({
 			...type,
 			optionCount: type.question_type !== 'essay' ? type.questions[0].options.length : 0,
+			keterangan: type.questions?.length ? type.questions[0].keterangan : null,
 			questions: type.questions.map(question => ({
 				...question,
 				question_text: sanitizeHtml(question.question_text),
@@ -217,11 +218,15 @@ async function submitQuestionsData () {
 
 function addQuestion (wrapperIndex, questionIndex) {
 	const timestamp = Date.now()
-	const { question_type, optionCount } = questionsData.question_types[wrapperIndex]
+	const { question_type, optionCount, keterangan } = questionsData.question_types[wrapperIndex]
 	const newQuestion = {
 		question_id: 'question-dummy-id-' + timestamp,
 		question_text: '',
 		ehq_order: null,
+		keterangan,
+		score: 10,
+		attachment_id: null,
+		attachment_title: null,
 		options: question_type === 'essay' ? [] : [...Array(optionCount).keys()].map((optionIndex) => ({
 			option_id: 'option-dummy-id-' + timestamp + optionIndex,
 			option_text: '',
@@ -252,6 +257,7 @@ function addQuestionType (payload) {
 	questionsData.question_types.push({
 		question_type: payload.questionType,
 		optionCount: parseInt(payload.optionCount),
+		keterangan: payload.keterangan,
 		questions: []
 	})
 
