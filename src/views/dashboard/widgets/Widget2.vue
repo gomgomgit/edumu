@@ -34,7 +34,14 @@
         <!--begin::Item-->
         <div class="timeline-item">
           <!--begin::Label-->
-          <div class="timeline-label fw-bolder text-gray-800 fs-6">08:42</div>
+          <div class="timeline-label fw-bolder text-gray-800 fs-6">
+            <div>
+              08:42
+            </div>
+            <div class="fw-normal fs-7">
+              09:42
+            </div>
+          </div>
           <!--end::Label-->
 
           <!--begin::Badge-->
@@ -44,8 +51,13 @@
           <!--end::Badge-->
 
           <!--begin::Text-->
-          <div class="fw-mormal timeline-content text-muted ps-3">
-            Outlines keep you honest. And keep structure
+          <div class="fw-normal timeline-content ps-3">
+            <div class="fw-bold">
+              Guru 1 - Matematika
+            </div>
+            <div class="text-muted">
+              Outlines keep you honest. And keep structure
+            </div>
           </div>
           <!--end::Text-->
         </div>
