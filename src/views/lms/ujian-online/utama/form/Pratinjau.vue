@@ -104,7 +104,8 @@ async function submitReorderedQuestions () {
 			.ehq_order = question.ehq_order
 	}
 
-	await submitQuestionsData()
+	const bypassOrderNumber = true
+	await submitQuestionsData(bypassOrderNumber)
 }
 
 async function openSubmitPopup () {
@@ -139,8 +140,7 @@ async function openSubmitPopup () {
 
 		await Swal.fire(
 			'SELAMAT!',
-			`<p class="lh-lg">${examData.exam_title}</p>
-			<div class="text-success fs-1 fw-bold">Berhasil Dibuat!</div>`,
+			`<div class="lh-lg">${examData.exam_title} berhasil disimpan!</div>`,
 			'success'
 		)
 

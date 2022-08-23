@@ -38,7 +38,9 @@ const isError = computed(() => errorBag.value[`${props.wrapperIndex}-${props.que
 				</InlineEditor>
 			</div>
 			<div class="col-3 d-flex justify-content-between">
-				<div></div>
+				<div class="d-flex flex-column-reverse py-1 gap-4">
+					<el-input-number v-model="question.score" class="score-input" />
+				</div>
 				<div class="py-5 px-7 fs-2 fw-bolder text-black-50 rounded-2 bg-white align-self-start">
 					{{ orderNumber }}
 				</div>
@@ -49,3 +51,9 @@ const isError = computed(() => errorBag.value[`${props.wrapperIndex}-${props.que
 
 	</section>
 </template>
+
+<style scoped>
+.score-input {
+	width: 140px;
+}
+</style>

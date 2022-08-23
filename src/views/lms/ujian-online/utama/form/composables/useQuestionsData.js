@@ -169,8 +169,7 @@ function validateQuestionsData () {
 	return Object.values(errorBag.value)
 }
 
-async function submitQuestionsData () {
-
+async function submitQuestionsData (bypassOrderNumber = false) {
 	try {
 		isSaving.value = true
 
@@ -186,7 +185,7 @@ async function submitQuestionsData () {
 				...type,
 				questions: type.questions.map((question, questionIndex) => ({
 					...question,
-					ehq_order: resolveOrderNumber(typeIndex, questionIndex),
+					ehq_order: bypassOrderNumber ? question.ehq_order : resolveOrderNumber(typeIndex, questionIndex),
 					keterangan: question?.keterangan ?? null,
 					score: question?.score ?? 0,
 					attachment_id: question?.attachment_id ?? null,

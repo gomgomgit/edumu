@@ -176,12 +176,24 @@ onUnmounted(() => {
 							</button>
 
 							<div class="question-action">
-								<div class="question-remove" role="button" @click="handleAction('remove', wrapperIndex)">
-									<img src="figma-icon/question-remove.png" alt="" />
-								</div>
-								<div class="question-add" role="button" @click="handleAction('add', wrapperIndex)">
-									<img src="figma-icon/question-add.png" alt="" />
-								</div>
+								<el-tooltip
+									class="box-item"
+									effect="dark"
+									content="Hapus Soal Terakhir"
+									placement="top-end">
+									<div class="question-remove" role="button" @click="handleAction('remove', wrapperIndex)">
+										<img src="figma-icon/question-remove.png" alt="" />
+									</div>
+								</el-tooltip>
+								<el-tooltip
+									class="box-item"
+									effect="dark"
+									content="Tambah Soal"
+									placement="bottom-end">
+									<div class="question-add" role="button" @click="handleAction('add', wrapperIndex)">
+										<img src="figma-icon/question-add.png" alt="" />
+									</div>
+								</el-tooltip>
 							</div>
 						</div>
 					</header>
@@ -312,7 +324,7 @@ onUnmounted(() => {
 	position: relative;
 	width: 35px;
 	bottom: 13px;
-	left: 7.5px;
+	left: 7.3px;
 }
 
 #soal-ujian .question-action :where(.question-add, .question-remove):hover {
