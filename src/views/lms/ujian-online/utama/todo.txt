@@ -2,7 +2,8 @@ ini todo list untuk ujian online:
 
 # general
 -/ jika user telah mengubah data maka peringatkan user ketika akan pindah halaman jika tidak melalui tombol selanjutnya/submit
-- tombol back pakai method push ke route tujuan
+-x tombol back pakai method push ke route tujuan
+- cleanup data jika exam_id ganti value
 
 # pengaturan
 -/ tukar posisi switch dan helper
@@ -25,7 +26,7 @@ ini todo list untuk ujian online:
 
 # pratinjau
 -/ ambil data dari api pada bagian header
-- fungsikan tombol submit untuk menyimpan urutan soal ke database
+-/ fungsikan tombol submit untuk menyimpan urutan soal ke database
 
 # list ujian online
 - sembunyikan tombol remedial, ubah status, dan atur ulang waktu, kedalam tombol opsi dengan icon titik 3

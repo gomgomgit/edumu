@@ -151,10 +151,20 @@ async function openSubmitPopup () {
 	}
 }
 
-const watchDeps = computed(() => questionsData.exam_id + '-' + questionsData.question_types.length)
+const questionsSignature = computed(() => questionsData.exam_id + '-' + questionsData.question_types.length)
+const examIdParam = computed(() => route.params?.exam_id)
 
 watch(
-	watchDeps,
+	examIdParam,
+	function (examId) {
+		loadQuestionsData(examId)
+		loadExamData(examId)
+	},
+	{ immediate: true }
+)
+
+watch(
+	questionsSignature,
 	() => {
 		const formattedQuestions = []
 
@@ -192,11 +202,6 @@ watch(
 
 	mergedQuestions.value = formattedQuestions
 }) */
-
-onMounted(() => {
-	loadQuestionsData(route.params.exam_id)
-	loadExamData(route.params.exam_id)
-})
 </script>
 
 <template>
@@ -358,6 +363,7 @@ onMounted(() => {
 						<Spinner />
 					</div>
 					<button
+						v-else
 						class="btn btn-primary btn-lg w-100"
 						@click="openSubmitPopup">
 						SIMPAN

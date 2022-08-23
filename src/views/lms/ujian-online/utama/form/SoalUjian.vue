@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Swal from 'sweetalert2'
 
@@ -19,7 +19,7 @@ const route = useRoute()
 
 const {
 	questionsData, isNoQuestion, isLoading, isChanged, isSaving, questionTypeLabels,
-	addQuestion, removeQuestion, loadQuestionsData, cacheQuestionsData, submitQuestionsData, resolveOrderNumber
+	addQuestion, removeQuestion, loadQuestionsData, cacheQuestionsData, submitQuestionsData, resetQuestionsData, resolveOrderNumber
 } = useQuestionsData()
 
 const questionComponentMap = {
@@ -78,8 +78,18 @@ function setCacheTimeout () {
 	}, 10000)
 }
 
+const examIdParam = computed(() => route.params?.exam_id)
+
+watch(
+	examIdParam,
+	function (examId) {
+		resetQuestionsData()
+		loadQuestionsData(examId)
+	},
+	{ immediate: true }
+)
+
 onMounted(() => {
-	loadQuestionsData(route.params.exam_id)
 	setCacheTimeout()
 })
 

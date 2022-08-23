@@ -19,10 +19,12 @@ const isChanged = ref(false)
 
 const errorBag = ref({})
 
-const questionsData = reactive({
+const initialData = {
 	exam_id: null,
 	question_types: []
-})
+}
+
+const questionsData = reactive({ ...initialData })
 
 const isNoQuestion = computed(() => questionsData.question_types.length === 0)
 
@@ -64,6 +66,10 @@ function formatQuestionsData (data) {
 			}))
 		}))
 	}
+}
+
+function resetQuestionsData () {
+	Object.assign(questionsData, {...initialData})
 }
 
 function loadQuestionsData(examId) {
@@ -275,6 +281,6 @@ export default function () {
 	return {
 		questionsData, questionTypeLabels, availableTypes, isNoQuestion, isChanged, isLoading, isSaving, errorBag,
 		addQuestion, removeQuestion, addQuestionType, removeQuestionType, resolveOrderNumber,
-		loadQuestionsData, cacheQuestionsData, submitQuestionsData,
+		loadQuestionsData, cacheQuestionsData, submitQuestionsData, resetQuestionsData
 	}
 }
