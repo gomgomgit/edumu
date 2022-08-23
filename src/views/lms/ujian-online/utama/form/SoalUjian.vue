@@ -18,7 +18,7 @@ const router = useRouter()
 const route = useRoute()
 
 const {
-	questionsData, isNoQuestion, isLoading, isChanged, questionTypeLabels,
+	questionsData, isNoQuestion, isLoading, isChanged, isSaving, questionTypeLabels,
 	addQuestion, removeQuestion, loadQuestionsData, cacheQuestionsData, submitQuestionsData, resolveOrderNumber
 } = useQuestionsData()
 
@@ -58,6 +58,11 @@ function handleAction (type, wrapperIndex) {
 		const el = wrapperRefs.value[wrapperIndex]
 		el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
 	})
+}
+
+async function handleSubmit () {
+	await submitQuestionsData()
+	router.push('/lms/ujian-online/utama/form/pratinjau/' + route.params.exam_id)
 }
 
 let cacheQuestionsTimeout
@@ -195,9 +200,15 @@ onUnmounted(() => {
 					</button>
 				</div>
 				<div class="col-3 offset-6">
+					<div
+						v-if="isSaving"
+						class="d-flex justify-content-center">
+						<Spinner />
+					</div>
 					<button
+						v-else
 						class="btn btn-primary btn-lg w-100"
-						@click="submitQuestionsData()">
+						@click="handleSubmit">
 						SELANJUTNYA
 						<i class="fas fa-angle-double-right ms-2"></i>
 					</button>

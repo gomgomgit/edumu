@@ -14,10 +14,12 @@ ini todo list untuk ujian online:
 -/ sanitize html sebelum diinput dan saat akan ditampilkan
 -/ hilangkan validasi jumlah opsi jika soal bertipe essay pada modal tambah tipe soal
 -/ pindahkan tombol tambah dan hapus soal ke atas wrapper soal
-- tambahkan input bobot
-- fungsikan kolom label soal pada modal tambah tipe soal // keterangan: bambang#yudoyono
-- fungsikan tombol selanjutnya untuk submit soal ke database
-- tambahkan modul attachment
+-- tambahkan input bobot
+-- fungsikan kolom label soal pada modal tambah tipe soal // keterangan: bambang#yudoyono
+- hitung ehq_order sebelum submit ke database
+-x perbaiki return pada validasi di api
+-/ fungsikan tombol selanjutnya untuk submit soal ke database
+-- tambahkan modul attachment
 - tambahkan input soal dari bank soal
 - tambahkan import soal
 

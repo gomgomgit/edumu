@@ -14,6 +14,7 @@ const questionTypeLabels = [
 ]
 
 const isLoading = ref(false)
+const isSaving = ref(false)
 const isChanged = ref(false)
 
 const errorBag = ref({})
@@ -62,11 +63,12 @@ function loadQuestionsData(examId) {
 					options: !question.options ? [] : question.options.map(option => ({
 						...option,
 						option_text: sanitizeHtml(option.option_text),
-						is_correct: parseInt(option.is_correct) ? 1 : 0
+						is_correct: typeof option.is_correct === 'string' ? parseInt(option.is_correct) : option.is_correct
 					})),
 					matches: !question.matches ? [] : question.matches.map(match => ({
 						...match,
-						option_match_text: sanitizeHtml(match.option_match_text)
+						option_match_text: sanitizeHtml(match.option_match_text),
+						is_correct: 1
 					}))
 				}))
 			}))
@@ -120,7 +122,7 @@ async function cacheQuestionsData (immediate) {
 			})
 
 			isChanged.value = false
-			useToast().success('Autosaved successfully!')
+			useToast().info('Autosaved successfully!')
 		}
 		else if (res.data.status === false) throw res.data.text
 	} catch (err) {
@@ -165,10 +167,41 @@ function validateQuestionsData () {
 	return Object.values(errorBag.value)
 }
 
-function submitQuestionsData () {
+async function submitQuestionsData () {
 	const errors = validateQuestionsData()
 	if (errors.length) useToast().warning(errors[0], { duration: 60000 })
-	else useToast().success('Data will be submitted')
+
+	try {
+		isSaving.value = true
+		const payload = {
+			...questionsData,
+			question_types: questionsData.question_types.map(type => ({
+				...type,
+				questions: type.questions.map(question => ({
+					...question,
+					keterangan: question?.keterangan ?? null,
+					score: question?.score ?? 0,
+					attachment_id: question?.attachment_id ?? null,
+					options: !question.options ? [] : question.options.map(option => ({
+						...option,
+						is_correct: option.is_correct ? 1 : 0
+					}))
+				}))
+			}))
+		}
+		const params = qs.stringify(payload)
+		const res = await requestDevel.post('/v2dev/exam/save-soal?', params)
+
+		if (res.data.status === true) {
+			isSaving.value = false
+			isChanged.value = false
+			useToast().info('Soal ujian berhasil disimpan!')
+		}
+		else if (res.data.status === false) throw res.data.text
+	} catch (err) {
+		isSaving.value = false
+		handleRequestError(err)
+	}
 }
 
 function addQuestion (wrapperIndex, questionIndex) {
@@ -185,7 +218,8 @@ function addQuestion (wrapperIndex, questionIndex) {
 		})),
 		matches: question_type !== 'match' ? [] : [...Array(optionCount).keys()].map((matchIndex) => ({
 			option_match_text: '',
-			match_with_option_id: 'option-dummy-id-' + timestamp + matchIndex
+			match_with_option_id: 'option-dummy-id-' + timestamp + matchIndex,
+			is_correct: 1
 		}))
 	}
 
@@ -234,7 +268,7 @@ function resolveOrderNumber(wrapperIndex, questionIndex) {
 
 export default function () {
 	return {
-		questionsData, questionTypeLabels, availableTypes, isNoQuestion, isChanged, isLoading, errorBag,
+		questionsData, questionTypeLabels, availableTypes, isNoQuestion, isChanged, isLoading, isSaving, errorBag,
 		addQuestion, removeQuestion, addQuestionType, removeQuestionType, resolveOrderNumber,
 		loadQuestionsData, cacheQuestionsData, submitQuestionsData,
 	}
