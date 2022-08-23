@@ -2,40 +2,45 @@
   <!--begin::Dashboard-->
   <div class="row gy-5 g-xl-8">
     <div class="col-xxl-4">
-      <MixedWidget2
+      <Widget1
         widget-classes="card-xl-stretch mb-xl-8"
         widget-color="danger"
         chart-height="200"
         stroke-color="#cb1e46"
-      ></MixedWidget2>
+        :siswa="datas?.countSiswa"
+        :siswaOnline="datas?.siswaOnline"
+        :guru="datas?.countGuru"
+        :guruOnline="datas?.guruOnline"
+      ></Widget1>
     </div>
     <div class="col-xxl-4">
-      <ListWidget5
+      <Widget2
         widget-classes="card-xxl-stretch mb-5 mb-xl-10"
-      ></ListWidget5>
+      ></Widget2>
     </div>
     <div class="col-xxl-4">
-      <MixedWidget7
+      <Widget3
         widget-classes="card-xxl-stretch-50 mb-5 mb-xl-8"
         chart-color="primary"
         chart-height="150"
-      ></MixedWidget7>
-      <MixedWidget10
+      ></Widget3>
+      <Widget4
         widget-classes="card-xxl-stretch-50 mb-5 mb-xl-8"
         chart-color="primary"
         chart-height="168"
-      ></MixedWidget10>
+      ></Widget4>
     </div>
   </div>
 
   <div class="row gy-5 gx-xl-8">
     <div class="col-xxl-4">
-      <ListWidget3 widget-classes="card-xxl-stretch mb-xl-3"></ListWidget3>
+      <Widget5 :datas="datas?.dataMateri" widget-classes="card-xxl-stretch mb-xl-3"></Widget5>
     </div>
     <div class="col-xxl-8">
-      <TableWidget9
+      <Widget6
+        :datas="datas?.dataTugas"
         widget-classes="card-xxl-stretch mb-5 mb-xl-8"
-      ></TableWidget9>
+      ></Widget6>
     </div>
   </div>
 
@@ -68,41 +73,34 @@
   <!--end::Dashboard-->
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted } from "vue";
-import TableWidget9 from "@/components/widgets/tables/Widget9.vue";
+<script setup>
+import { defineComponent, onMounted, ref } from "vue";
+import Widget1 from "./widgets/Widget1.vue";
+import Widget2 from "./widgets/Widget2.vue";
+import Widget3 from "./widgets/Widget3.vue";
+import Widget4 from "./widgets/Widget4.vue";
+import Widget5 from "./widgets/Widget5.vue";
+import Widget6 from "./widgets/Widget6.vue";
 import TableWidget5 from "@/components/widgets/tables/Widget5.vue";
 import ListWidget1 from "@/components/widgets/lists/Widget1.vue";
 import ListWidget2 from "@/components/widgets/lists/Widget2.vue";
-import ListWidget3 from "@/components/widgets/lists/Widget3.vue";
-import ListWidget5 from "@/components/widgets/lists/Widget5.vue";
 import ListWidget6 from "@/components/widgets/lists/Widget6.vue";
-import MixedWidget2 from "@/components/widgets/mixed/Widget2.vue";
 import MixedWidget5 from "@/components/widgets/mixed/Widget5.vue";
-import MixedWidget7 from "@/components/widgets/mixed/Widget7.vue";
-import MixedWidget10 from "@/components/widgets/mixed/Widget10.vue";
 import { setCurrentPageTitle, setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumb";
 import { useStore } from "vuex";
+import { request } from "@/util";
 
-export default defineComponent({
-  name: "dashboard-main",
-  components: {
-    TableWidget9,
-    TableWidget5,
-    ListWidget1,
-    ListWidget2,
-    ListWidget3,
-    ListWidget5,
-    ListWidget6,
-    MixedWidget2,
-    MixedWidget5,
-    MixedWidget7,
-    MixedWidget10,
-  },
-  setup() {
-    onMounted(() => {
-      setCurrentPageBreadcrumbs("Dashboard", ['dsaf', 'dfdsfa']);
-    });
-  },
+onMounted(() => {
+  setCurrentPageBreadcrumbs("Dashboard", ['dsaf', 'dfdsfa']);
+  getData()
 });
+
+const datas = ref()
+
+function getData() {
+  request.post('dashboard')
+  .then(res => {
+    datas.value = res.data.data
+  })
+}
 </script>
