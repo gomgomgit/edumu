@@ -91,7 +91,7 @@ import { useStore } from "vuex";
 import { request } from "@/util";
 
 onMounted(() => {
-  setCurrentPageBreadcrumbs("Dashboard", ['dsaf', 'dfdsfa']);
+  setCurrentPageBreadcrumbs("Dashboard", []);
   getData()
 });
 

@@ -2,8 +2,8 @@
   <!--begin::Mixed Widget 1-->
   <div class="card card-xxl-stretch">
     <!--begin::Header-->
-    <div :class="`bg-${widgetColor}`" class="card-header border-0 py-5 align-items-start">
-      <div class="d-flex align-items-center py-7 gap-5">
+    <div :class="`bg-${widgetColor}`" class="card-header border-0 py-5 align-items-start rounded-3">
+      <div class="d-flex align-items-center py-7 gap-5 mb-20">
         <div>
           <div class="rounded-circle overflow-hidden w-60px h-60px"
             style="
@@ -41,14 +41,6 @@
     <!--begin::Body-->
     <div class="card-body p-0">
       <!--begin::Chart-->
-      <apexchart
-        :class="`bg-${widgetColor}`"
-        class="mixed-widget-2-chart card-rounded-bottom"
-        :options="chartOptions"
-        :series="series"
-        height="200"
-        type="area"
-      ></apexchart>
       <!--end::Chart-->
       <!--begin::Stats-->
       <div class="card-p mt-n20 position-relative">
