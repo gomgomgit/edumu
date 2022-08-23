@@ -110,9 +110,8 @@ async function cacheQuestionsData (immediate) {
 		}
 		const params = qs.stringify(payload)
 		const res = await requestDevel.post(
-			'/v2dev/exam/cache-soal?'
-			+ params
-			+ (params.includes('question_types') ? '' : '&question_types[]')
+			'/v2dev/exam/cache-soal?',
+			params
 		)
 
 		if (res.data.status === true) {
@@ -205,7 +204,7 @@ async function submitQuestionsData (bypassOrderNumber = false) {
 
 			isSaving.value = false
 			isChanged.value = false
-			useToast().info('Soal ujian berhasil disimpan!')
+			// useToast().info('Soal ujian berhasil disimpan!')
 		}
 		else if (res.data.status === false) throw res.data.text
 	} catch (err) {

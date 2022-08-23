@@ -8,6 +8,7 @@ import Spinner from '@/components/Spinner.vue'
 import useQuestionsData from './composables/useQuestionsData.js'
 import EditorModal from './components/EditorModal.vue'
 import AddQuestionWrapperModal from './components/AddQuestionWrapperModal.vue'
+import AttachmentModal from './components/AttachmentModal.vue'
 import QuestionSingle from './components/QuestionSingle.vue'
 import QuestionMulti from './components/QuestionMulti.vue'
 import QuestionEssay from './components/QuestionEssay.vue'
@@ -178,7 +179,7 @@ onUnmounted(() => {
 							<div class="question-action">
 								<el-tooltip
 									class="box-item"
-									effect="dark"
+									effect="light"
 									content="Hapus Soal Terakhir"
 									placement="top-end">
 									<div class="question-remove" role="button" @click="handleAction('remove', wrapperIndex)">
@@ -187,7 +188,7 @@ onUnmounted(() => {
 								</el-tooltip>
 								<el-tooltip
 									class="box-item"
-									effect="dark"
+									effect="light"
 									content="Tambah Soal"
 									placement="bottom-end">
 									<div class="question-add" role="button" @click="handleAction('add', wrapperIndex)">
@@ -244,6 +245,8 @@ onUnmounted(() => {
 			<AddQuestionWrapperModal
 				:show="isShowAddQuestion"
 				@close-modal="isShowAddQuestion = false" />
+
+			<AttachmentModal />
 		</div>
 	</div>
 </template>

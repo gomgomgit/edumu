@@ -4,6 +4,7 @@ ini todo list untuk ujian online:
 -/ jika user telah mengubah data maka peringatkan user ketika akan pindah halaman jika tidak melalui tombol selanjutnya/submit
 -x tombol back pakai method push ke route tujuan
 -/ cleanup data jika exam_id ganti value
+- pakai adapter base64 pada exam editor
 
 # pengaturan
 -/ tukar posisi switch dan helper
@@ -19,8 +20,8 @@ ini todo list untuk ujian online:
 -/ fungsikan tombol selanjutnya untuk submit soal ke database
 -/ hitung ehq_order sebelum submit ke database
 -/ fungsikan kolom label soal pada modal tambah tipe soal // keterangan: bambang#yudoyono
--- tambahkan input bobot
--- tambahkan modul attachment
+--/ tambahkan input bobot
+--/ tambahkan modul attachment
 -? tambahkan input soal dari bank soal
 -? tambahkan import soal
 
