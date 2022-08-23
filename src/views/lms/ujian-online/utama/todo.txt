@@ -4,7 +4,7 @@ ini todo list untuk ujian online:
 -/ jika user telah mengubah data maka peringatkan user ketika akan pindah halaman jika tidak melalui tombol selanjutnya/submit
 -x tombol back pakai method push ke route tujuan
 -/ cleanup data jika exam_id ganti value
-- pakai adapter base64 pada exam editor
+-/ pakai adapter base64 pada exam editor
 
 # pengaturan
 -/ tukar posisi switch dan helper

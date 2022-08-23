@@ -2,9 +2,9 @@ import { computed, reactive, ref } from 'vue'
 import { useToast } from 'vue-toast-notification';
 import { isEmpty } from 'validate.js';
 import qs from 'qs'
-import sanitizeHtml from 'sanitize-html';
+// import sanitizeHtml from 'sanitize-html';
 
-import { requestDevel } from '@/util'
+import { requestDevel, sanitizeHtml } from '@/util'
 
 const questionTypeLabels = [
 	{ key: 'single', title: 'Pilihan Ganda', icon: 'fa-list-ul' },

@@ -3,10 +3,10 @@ import { onMounted, reactive, ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router';
 import { isEmpty, validate } from 'validate.js';
 import { useToast } from 'vue-toast-notification';
-import sanitizeHtml from 'sanitize-html';
+// import sanitizeHtml from 'sanitize-html';
 import qs from 'qs';
 
-import { requestDevel } from '@/util';
+import { requestDevel, sanitizeHtml } from '@/util';
 import Modal from '@/components/modals/CustomModal.vue'
 import Spinner from '@/components/Spinner.vue';
 import InlineEditor from '@/components/ckeditor-inline/Index.vue';
