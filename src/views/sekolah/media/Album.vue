@@ -39,8 +39,8 @@ import DownloadModal from './DownloadModal.vue'
     }
 
     function getDownloadZip() {
-      axios.get(`https://apiedumu.edumu.id/devel/apischool/kelas/download/${kelas_id}?id=410`).then(res => {
-      // request.get(`kelas/download/${kelas_id}`).then(res => {
+      // axios.get(`https://apiedumu.edumu.id/devel/apischool/kelas/download/${kelas_id}?id=410`).then(res => {
+      request.get(`kelas/download/${kelas_id}`).then(res => {
         fileDownload.value = res.data.data
       })
     }
