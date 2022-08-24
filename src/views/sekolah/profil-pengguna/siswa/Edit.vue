@@ -298,6 +298,7 @@ function submitAddKelas() {
                 type="date"
                 placeholder="Pilih Tanggal Lahir"
                 size=""
+                value-format="YYYY-MM-DD"
               />
             </div>
           </div>
