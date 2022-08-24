@@ -98,7 +98,7 @@ import FormModal from "./FormModal";
     formMode.value = 'Edit Data'
   }
   function handleFormClose (row) {
-    activeData.value = {}
+    activeData.value = null
     formMode.value = ''
   }
 </script>
