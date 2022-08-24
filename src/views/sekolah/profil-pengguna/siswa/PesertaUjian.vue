@@ -134,7 +134,7 @@ import ModalBlokir from './ModalBlokir.vue'
         <div class="card mb-5 mb-3">
           <div class="card-body pt-5 pb-5">
             <div class="d-flex justify-content-between align-items-center">
-              <h2 class="fs-1">Data Siswa</h2>
+              <h2 class="fs-1">Data Siswa Peserta Ujian</h2>
               <div>
                 <FilterSelect v-model:filterValue="kelasSelect" @changeFilter="changeKelas"
                   placeholder="Pilih Kelas">
