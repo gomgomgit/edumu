@@ -14,6 +14,7 @@ import { Doughnut } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, Plugin } from 'chart.js'
 import { computed } from '@vue/reactivity';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale)
 
 const router = useRouter()
@@ -175,6 +176,7 @@ function updateChart(val, tot) {
 
 
 function getLaporan () {
+	// axios.get('https://apiedumu.edumu.id/devel/apischool/siswa/financereport', {
 	request.get('siswa/financereport', {
 		params: {
 			user_nama: searchFilter.value,
