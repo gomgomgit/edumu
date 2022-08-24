@@ -9,6 +9,8 @@
   import { useToast } from "vue-toast-notification"
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
+import axios from "axios";
+import DownloadModal from './DownloadModal.vue'
 
   onMounted(() => {
     setCurrentPageBreadcrumbs("Album", ['Sekolah', "Media"]);
@@ -16,6 +18,8 @@ import { useStore } from "vuex";
   })
   const route = useRoute()
   const kelas_id = route.params.id
+
+  const fileDownload = ref()
 
   const store = useStore()
   const currentUser = store.getters.currentUser;
@@ -32,6 +36,16 @@ import { useStore } from "vuex";
         kelas.value = res.data.kelas
         album.value = res.data.data
       })
+    }
+
+    function getDownloadZip() {
+      axios.get(`https://apiedumu.edumu.id/devel/apischool/kelas/download/${kelas_id}?id=410`).then(res => {
+      // request.get(`kelas/download/${kelas_id}`).then(res => {
+        fileDownload.value = res.data.data
+      })
+    }
+    function handleClose() {
+      fileDownload.value = null
     }
 
     const kelas = ref('')
@@ -54,7 +68,7 @@ import { useStore } from "vuex";
             </div>
 
             <div class="position-relative d-flex ">
-                <a class="btn btn-primary d-flex gap-4 align-items-center w-auto">
+                <a @click="getDownloadZip()" class="btn btn-primary d-flex gap-4 align-items-center w-auto">
                   <span>
                     Download
                   </span>
@@ -77,6 +91,10 @@ import { useStore } from "vuex";
       </div>
     </div>
 
+    <DownloadModal 
+      :file="fileDownload"
+      @close="handleClose()"
+    />
   </div>
 </template>
 

@@ -4,7 +4,8 @@
     title: {type: String},
     confirmText: { type: String, required: false },
     breadcrumb: {type: Array, required: false},
-    width: {type:String, required:false}
+    width: {type:String, required:false},
+    dismissable: {type:Boolean, default: true}
   })
 
   const emits = defineEmits(['closeModal', 'confirm', 'dismiss'])
@@ -45,7 +46,7 @@
         <div class="modal-footer border-top border-secondary">
           <div class="modal-footer-fade"></div>
           <div class="d-flex justify-content-end gap-4">
-            <button @click="emits('dismiss')" class="btn btn-light">Batal</button>
+            <button v-if="dismissable" @click="emits('dismiss')" class="btn btn-light">Batal</button>
             <button @click="emits('confirm')" class="btn btn-primary text-white">{{ props.confirmText ?? 'Simpan' }}</button>
           </div>
         </div>
