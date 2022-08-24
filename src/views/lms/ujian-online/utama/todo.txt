@@ -5,6 +5,7 @@ ini todo list untuk ujian online:
 -x tombol back pakai method push ke route tujuan
 -/ cleanup data jika exam_id ganti value
 -/ pakai adapter base64 pada exam editor
+- sanitize html sebelum post ke server
 
 # pengaturan
 -/ tukar posisi switch dan helper

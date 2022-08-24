@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import InlineEditor from '@/components/ckeditor-inline/Index.vue'
 
 import useQuestionsData from '../composables/useQuestionsData.js'
@@ -12,7 +12,7 @@ const props = defineProps({
 	question: { type: Object, default: () => ({}) },
 })
 
-const { isChanged, errorBag, cacheQuestionsData } = useQuestionsData()
+const { isChanged, errorBag, resolveScore, cacheQuestionsData } = useQuestionsData()
 const { setAttachmentData } = useAttachment()
 
 const isShowEditor = ref(false)
@@ -23,6 +23,17 @@ function removeAttachment () {
 	props.question.attachment_id = null
 	props.question.attachment_title = null
 }
+
+function handleScoreChange () {
+	props.question.is_score_manual = 1
+
+	// resolveScore()
+}
+
+// watch(
+// 	props.question.score,
+// 	console.log
+// )
 </script>
 
 <template>
@@ -57,7 +68,11 @@ function removeAttachment () {
 
 			<div class="col-3 d-flex justify-content-between">
 				<div class="d-flex flex-column-reverse py-1 gap-6">
-					<el-input-number v-model="question.score" class="score-input" />
+					<el-input-number
+						v-model="question.score"
+						class="score-input"
+						@change="handleScoreChange" />
+
 					<el-tooltip
 						class="box-item"
 						effect="light"

@@ -281,10 +281,60 @@ function resolveOrderNumber(wrapperIndex, questionIndex) {
 	return previousNumber + currentNumber
 }
 
+function resolveScore () {
+	const scoresData = []
+
+	for (const wrapperIndex in questionsData.question_types) {
+		const wrapper = questionsData.question_types[wrapperIndex]
+		for (const questionIndex in wrapper.questions) {
+			const question = wrapper.questions[questionIndex]
+			scoresData.push({
+				wrapperIndex,
+				questionIndex,
+				score: parseInt(question.score),
+				is_score_manual: question.is_score_manual === 'string'
+					? parseInt(question.is_score_manual)
+					: question.is_score_manual,
+			})
+		}
+	}
+
+	const manualScoreSum = scoresData.filter(data => data.is_score_manual).reduce((acc, curr) => acc + curr.score, 0)
+	console.log('manualScoreSum', manualScoreSum)
+	const autoScoreSum = scoresData.filter(data => !data.is_score_manual).reduce((acc, curr) => acc + curr.score, 0)
+	console.log('autoScoreSum', autoScoreSum)
+	const totalScoreSum = manualScoreSum + autoScoreSum
+	console.log('totalScoreSum', totalScoreSum)
+
+	const manualScoreCount = scoresData.filter(data => data.is_score_manual).length
+	console.log('manualScoreCount', manualScoreCount)
+	const autoScoreCount = scoresData.filter(data => !data.is_score_manual).length
+	console.log('autoScoreCount', autoScoreCount)
+	const totalScoreCount = manualScoreCount + autoScoreCount
+	console.log('totalScoreCount', totalScoreCount)
+
+	const autoPercentage = 100 - Math.round(manualScoreSum / totalScoreCount * 100, 2)
+	console.log('autoPercentage', autoPercentage)
+	const autoScoreTotal = Math.round(totalScoreSum * autoPercentage / 100, 2)
+	console.log('autoScoreTotal', autoScoreTotal)
+	const autoScorePerQuestion = Math.round(autoScoreTotal / autoScoreCount, 2)
+	console.log('autoScorePerQuestion', autoScorePerQuestion)
+
+	const autoScoresData = scoresData.filter(data => !data.is_score_manual)
+	console.log('autoScoresData', autoScoresData)
+
+	for (const scoreData of autoScoresData) {
+		questionsData
+			.question_types[scoreData.wrapperIndex]
+			.questions[scoreData.questionIndex]
+			.score = autoScorePerQuestion
+	}
+}
+
 export default function () {
 	return {
 		questionsData, questionTypeLabels, availableTypes, isNoQuestion, isChanged, isLoading, isSaving, errorBag,
-		addQuestion, removeQuestion, addQuestionType, removeQuestionType, resolveOrderNumber,
+		addQuestion, removeQuestion, addQuestionType, removeQuestionType, resolveOrderNumber, resolveScore,
 		loadQuestionsData, cacheQuestionsData, submitQuestionsData, resetQuestionsData
 	}
 }
