@@ -180,13 +180,17 @@ function formatContentToJson () {
 function handleSubmit () {
 	const editorResult = formatContentToJson()
 	const timestamp = Date.now()
-	const { optionCount, question_type } = props.editorData
+	const { optionCount, question_type, keterangan } = props.editorData
 	const wrapperIndex = questionsData.question_types.findIndex(type => type.question_type === question_type)
 
 	const questions = editorResult.map((result, questionIndex) => ({
 		question_id: 'question-dummy-id-' + timestamp + questionIndex,
 		question_text: result.question,
 		ehq_order: null,
+		keterangan,
+		score: 10,
+		attachment_id: null,
+		attachment_title: null,
 		options: [...Array(optionCount).keys()].map(optionIndex => ({
 			option_id: 'option-dummy-id-' + timestamp + optionIndex,
 			option_text: evaluateOption('option', result.options[optionIndex]),

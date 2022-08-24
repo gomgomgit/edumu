@@ -8,6 +8,7 @@ import Spinner from '@/components/Spinner.vue'
 import useQuestionsData from './composables/useQuestionsData.js'
 import EditorModal from './components/EditorModal.vue'
 import AddQuestionWrapperModal from './components/AddQuestionWrapperModal.vue'
+import AttachmentModal from './components/AttachmentModal.vue'
 import QuestionSingle from './components/QuestionSingle.vue'
 import QuestionMulti from './components/QuestionMulti.vue'
 import QuestionEssay from './components/QuestionEssay.vue'
@@ -176,12 +177,24 @@ onUnmounted(() => {
 							</button>
 
 							<div class="question-action">
-								<div class="question-remove" role="button" @click="handleAction('remove', wrapperIndex)">
-									<img src="figma-icon/question-remove.png" alt="" />
-								</div>
-								<div class="question-add" role="button" @click="handleAction('add', wrapperIndex)">
-									<img src="figma-icon/question-add.png" alt="" />
-								</div>
+								<el-tooltip
+									class="box-item"
+									effect="light"
+									content="Hapus Soal Terakhir"
+									placement="top-end">
+									<div class="question-remove" role="button" @click="handleAction('remove', wrapperIndex)">
+										<img src="figma-icon/question-remove.png" alt="" />
+									</div>
+								</el-tooltip>
+								<el-tooltip
+									class="box-item"
+									effect="light"
+									content="Tambah Soal"
+									placement="bottom-end">
+									<div class="question-add" role="button" @click="handleAction('add', wrapperIndex)">
+										<img src="figma-icon/question-add.png" alt="" />
+									</div>
+								</el-tooltip>
 							</div>
 						</div>
 					</header>
@@ -232,6 +245,8 @@ onUnmounted(() => {
 			<AddQuestionWrapperModal
 				:show="isShowAddQuestion"
 				@close-modal="isShowAddQuestion = false" />
+
+			<AttachmentModal />
 		</div>
 	</div>
 </template>
@@ -312,7 +327,7 @@ onUnmounted(() => {
 	position: relative;
 	width: 35px;
 	bottom: 13px;
-	left: 7.5px;
+	left: 7.3px;
 }
 
 #soal-ujian .question-action :where(.question-add, .question-remove):hover {

@@ -2,9 +2,9 @@ import { computed, reactive, ref } from 'vue'
 import { useToast } from 'vue-toast-notification';
 import { isEmpty } from 'validate.js';
 import qs from 'qs'
-import sanitizeHtml from 'sanitize-html';
+// import sanitizeHtml from 'sanitize-html';
 
-import { requestDevel } from '@/util'
+import { requestDevel, sanitizeHtml } from '@/util'
 
 const questionTypeLabels = [
 	{ key: 'single', title: 'Pilihan Ganda', icon: 'fa-list-ul' },
@@ -50,6 +50,7 @@ function formatQuestionsData (data) {
 		question_types: !data.question_types ? [] : data.question_types.map(type => ({
 			...type,
 			optionCount: type.question_type !== 'essay' ? type.questions[0].options.length : 0,
+			keterangan: type.questions?.length ? type.questions[0].keterangan : null,
 			questions: type.questions.map(question => ({
 				...question,
 				question_text: sanitizeHtml(question.question_text),
@@ -109,9 +110,8 @@ async function cacheQuestionsData (immediate) {
 		}
 		const params = qs.stringify(payload)
 		const res = await requestDevel.post(
-			'/v2dev/exam/cache-soal?'
-			+ params
-			+ (params.includes('question_types') ? '' : '&question_types[]')
+			'/v2dev/exam/cache-soal?',
+			params
 		)
 
 		if (res.data.status === true) {
@@ -168,8 +168,7 @@ function validateQuestionsData () {
 	return Object.values(errorBag.value)
 }
 
-async function submitQuestionsData () {
-
+async function submitQuestionsData (bypassOrderNumber = false) {
 	try {
 		isSaving.value = true
 
@@ -185,7 +184,7 @@ async function submitQuestionsData () {
 				...type,
 				questions: type.questions.map((question, questionIndex) => ({
 					...question,
-					ehq_order: resolveOrderNumber(typeIndex, questionIndex),
+					ehq_order: bypassOrderNumber ? question.ehq_order : resolveOrderNumber(typeIndex, questionIndex),
 					keterangan: question?.keterangan ?? null,
 					score: question?.score ?? 0,
 					attachment_id: question?.attachment_id ?? null,
@@ -205,7 +204,7 @@ async function submitQuestionsData () {
 
 			isSaving.value = false
 			isChanged.value = false
-			useToast().info('Soal ujian berhasil disimpan!')
+			// useToast().info('Soal ujian berhasil disimpan!')
 		}
 		else if (res.data.status === false) throw res.data.text
 	} catch (err) {
@@ -217,11 +216,15 @@ async function submitQuestionsData () {
 
 function addQuestion (wrapperIndex, questionIndex) {
 	const timestamp = Date.now()
-	const { question_type, optionCount } = questionsData.question_types[wrapperIndex]
+	const { question_type, optionCount, keterangan } = questionsData.question_types[wrapperIndex]
 	const newQuestion = {
 		question_id: 'question-dummy-id-' + timestamp,
 		question_text: '',
 		ehq_order: null,
+		keterangan,
+		score: 10,
+		attachment_id: null,
+		attachment_title: null,
 		options: question_type === 'essay' ? [] : [...Array(optionCount).keys()].map((optionIndex) => ({
 			option_id: 'option-dummy-id-' + timestamp + optionIndex,
 			option_text: '',
@@ -252,6 +255,7 @@ function addQuestionType (payload) {
 	questionsData.question_types.push({
 		question_type: payload.questionType,
 		optionCount: parseInt(payload.optionCount),
+		keterangan: payload.keterangan,
 		questions: []
 	})
 
