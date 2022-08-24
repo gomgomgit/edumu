@@ -8,10 +8,15 @@
   import { Search } from '@element-plus/icons-vue'
 import { useToast } from "vue-toast-notification";
 import { deleteConfirmation } from "@/core/helpers/deleteconfirmation";
+import { useStore } from "vuex";
 
   onMounted(() => {
     setCurrentPageBreadcrumbs("Berita", ['Sekolah', "Informasi"]);
   })
+  
+const store = useStore()
+const currentUser = store.getters.currentUser;
+const apiUrl = `${process.env.VUE_APP_API_URL}/${currentUser.sekolah_kode}/apischool/public`;
 
   function getBerita (payload) {
       request.post('konten', null, {
@@ -120,7 +125,7 @@ import { deleteConfirmation } from "@/core/helpers/deleteconfirmation";
               <div v-if="column.field == 'content_image'">
                 <div class="p-2 bg-secondary d-inline-block">
                   <template v-if="row.content_image">
-                    <img class="image-thumbnail"  :src="publicApi + '/images/konten/' + row.content_image" alt="">
+                    <img class="image-thumbnail"  :src="apiUrl + '/images/konten/' + row.content_image" alt="">
                   </template>
                   <template v-if="!row.content_image">
                     <span class="fw-bold fs-6 mx-2">NO IMAGE</span>

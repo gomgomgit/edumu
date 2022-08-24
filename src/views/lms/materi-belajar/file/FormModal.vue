@@ -29,6 +29,8 @@ const initialForm = {
 
 const store = useStore()
 const currentUser = store.getters.currentUser
+const storageUrl = `${process.env.VUE_APP_STORAGE_URL}/${currentUser.sekolah_kode}/apischool/public`;
+
 
 const form = reactive({...initialForm})
 
@@ -184,7 +186,7 @@ watch(
         <div class="col-9 align-items-center">
           
           <ul v-if="activeData?.materi_file">
-            <li><a class="fs-4" target="_blank" :href="storagePublic + '/files/' + activeData?.materi_file">{{activeData?.materi_file}}</a></li>
+            <li><a class="fs-4" target="_blank" :href="storageUrl + '/files/' + activeData?.materi_file">{{activeData?.materi_file}}</a></li>
           </ul>
           <FileDrop v-model:fileInputData="form.materi_file"></FileDrop>
         </div>

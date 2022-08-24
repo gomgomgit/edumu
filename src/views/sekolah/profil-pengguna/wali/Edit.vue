@@ -6,6 +6,7 @@ import ImageInput from '@/components/image-input/Index.vue'
 import { useToast } from 'vue-toast-notification';
 import { useRoute, useRouter } from 'vue-router';
 import QueryString from 'qs';
+import { useStore } from 'vuex';
 
 
 onMounted(() => {
@@ -15,6 +16,10 @@ onMounted(() => {
 
 const router = useRouter()
 const route = useRoute()
+
+const store = useStore()
+const currentUser = store.getters.currentUser
+const storageUrl = `${process.env.VUE_APP_STORAGE_URL}/${currentUser.sekolah_kode}/apischool/public`;
 
 const waliId = route.params.id
 
@@ -207,7 +212,7 @@ function post() {
           <div class="d-flex gap-6">
             <div v-if="oldFoto">
               <p class="m-0 fs-4 fw-bold mb-6">Foto</p>
-              <img height="200" width="200" :src="storagePublic + '/images/wali/' + oldFoto" alt="">
+              <img height="200" width="200" :src="storageUrl + '/images/wali/' + oldFoto" alt="">
             </div>
             <div class="">
               <p class="m-0 fs-4 fw-bold mb-6">Ganti Foto</p>

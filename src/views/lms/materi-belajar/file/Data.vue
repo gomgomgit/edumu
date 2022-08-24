@@ -8,11 +8,16 @@ import QueryString from 'qs';
 import FileDrop from '@/components/file-dropzone/Index.vue';
 import { useToast } from 'vue-toast-notification';
 import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 onMounted(() => {
   setCurrentPageBreadcrumbs(`${pageType == 'edit' && materiId ? 'Edit' : 'Tambah'} Materi File`, ['LMS', 'Materi Belajar', 'Materi File']);
   getData()
 })
+
+const store = useStore()
+const currentUser = store.getters.currentUser;
+const storageUrl = `${process.env.VUE_APP_STORAGE_URL}/${currentUser.sekolah_kode}/apischool/public`;
 
 const baseUrl = process.env.VUE_APP_API_URL
 const router = useRouter()
@@ -208,7 +213,7 @@ function post() {
             <div class="col-9 align-items-center">
               
               <ul v-if="oldFiles">
-                <li><a class="fs-4" target="_blank" :href="storagePublic + '/files/' + oldFiles">{{oldFiles}}</a></li>
+                <li><a class="fs-4" target="_blank" :href="storageUrl + '/files/' + oldFiles">{{oldFiles}}</a></li>
               </ul>
               <FileDrop v-model:fileInputData="form.materi_file"></FileDrop>
             </div>

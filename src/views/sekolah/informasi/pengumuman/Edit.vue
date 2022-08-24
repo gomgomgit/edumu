@@ -10,6 +10,7 @@ import { useRoute, useRouter } from "vue-router";
 import FileDrop from "@/components/file-dropzone/Index.vue"
 import { file } from "@babel/types";
 import { isEmpty } from "validate.js";
+import { useStore } from "vuex";
 
 onMounted(() => {
   setCurrentPageBreadcrumbs('Edit Pengumuman', ['Informasi', 'Pengumuman'])
@@ -20,6 +21,10 @@ onMounted(() => {
 const router = useRouter()
 const route = useRoute()
 const pengumumanId = route.params.id
+
+const store = useStore()
+const currentUser = store.getters.currentUser
+const storageUrl = `${process.env.VUE_APP_STORAGE_URL}/${currentUser.sekolah_kode}/apischool/public`;
 
 const classes = ref()
 const form = reactive({
@@ -136,7 +141,7 @@ function postBerita() {
               <p class="m-0 fs-4 fw-bold">Gambar</p>
             </div>
             <div class="col-9 align-items-center d-flex gap-4">
-              <ImageCropper  v-model:fileInputData="form.content_image" :oldImage="storagePublic + '/images/konten/' + oldImage" />
+              <ImageCropper  v-model:fileInputData="form.content_image" :oldImage="storageUrl + '/images/konten/' + oldImage" />
             </div>
           </div>
           <div class="row">
@@ -188,7 +193,7 @@ function postBerita() {
             <div class="col-9 align-items-center">
               <ul>
                 <template v-for="file in oldFiles">
-                  <li><a class="fs-4" target="_blank" :href="storagePublic + '/files/' + file.content_file_nama">{{file.content_file_nama}}</a></li>
+                  <li><a class="fs-4" target="_blank" :href="storageUrl + '/files/' + file.content_file_nama">{{file.content_file_nama}}</a></li>
                 </template>
               </ul>
               <FileDrop :multiple="true" v-model:fileInputData="fileDatas"></FileDrop>

@@ -7,10 +7,15 @@
   import FilterSelect from '@/components/filter-select'
   import { Search } from '@element-plus/icons-vue'
 import { deleteConfirmation } from "@/core/helpers/deleteconfirmation";
+import { useStore } from "vuex";
 
   onMounted(() => {
     setCurrentPageBreadcrumbs("Prestasi", ['Sekolah', "Informasi"]);
   })
+  
+const store = useStore()
+const currentUser = store.getters.currentUser
+const storageUrl = `${process.env.VUE_APP_STORAGE_URL}/${currentUser.sekolah_kode}/apischool/public`;
 
   function getPrestasi (payload) {
       request.post('prestasi', null, {
@@ -114,7 +119,7 @@ import { deleteConfirmation } from "@/core/helpers/deleteconfirmation";
               <div v-if="column.field == 'content_image'">
                 <div class="p-2 bg-secondary d-inline-block">
                   <template v-if="row.content_image">
-                    <img class="image-thumbnail"  :src="storagePublic + '/images/konten/' + row.content_image" alt="">
+                    <img class="image-thumbnail"  :src="storageUrl + '/images/konten/' + row.content_image" alt="">
                   </template>
                   <template v-if="!row.content_image">
                     <span class="fw-bold fs-6 mx-2">NO IMAGE</span>

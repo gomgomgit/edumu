@@ -8,6 +8,7 @@ import QueryString from 'qs';
 import FileDrop from '@/components/file-dropzone/Index.vue';
 import { useToast } from 'vue-toast-notification';
 import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 onMounted(() => {
   setCurrentPageBreadcrumbs(`${pageType == 'edit' && tugasid ? 'Edit' : 'Tambah'}  Data Tugas`, ['LMS', 'Tugas Offline']);
@@ -16,6 +17,10 @@ onMounted(() => {
 
 const router = useRouter()
 const route = useRoute()
+
+const store = useStore()
+const currentUser = store.getters.currentUser
+const storageUrl = `${process.env.VUE_APP_STORAGE_URL}/${currentUser.sekolah_kode}/apischool/public`;
 
 const tugasid = route.params.id ?? null
 const pageType = route.params.type
@@ -248,7 +253,7 @@ function post() {
             <div class="col-9 align-items-center">
               <ul>
                 <template v-for="file in oldFiles">
-                  <li><a class="fs-4" target="_blank" :href="storagePublic + '/files/' + file.tugas_file_nama">{{file.tugas_file_nama}}</a></li>
+                  <li><a class="fs-4" target="_blank" :href="storageUrl + '/files/' + file.tugas_file_nama">{{file.tugas_file_nama}}</a></li>
                 </template>
               </ul>
               <FileDrop :multiple="true" v-model:fileInputData="fileDatas"></FileDrop>

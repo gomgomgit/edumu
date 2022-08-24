@@ -7,6 +7,7 @@ import QueryString from 'qs';
 import { useToast } from 'vue-toast-notification';
 import { useRoute, useRouter } from 'vue-router';
 import FormKelas from './FormKelas'
+import { useStore } from 'vuex';
 
 
 onMounted(() => {
@@ -18,6 +19,10 @@ onMounted(() => {
 
 const router = useRouter()
 const route = useRoute()
+
+const store = useStore()
+const currentUser = store.getters.currentUser
+const storageUrl = `${process.env.VUE_APP_STORAGE_URL}/${currentUser.sekolah_kode}/apischool/public`;
 
 const siswaId = route.params.id
 const oldFoto = ref('')
@@ -340,7 +345,7 @@ function submitAddKelas() {
           <div class="d-flex gap-6">
             <div v-if="oldFoto">
               <p class="m-0 fs-4 fw-bold mb-6">Foto Siswa</p>
-              <img height="200" width="200"  :src="storagePublic + '/images/siswa/' + oldFoto" alt="">
+              <img height="200" width="200"  :src="storageUrl + '/images/siswa/' + oldFoto" alt="">
             </div>
             <div>
               <p class="m-0 fs-4 fw-bold mb-6">Ganti Foto Siswa</p>
