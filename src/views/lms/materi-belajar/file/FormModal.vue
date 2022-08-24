@@ -7,6 +7,7 @@ import { isEmpty } from "validate.js"
 import Modal from "@/components/modals/CustomModal.vue"
 import { request } from "@/util";
 import FileDrop from '@/components/file-dropzone/Index.vue';
+import { useStore } from "vuex"
 
 const props = defineProps({
 	mode: { type: String, required: true },
@@ -26,6 +27,11 @@ const initialForm = {
   materi_file: null,
 }
 
+const store = useStore()
+const currentUser = store.getters.currentUser
+const storageUrl = `${process.env.VUE_APP_STORAGE_URL}/${currentUser.sekolah_kode}/apischool/public`;
+
+
 const form = reactive({...initialForm})
 
 function handleClose () {
@@ -44,6 +50,8 @@ function handleSubmit () {
   }
   
   const formData = new FormData()
+  formData.append('code', currentUser.sekolah_kode)
+  formData.append('user_login', currentUser.user_id)
   formData.append('materi_id', form.materi_id)
   formData.append('kelas_id', selectedClass)
   formData.append('mapel_id', form.mapel_id)
@@ -51,8 +59,8 @@ function handleSubmit () {
   formData.append('materi_judul', form.materi_judul)
   formData.append('materi_status', form.materi_status)
   formData.append('materi_file', form.materi_file)
-  if (props.activeData) {
-    formData.append('materi_tipe', oldFiles.value.split('.').pop())
+  if (typeof form.materi_file == 'string' ) {
+    formData.append('materi_tipe', form.materi_file.split('.').pop())
   }
 
   const endpoint = props.activeData ? 'materi/edit' : 'materi/add'
@@ -178,7 +186,7 @@ watch(
         <div class="col-9 align-items-center">
           
           <ul v-if="activeData?.materi_file">
-            <li><a class="fs-4" target="_blank" :href="storagePublic + '/files/' + activeData?.materi_file">{{activeData?.materi_file}}</a></li>
+            <li><a class="fs-4" target="_blank" :href="storageUrl + '/files/' + activeData?.materi_file">{{activeData?.materi_file}}</a></li>
           </ul>
           <FileDrop v-model:fileInputData="form.materi_file"></FileDrop>
         </div>

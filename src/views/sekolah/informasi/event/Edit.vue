@@ -7,6 +7,7 @@ import ImageCropper from '@/components/image-cropper/Index.vue'
 import CKEditor from '@/components/ckeditor/Index.vue'
 import { useToast } from "vue-toast-notification";
 import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 onMounted(() => {
   setCurrentPageBreadcrumbs('Edit Event', ['Informasi', 'Event'])
@@ -15,6 +16,10 @@ onMounted(() => {
 
 const router = useRouter()
 const route = useRoute()
+
+const store = useStore()
+const currentUser = store.getters.currentUser
+const storageUrl = `${process.env.VUE_APP_STORAGE_URL}/${currentUser.sekolah_kode}/apischool/public`;
 
 const eventId = route.params.id
 
@@ -112,7 +117,7 @@ function postBerita() {
               <p class="m-0 fs-4 fw-bold">Gambar</p>
             </div>
             <div class="col-9 align-items-center d-flex gap-4">
-              <ImageCropper  v-model:fileInputData="form.event_foto" :oldImage="storagePublic + '/images/event/' + oldImage"/>
+              <ImageCropper  v-model:fileInputData="form.event_foto" :oldImage="storageUrl + '/images/event/' + oldImage"/>
             </div>
           </div>
           <div class="row">

@@ -8,6 +8,7 @@ import QueryString from 'qs';
 import FileDrop from '@/components/file-dropzone/Index.vue';
 import { useToast } from 'vue-toast-notification';
 import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 onMounted(() => {
   setCurrentPageBreadcrumbs(`${pageType == 'edit' && tugasid ? 'Edit' : 'Tambah'}  Data Tugas`, ['LMS', 'Tugas Offline']);
@@ -16,6 +17,10 @@ onMounted(() => {
 
 const router = useRouter()
 const route = useRoute()
+
+const store = useStore()
+const currentUser = store.getters.currentUser
+const storageUrl = `${process.env.VUE_APP_STORAGE_URL}/${currentUser.sekolah_kode}/apischool/public`;
 
 const tugasid = route.params.id ?? null
 const pageType = route.params.type
@@ -87,38 +92,39 @@ function post() {
     selectedClass = form.kelas_id
   }
   
-  const formFile = new FormData()
-  Array.from(fileDatas.value).forEach((file, indexFile) => {
-    formFile.append('file' + indexFile, file)
-  });
-  request.post('file', formFile, {
+  if (fileDatas.value.length > 0) {
+    const formFile = new FormData()
+    Array.from(fileDatas.value).forEach((file, indexFile) => {
+      formFile.append('file' + indexFile, file)
+    });
+    request.post('file', formFile, {
+      headers: {
+        'Content-Type' : 'multipart/form-data'
+      }
+    }).then(res => {
+        useToast().success('File Berhasil DiUpload')
+    })
+  }
+  const formData = new FormData()
+  formData.append('materi_id', form.materi_id)
+  formData.append('kelas_id', selectedClass)
+  formData.append('mapel_id', form.mapel_id)
+  formData.append('user_id', form.user_id)
+  formData.append('tugas_judul', form.tugas_judul)
+  formData.append('tugas_desc', form.tugas_desc)
+  formData.append('tugas_due_date', form.tugas_due_date)
+  formData.append('tugas_status', form.tugas_status)
+  formData.append('materi_file', form.materi_file)
+
+  const endpoint = pageType == 'edit' && tugasid ? 'tugas/update' : 'tugas/create'
+  const message = pageType == 'edit' && tugasid ? 'Data Berhasil Diedit!' : 'Data Berhasil Ditambahkan!'
+  request.post(endpoint, formData, {
     headers: {
       'Content-Type' : 'multipart/form-data'
     }
   }).then(res => {
-      useToast().success('File Berhasil DiUpload')
-
-      const formData = new FormData()
-      formData.append('materi_id', form.materi_id)
-      formData.append('kelas_id', selectedClass)
-      formData.append('mapel_id', form.mapel_id)
-      formData.append('user_id', form.user_id)
-      formData.append('tugas_judul', form.tugas_judul)
-      formData.append('tugas_desc', form.tugas_desc)
-      formData.append('tugas_due_date', form.tugas_due_date)
-      formData.append('tugas_status', form.tugas_status)
-      formData.append('materi_file', form.materi_file)
-
-      const endpoint = pageType == 'edit' && tugasid ? 'tugas/update' : 'tugas/create'
-      const message = pageType == 'edit' && tugasid ? 'Data Berhasil Diedit!' : 'Data Berhasil Ditambahkan!'
-      request.post(endpoint, formData, {
-        headers: {
-          'Content-Type' : 'multipart/form-data'
-        }
-      }).then(res => {
-          useToast().success(message)
-          router.push('/lms/tugas-offline')
-      })
+      useToast().success(message)
+      router.push('/lms/tugas-offline')
   })
   
 }
@@ -247,7 +253,7 @@ function post() {
             <div class="col-9 align-items-center">
               <ul>
                 <template v-for="file in oldFiles">
-                  <li><a class="fs-4" target="_blank" :href="storagePublic + '/files/' + file.tugas_file_nama">{{file.tugas_file_nama}}</a></li>
+                  <li><a class="fs-4" target="_blank" :href="storageUrl + '/files/' + file.tugas_file_nama">{{file.tugas_file_nama}}</a></li>
                 </template>
               </ul>
               <FileDrop :multiple="true" v-model:fileInputData="fileDatas"></FileDrop>

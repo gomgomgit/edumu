@@ -25,8 +25,6 @@ import VueCryptojs from 'vue-cryptojs'
 const app = createApp(App);
 
 const currentUser = store.getters.currentUser;
-app.config.globalProperties.publicApi = `${process.env.VUE_APP_API_URL}/${currentUser.sekolah_kode}/apischool/public`;
-app.config.globalProperties.storagePublic = `${process.env.VUE_APP_STORAGE_URL}/${currentUser.sekolah_kode}/apischool/public`;
 
 app.use(store);
 app.use(router);

@@ -7,6 +7,7 @@ import ImageCropper from '@/components/image-cropper/Index.vue'
 import CKEditor from '@/components/ckeditor/Index.vue'
 import { useToast } from "vue-toast-notification";
 import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 onMounted(() => {
   setCurrentPageBreadcrumbs('Edit Berita', ['Informasi', 'Berita'])
@@ -16,6 +17,10 @@ onMounted(() => {
 
 const router = useRouter()
 const route = useRoute()
+
+const store = useStore()
+const currentUser = store.getters.currentUser;
+const apiUrl = `${process.env.VUE_APP_API_URL}/${currentUser.sekolah_kode}/apischool/public`;
 
 const beritaId = route.params.id
 
@@ -115,7 +120,7 @@ function postBerita() {
               <p class="m-0 fs-4 fw-bold">Gambar</p>
             </div>
             <div class="col-9 align-items-center d-flex gap-4">
-              <ImageCropper  v-model:fileInputData="form.content_image" :ratio="16/9" :cropRequire="true" :oldImage="publicApi + '/images/konten/' + oldImage"/>
+              <ImageCropper  v-model:fileInputData="form.content_image" :ratio="16/9" :cropRequire="true" :oldImage="apiUrl + '/images/konten/' + oldImage"/>
             </div>
           </div>
           <div class="row">
