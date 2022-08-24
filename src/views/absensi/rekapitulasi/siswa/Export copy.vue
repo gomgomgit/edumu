@@ -12,7 +12,7 @@ import * as XLSX from 'xlsx';
 
 onMounted(() => {
   setCurrentPageBreadcrumbs("Export Presensi", ['Absensi', 'Rekapitulasi', 'Siswa']);
-  getQueue()
+  getDownloadData()
 })
 
 const store = useStore()
@@ -29,7 +29,8 @@ const exportData = ref([])
 const exportDate = ref('')
 const exportKelas = ref('')
 
-const loading = ref(true)
+const loading = ref(false)
+const readyToGenerate = ref(false)
 
 const form = reactive({
   status_import: '',
@@ -39,7 +40,8 @@ const form = reactive({
 
 function getQueue() {
   loading.value = true
-  request.post('reportsiswanew', null, {
+  readyToGenerate.value = false
+  request.post('reportsiswa', null, {
     params: {
       level: 'siswa',
       cari: route.query.cari,
@@ -53,7 +55,8 @@ function getQueue() {
       reportQueue.value = resReport.data
       checkQueue()
     }
-
+  }).catch(err => {
+    loading.value = false
   })
 }
 
@@ -85,7 +88,9 @@ function getDownloadData() {
     if (res.data.success == true) {
       exportData.value = res.data.data
       exportDate.value = res.data.created_at
-      exportKelas.value = res.data.kelas?.kelas_nama
+      exportKelas.value = res.data.kelas.kelas_nama
+
+      readyToGenerate.value = true
 
       loading.value = false
     }
@@ -180,17 +185,22 @@ function generate() {
               <p class="m-0 m-auto mt-3 fs-5 text-black-50 fw-bold">Harap Tuggu, Data sedang diproses</p>
           </div>
           <div v-if="!loading" class="d-flex flex-column align-items-center">
-            <p class="m-0 m-auto fs-5 text-black-50">Report Excel siap di Unduh, Klik tombol bawah untuk unduh laporan presensi</p>
-            <p class="m-0 m-auto fs-5 text-black-50">{{exportDate}}</p>
+            <div v-if="readyToGenerate">
+              <p class="m-0 m-auto fs-5 text-black-50">Report Excel siap di Unduh, Klik tombol bawah untuk unduh laporan presensi</p>
+              <p class="m-0 m-auto fs-5 text-black-50">{{exportDate}}</p>
+            </div>
+            <div v-if="!readyToGenerate">
+              <p class="m-0 m-auto fs-5 text-black-50">Report Excel belum dibuat, Klik tombol generate untuk export laporan presensi</p>
+            </div>
             <div class="my-3">
               <a @click="getQueue()" class="btn btn-danger d-flex gap-3 align-items-center w-auto">
                 <span>
-                  Generate ulang
+                  Generate <span v-if="readyToGenerate">ulang</span>
                 </span>
                 <i class="bi bi-arrow-repeat fs-1"></i>
               </a>
             </div>
-            <div class="my-3">
+            <div v-if="readyToGenerate" class="my-3">
               <a @click="generate()" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
                 <span>
                   Download File
