@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, onUnmounted, reactive, ref } from 'vue'
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumb";
 import { request } from '@/util';
 import QueryString from 'qs';
@@ -12,7 +12,16 @@ import * as XLSX from 'xlsx';
 
 onMounted(() => {
   setCurrentPageBreadcrumbs("Export Presensi", ['Absensi', 'Rekapitulasi', 'Siswa']);
-  getQueue()
+    if (reportQueue.value !== ''){
+      intervalId.value = setInterval(function () {
+        checkQueue()
+      }, delay.value);
+    }
+    getDownloadData()
+})
+
+onUnmounted(() => {
+  clearInterval(intervalId.value)
 })
 
 const store = useStore()
@@ -30,6 +39,10 @@ const exportDate = ref('')
 const exportKelas = ref('')
 
 const loading = ref(true)
+const fileReady = ref(false)
+
+const intervalId = ref()
+const delay = ref(10000)
 
 const form = reactive({
   status_import: '',
@@ -38,6 +51,8 @@ const form = reactive({
 })
 
 function getQueue() {
+  clearInterval(intervalId.value);
+  fileReady.value = false
   loading.value = true
   request.post('reportsiswanew', null, {
     params: {
@@ -51,7 +66,9 @@ function getQueue() {
     const resReport = res.data
     if (resReport.success == true) {
       reportQueue.value = resReport.data
-      checkQueue()
+      intervalId.value = setInterval(function () {
+        checkQueue()
+      }, delay.value);
     }
 
   })
@@ -67,8 +84,11 @@ function checkQueue() {
     }
   }).then(res => {
     if (res.data.success == true) {
+      clearInterval(intervalId.value);
       getDownloadData()
     }
+  }).catch(err => {
+    console.log(err)
   })
 }
 
@@ -179,7 +199,27 @@ function generate() {
               </Loading>
               <p class="m-0 m-auto mt-3 fs-5 text-black-50 fw-bold">Harap Tuggu, Data sedang diproses</p>
           </div>
-          <div v-if="!loading" class="d-flex flex-column align-items-center">
+          <div v-if="!loading && fileReady" class="d-flex flex-column align-items-center">
+            <p class="m-0 m-auto fs-5 text-black-50">Report Excel siap di Unduh, Klik tombol bawah untuk unduh laporan presensi</p>
+            <p class="m-0 m-auto fs-5 text-black-50">{{exportDate}}</p>
+            <div class="my-3">
+              <a @click="getQueue()" class="btn btn-danger d-flex gap-3 align-items-center w-auto">
+                <span>
+                  Generate ulang
+                </span>
+                <i class="bi bi-arrow-repeat fs-1"></i>
+              </a>
+            </div>
+            <div class="my-3">
+              <a @click="generate()" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
+                <span>
+                  Download File
+                </span>
+                <i class="bi bi-cloud-arrow-down fs-1"></i>
+              </a>
+            </div>
+          </div>
+          <div v-if="!loading && !fileReady" class="d-flex flex-column align-items-center">
             <p class="m-0 m-auto fs-5 text-black-50">Report Excel siap di Unduh, Klik tombol bawah untuk unduh laporan presensi</p>
             <p class="m-0 m-auto fs-5 text-black-50">{{exportDate}}</p>
             <div class="my-3">
