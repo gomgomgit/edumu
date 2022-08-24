@@ -285,6 +285,11 @@ const routes: Array<RouteRecordRaw> = [
         ],
       },
       {
+        path: "/sekolah/akademik/data-kelas/detail/:id",
+        name: "sekolah-akademik-data-kelas-detail",
+        component: () => import("@/views/sekolah/akademik/data-kelas/Detail.vue"),
+      },
+      {
         path: "/sekolah/akademik/kalender-akademik",
         name: "sekolah-akademik-kalender-akademik",
         component: () => import("@/views/sekolah/akademik/kalender-akademik/Index.vue"),
