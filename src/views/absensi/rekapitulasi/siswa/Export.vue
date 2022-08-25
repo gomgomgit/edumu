@@ -30,8 +30,6 @@ const userId = store.getters.currentUser.user_id
 const router = useRouter()
 const route = useRoute()
 
-const kelasOption = ref()
-
 const reportQueue = ref('')
 
 const exportData = ref([])

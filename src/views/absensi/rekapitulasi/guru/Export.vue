@@ -34,7 +34,7 @@ const exportData = ref([])
 const exportDate = ref('')
 const reportQueue = ref(0)
 
-const loading = ref(true)
+const loading = ref(false)
 const fileReady = ref(false)
 
 const intervalId = ref()
@@ -54,8 +54,8 @@ function getQueue() {
     params: {
       level: 'guru',
       user: route.query.user,
-      dateStart: route.query.dateStart,
-      dateEnd: route.query.dateEnd
+      tglMulai: route.query.dateStart,
+      tglEnd: route.query.dateEnd
     }
   }).then(res => {
     const resReport = res.data
@@ -80,7 +80,7 @@ function checkQueue() {
   request.post('checkqueue', null, {
     params: {
       level: 'guru',
-      idqueue: reportQueue.value,
+      idque: reportQueue.value,
       dateStart: route.query.dateStart,
       dateEnd: route.query.dateEnd
     }
@@ -112,6 +112,7 @@ function getDownloadData() {
       fileReady.value = true
     } else {
       loading.value = false
+      fileReady.value = true 
     }
   }).catch(err => {
     loading.value = false
