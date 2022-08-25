@@ -149,12 +149,12 @@ import Swal from "sweetalert2";
         </div>
         <div class="separator border-black-50 border-2 my-6"></div>
         <div>
-          <div class="d-flex flex-wrap justify-content-between align-items-center gap-4">
-            <div class="d-flex w-100 w-lg-50 w-xl-auto gap-4 align-items-center">
+          <div class="">
+            <div class="d-flex justify-content-between gap-4 align-items-center">
                   <el-input
                     v-model="searchSiswa"
                     clearable
-                    class="me-n6"
+                    class="w-auto"
                     placeholder="Cari Siswa"
                     @input="getSiswa()"
                   >
@@ -172,7 +172,7 @@ import Swal from "sweetalert2";
                   </FilterSelect>
             </div>
 
-            <div class="position-relative d-flex flex-wrap gap-4 w-100 w-xl-auto justify-content-end">
+            <div class="mt-5 position-relative d-flex flex-wrap gap-4 justify-content-end">
               <!-- <div class="d-flex align-items-center">
                 <router-link to="/absensi/skema-absensi/siswa" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
                   <span>
@@ -180,6 +180,13 @@ import Swal from "sweetalert2";
                   </span>
                 </router-link>
               </div> -->
+              <div class="d-flex align-items-center">
+                <router-link to="/sekolah/profil-pengguna/siswa/peserta-ujian" class="btn btn-primary d-flex gap-1 align-items-center w-auto">
+                  <span>
+                    Data Peserta Ujian Siswa
+                  </span>
+                </router-link>
+              </div>
               <div class="d-flex align-items-center">
                 <a @click="getDataExportSiswa()" class="btn btn-primary d-flex gap-1 align-items-center w-auto">
                   <span>

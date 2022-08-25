@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, onUnmounted, onUpdated, reactive, ref } from 'vue'
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumb";
 import { request } from '@/util';
 import QueryString from 'qs';
@@ -12,8 +12,17 @@ import * as XLSX from 'xlsx';
 
 onMounted(() => {
   setCurrentPageBreadcrumbs("Export Presensi", ['Absensi', 'Rekapitulasi', 'Guru']);
-  getDownloadData()
+    if (reportQueue.value !== ''){
+      intervalId.value = setInterval(function () {
+        checkQueue()
+      }, delay.value);
+    }
+    getDownloadData()
 })
+
+  onUnmounted(() => {
+    clearInterval(intervalId.value)
+  })
 
 const store = useStore()
 const userId = store.getters.currentUser.user_id 
@@ -23,8 +32,13 @@ const route = useRoute()
 
 const exportData = ref([])
 const exportDate = ref('')
+const reportQueue = ref(0)
 
-const loading = ref(true)
+const loading = ref(false)
+const fileReady = ref(false)
+
+const intervalId = ref()
+const delay = ref(10000)
 
 const form = reactive({
   status_import: '',
@@ -32,26 +46,76 @@ const form = reactive({
   file: null,
 })
 
+function getQueue() {
+  clearInterval(intervalId.value);
+  fileReady.value = false
+  loading.value = true
+  request.post('reportgurunew', null, {
+    params: {
+      level: 'guru',
+      user: route.query.user,
+      tglMulai: route.query.dateStart,
+      tglEnd: route.query.dateEnd
+    }
+  }).then(res => {
+    const resReport = res.data
+
+    if (resReport.success) {
+      reportQueue.value = resReport.data
+      intervalId.value = setInterval(function () {
+        checkQueue()
+      }, delay.value);
+    } else {
+      loading.value = false
+    }
+  }).catch(err => {
+      loading.value = false
+  })
+}
+
+function checkQueue() {
+  if (!reportQueue.value) {
+    return false
+  }
+  request.post('checkqueue', null, {
+    params: {
+      level: 'guru',
+      idque: reportQueue.value,
+      dateStart: route.query.dateStart,
+      dateEnd: route.query.dateEnd
+    }
+  }).then(res => {
+    if (res.data.success == true) {
+      clearInterval(intervalId.value);
+      getDownloadData()
+    }
+  }).catch(err => {
+    console.log(err)
+  })
+}
+
 function getDownloadData() {
-  console.log(route.query)
+  fileReady.value = false
   loading.value = true
   request.post('downloadreportguru', null, {
     params: {
       level: 'guru',
       user: route.query.user,
-      tglMulai: route.query.tglMulai,
-      tglEnd: route.query.tglEnd
+      tglMulai: route.query.dateStart,
+      tglEnd: route.query.dateEnd
     }
   }).then(res => {
     if (res.data.success == true) {
       exportData.value = res.data.data
       exportDate.value = res.data.created_at
-
       loading.value = false
+      fileReady.value = true
     } else {
-
       loading.value = false
+      fileReady.value = true 
     }
+  }).catch(err => {
+    loading.value = false
   })
 }
 
@@ -137,7 +201,7 @@ function generate() {
               </Loading>
               <p class="m-0 m-auto mt-3 fs-5 text-black-50 fw-bold">Harap Tuggu, Data sedang diproses</p>
           </div>
-          <div v-if="!loading" class="d-flex flex-column align-items-center">
+          <div v-if="!loading && fileReady" class="d-flex flex-column align-items-center">
             <p class="m-0 m-auto fs-5 text-black-50">Report Excel siap di Unduh, Klik tombol bawah untuk unduh laporan presensi</p>
             <p class="m-0 m-auto fs-5 text-black-50">{{exportDate}}</p>
             <div class="my-3">
@@ -154,6 +218,17 @@ function generate() {
                   Download File
                 </span>
                 <i class="bi bi-cloud-arrow-down fs-1"></i>
+              </a>
+            </div>
+          </div>
+          <div v-if="!loading && !fileReady" class="d-flex flex-column align-items-center">
+            <p class="m-0 m-auto fs-5 text-black-50">Report Excel belum dibuat, Klik Generate untuk export laporan presensi</p>
+            <div class="my-3">
+              <a @click="getQueue()" class="btn btn-danger d-flex gap-3 align-items-center w-auto">
+                <span>
+                  Generate
+                </span>
+                <i class="bi bi-arrow-repeat fs-1"></i>
               </a>
             </div>
           </div>

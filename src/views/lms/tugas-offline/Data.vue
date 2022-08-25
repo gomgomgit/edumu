@@ -53,7 +53,7 @@ function getData () {
     .then(res => {
       const result = res.data.data.tugas[0]
 
-      form.materi_id = result.materi_id
+      form.tugas_id = result.tugas_id
       form.kelas_id = result.kelas_id.split(",").map( Number )
       form.mapel_id = result.mapel_id
       form.user_id = result.user_id
@@ -61,7 +61,7 @@ function getData () {
       form.tugas_desc = result.tugas_desc
       form.tugas_due_date = result.tugas_due_date
       form.tugas_status = result.tugas_status
-      // form.materi_file = result.materi_file
+      form.tugas_file = result.tugas_file
       oldFiles.value = result.tugas_file
     })
   }
@@ -106,7 +106,7 @@ function post() {
     })
   }
   const formData = new FormData()
-  formData.append('materi_id', form.materi_id)
+  formData.append('tugas_id', form.tugas_id)
   formData.append('kelas_id', selectedClass)
   formData.append('mapel_id', form.mapel_id)
   formData.append('user_id', form.user_id)

@@ -184,7 +184,7 @@ function formatingDate(date) {
           >
             <template #table-row="{column, row}">
               <div v-if="column.field == 'download'">
-                <a target="_blank" :href="`${storageUrl}/public/files/${row.tugas_file_nama}`" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+                <a target="_blank" :href="row.tugas_file_url" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
                   <span class="svg-icon svg-icon-3">
                     <i class="bi bi-cloud-arrow-down-fill fs-3"></i>
                   </span>

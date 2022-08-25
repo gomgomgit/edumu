@@ -78,7 +78,7 @@ import moment from "moment";
                 <router-link :to="{
                     path: '/absensi/rekapitulasi/guru/export',
                     query: {
-                      level:'guru',user: userFilter, tglMulai: dateRangeStart, tglEnd: dateRangeEnd
+                      level:'guru',user: userFilter, dateStart: dateRangeStart, dateEnd: dateRangeEnd
                     }
                   }" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
                   <span>

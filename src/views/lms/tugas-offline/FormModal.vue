@@ -7,6 +7,7 @@ import { isEmpty } from "validate.js"
 import Modal from "@/components/modals/CustomModal.vue"
 import { request } from "@/util";
 import FileDrop from '@/components/file-dropzone/Index.vue';
+import { useStore } from "vuex"
 
 const props = defineProps({
 	mode: { type: String, required: true },
@@ -21,7 +22,7 @@ const currentUser = store.getters.currentUser
 const storageUrl = `${process.env.VUE_APP_STORAGE_URL}/${currentUser.sekolah_kode}/apischool/public`;
 
 const initialForm = { 
-  materi_id: '',
+  tugas_id: '',
   kelas_id: '',
   mapel_id: '',
   user_id: '',
@@ -32,13 +33,14 @@ const initialForm = {
 
 const fileDatas = ref([])
 
-const oldFiles = ref()
+const files = ref([])
 
 const form = reactive({...initialForm})
 
 function handleClose () {
 	Object.assign(form, {...initialForm})
 	emits('close')
+  files.value = []
 }
 
 function handleSubmit () {
@@ -50,48 +52,86 @@ function handleSubmit () {
   } else {
     selectedClass = form.kelas_id
   }
-  
+
+  const formData = new FormData()
+  formData.append('tugas_id', form.tugas_id)
+  formData.append('kelas_id', selectedClass)
+  formData.append('mapel_id', form.mapel_id)
+  formData.append('user_id', form.user_id)
+  formData.append('tugas_judul', form.tugas_judul)
+  formData.append('tugas_desc', form.tugas_desc)
+  formData.append('tugas_due_date', form.tugas_due_date)
+  formData.append('tugas_status', form.tugas_status)
+  formData.append('tugas_file', files.value.toString())
+
+  const endpoint = props.activeData ? 'tugas/update' : 'tugas/create'
+  const message = props.activeData ? 'Data Berhasil Diedit!' : 'Data Berhasil Ditambahkan!'
+  request.post(endpoint, formData, {
+    headers: {
+      'Content-Type' : 'multipart/form-data'
+    }
+  }).then(res => {
+      useToast().success(message)
+      Object.assign(form, initialForm)
+      files.value = []
+      emits('submit')
+      emits('close')
+  })
+}
+
+function getData () {
+  request.post(`tugas/detail`, null, {
+    params: {
+      tugas_id: props.activeData.tugas_id
+    }
+  })
+  .then(res => {
+    const result = res.data.data.tugas[0]
+
+    form.tugas_id = result.tugas_id
+    form.kelas_id = result.kelas_id.split(",").map( Number )
+    form.mapel_id = result.mapel_id
+    form.user_id = result.user_id
+    form.tugas_judul = result.tugas_judul
+    form.tugas_desc = result.tugas_desc
+    form.tugas_due_date = result.tugas_due_date
+    form.tugas_status = result.tugas_status
+
+    result.tugas_file.forEach((file) => {
+      files.value.push(file.tugas_file_nama) 
+    })
+  })
+}
+
+function uploadFile(dropfile) {
+  console.log(dropfile)
   
   const formFile = new FormData()
-  Array.from(fileDatas.value).forEach((file, indexFile) => {
+  Array.from(dropfile).forEach((file, indexFile) => {
     formFile.append('file' + indexFile, file)
   });
+  formFile.append('fitur', 'tugas')
+  formFile.append('jumFile', Array.from(dropfile).length)
+
   request.post('file', formFile, {
     headers: {
       'Content-Type' : 'multipart/form-data'
     }
   }).then(res => {
-      useToast().success('File Berhasil DiUpload')
-
-      const formData = new FormData()
-      formData.append('materi_id', form.materi_id)
-      formData.append('kelas_id', selectedClass)
-      formData.append('mapel_id', form.mapel_id)
-      formData.append('user_id', form.user_id)
-      formData.append('tugas_judul', form.tugas_judul)
-      formData.append('tugas_desc', form.tugas_desc)
-      formData.append('tugas_due_date', form.tugas_due_date)
-      formData.append('tugas_status', form.tugas_status)
-      formData.append('materi_file', form.materi_file)
-
-      const endpoint = props.activeData ? 'tugas/update' : 'tugas/create'
-      const message = props.activeData ? 'Data Berhasil Diedit!' : 'Data Berhasil Ditambahkan!'
-      request.post(endpoint, formData, {
-        headers: {
-          'Content-Type' : 'multipart/form-data'
-        }
-      }).then(res => {
-          useToast().success(message)
-          Object.assign(form, initialForm)
-          emits('submit')
-          emits('close')
-      })
+    var result = res.data.data
+    result.forEach((file) => {
+      files.value.push(file.filename) 
+    })
   })
+}
+function deleteFile(index) {
+  files.value.splice(index, 1)
 }
 
 watch(
 	() => props.activeData,
-	activeData => !isEmpty(activeData) && Object.assign(form, { ...activeData, kelas_id: activeData.multikelas.split(",").map( Number ) }),
+	activeData => !isEmpty(activeData) && getData(),
+	// activeData => !isEmpty(activeData) && Object.assign(form, { ...activeData, kelas_id: activeData.multikelas.split(",").map( Number ) }),
 	{ deep: true }
 )
 </script>
@@ -221,7 +261,19 @@ watch(
           <ul v-if="activeData?.tugas_file_nama">
             <li><a class="fs-4" target="_blank" :href="storageUrl + '/files/' + file.tugas_file_nama">{{file.tugas_file_nama}}</a></li>
           </ul>
-          <FileDrop :multiple="true" v-model:fileInputData="fileDatas"></FileDrop>
+          <FileDrop :multiple="true" v-model:fileInputData="fileDatas" :customUpload="true" @customUpload="uploadFile"></FileDrop>
+          <div>
+              <template v-for="file, fileindex in files" :key="fileindex">
+                  <div>
+                    <span class="me-3">{{file}}</span>
+                    <button @click="deleteFile(fileindex)" class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm">
+                      <span class="svg-icon svg-icon-3">
+                        <inline-svg src="media/icons/duotune/general/gen027.svg"/>
+                      </span>
+                    </button>
+                  </div>
+              </template>
+          </div>
         </div>
       </div>
     </div>

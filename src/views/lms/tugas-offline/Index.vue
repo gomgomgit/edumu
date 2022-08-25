@@ -93,6 +93,10 @@ import moment from "moment";
     })
   }
   
+  function handleEdit(data) {
+    formMode.value = 'Edit Data'
+    activeData.value = data
+  }
   function handleClose() {
     formMode.value = null
     activeData.value = null
@@ -198,11 +202,16 @@ import moment from "moment";
                       <inline-svg src="media/icons/duotune/files/fil001.svg" />
                     </span>
                   </router-link>
-                  <router-link :to="`/lms/tugas-offline/edit/${row.tugas_id}`" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
+                  <a @click="handleEdit(row)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
                     <span class="svg-icon svg-icon-3">
                       <inline-svg src="media/icons/duotune/art/art005.svg" />
                     </span>
-                  </router-link>
+                  </a>
+                  <!-- <router-link :to="`/lms/tugas-offline/edit/${row.tugas_id}`" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
+                    <span class="svg-icon svg-icon-3">
+                      <inline-svg src="media/icons/duotune/art/art005.svg" />
+                    </span>
+                  </router-link> -->
                   <button @click="deleteData(row.tugas_id)" class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm">
                     <span class="svg-icon svg-icon-3">
                       <inline-svg src="media/icons/duotune/general/gen027.svg"/>

@@ -246,6 +246,11 @@
                 <span :class="'badge badge-light-' + (row.kelas_status == 1 ? 'success' : 'danger')">{{row.kelas_status == 1 ? 'Aktif' : 'Non Aktif'}}</span>
               </div>
               <div v-if="column.field == 'action'">
+                <router-link :to="'/sekolah/akademik/data-kelas/detail/' + row.kelas_id" class="btn btn-icon btn-bg-light btn-active-color-success btn-sm me-2">
+                  <span class="svg-icon svg-icon-3">
+                    <inline-svg src="media/icons/duotune/files/fil001.svg" />
+                  </span>
+                </router-link>
                 <button @click="editData(row)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
                   <span class="svg-icon svg-icon-3">
                     <inline-svg src="media/icons/duotune/art/art005.svg" />

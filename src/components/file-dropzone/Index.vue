@@ -3,9 +3,10 @@ import { ref } from "vue";
 
 const props = defineProps({
   fileInputData: Array,
-  multiple: {Boolean, default: false}
+  multiple: {Boolean, default: false},
+  customUpload: {Boolean, default: false}
 })
-const emits = defineEmits('update:fileInputData')
+const emits = defineEmits('update:fileInputData', 'customUpload')
 
 const active = ref(false);
 const dropzoneFile = ref("");
@@ -14,23 +15,39 @@ function toggleActive () {
   active.value = !active.value;
 };
 function drop(e) {
-  if (props.multiple) {
-    dropzoneFile.value = e.dataTransfer.files;
-    emits('update:fileInputData', e.dataTransfer.files)
+  if (props.customUpload) {
+    if (props.multiple) {
+      emits('customUpload', e.dataTransfer.files)
+    } else {
+      emits('customUpload', e.dataTransfer.files[0])
+    }
   } else {
-    dropzoneFile.value = e.dataTransfer.files[0];
-    emits('update:fileInputData', e.dataTransfer.files[0])
+    if (props.multiple) {
+      dropzoneFile.value = e.dataTransfer.files;
+      emits('update:fileInputData', e.dataTransfer.files)
+    } else {
+      dropzoneFile.value = e.dataTransfer.files[0];
+      emits('update:fileInputData', e.dataTransfer.files[0])
+    }
   }
 };
 function selectedFile() {
-  if (props.multiple) {
-    dropzoneFile.value = null
-    dropzoneFile.value = document.querySelector(".dropzoneFile").files;
-    emits('update:fileInputData', document.querySelector(".dropzoneFile").files)
+  if (props.customUpload) {
+    if (props.multiple) {
+      emits('customUpload', document.querySelector(".dropzoneFile").files)
+    } else {
+      emits('customUpload', document.querySelector(".dropzoneFile").files[0])
+    }
   } else {
-    dropzoneFile.value = null
-    dropzoneFile.value = document.querySelector(".dropzoneFile").files[0];
-    emits('update:fileInputData', document.querySelector(".dropzoneFile").files[0])
+    if (props.multiple) {
+      dropzoneFile.value = null
+      dropzoneFile.value = document.querySelector(".dropzoneFile").files;
+      emits('update:fileInputData', document.querySelector(".dropzoneFile").files)
+    } else {
+      dropzoneFile.value = null
+      dropzoneFile.value = document.querySelector(".dropzoneFile").files[0];
+      emits('update:fileInputData', document.querySelector(".dropzoneFile").files[0])
+    }
   }
 };
 </script>
