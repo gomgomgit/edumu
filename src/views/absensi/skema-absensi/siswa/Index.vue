@@ -9,11 +9,15 @@
 import { useToast } from "vue-toast-notification";
 import { deleteConfirmation } from "@/core/helpers/deleteconfirmation";
 import QueryString from "qs";
+import { useStore } from "vuex";
 
   onMounted(() => {
     setCurrentPageBreadcrumbs("Skema Absensi", ["Absensi"]);
     getClass()
   })
+
+  const store = useStore()
+  const userId = store.getters.currentUser.user_id 
 
   function getSiswaGps (payload) {
     request.post('siswa_pkl', null, {
@@ -76,21 +80,22 @@ import QueryString from "qs";
 
   function selectionChangedNonGps(params) {
     var finalArray = params.selectedRows.map(function (obj) {
-      return obj.sk_id;
+      return obj.siswa_id;
     });
     selectedNonGps.value = finalArray
   }
   function selectionChangedGps(params) {
     var finalArray = params.selectedRows.map(function (obj) {
-      return obj.sk_id;
+      return obj.siswa_id;
     });
     selectedGps.value = finalArray
   }
 
   function setGps(gps, del = '', rand = '') {
     request.post('siswa/pkl', QueryString.stringify({
-      siswa_pkl:	gps ? selectedGps.value : null,
-      siswa_non_pkl:	gps ? null : selectedNonGps.value,
+      user_id: userId,
+      ...(gps && {siswa_pkl: selectedGps.value}),
+      ...(!gps && {siswa_non_pkl: selectedNonGps.value}),
       opsi:	gps ? "1" : "0",
       resetloc:	del,
       setloc:	rand,
