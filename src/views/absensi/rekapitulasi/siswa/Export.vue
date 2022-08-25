@@ -32,13 +32,13 @@ const route = useRoute()
 
 const kelasOption = ref()
 
-const reportQueue = ref()
+const reportQueue = ref('')
 
 const exportData = ref([])
 const exportDate = ref('')
 const exportKelas = ref('')
 
-const loading = ref(true)
+const loading = ref(false)
 const fileReady = ref(false)
 
 const intervalId = ref()
@@ -108,6 +108,7 @@ function getDownloadData() {
       exportKelas.value = res.data.kelas?.kelas_nama
 
       loading.value = false
+      fileReady.value = true
     }
   })
 }
@@ -220,22 +221,13 @@ function generate() {
             </div>
           </div>
           <div v-if="!loading && !fileReady" class="d-flex flex-column align-items-center">
-            <p class="m-0 m-auto fs-5 text-black-50">Report Excel siap di Unduh, Klik tombol bawah untuk unduh laporan presensi</p>
-            <p class="m-0 m-auto fs-5 text-black-50">{{exportDate}}</p>
+            <p class="m-0 m-auto fs-5 text-black-50">Report Excel belum dibuat, Klik Generate untuk export laporan presensi</p>
             <div class="my-3">
               <a @click="getQueue()" class="btn btn-danger d-flex gap-3 align-items-center w-auto">
                 <span>
-                  Generate ulang
+                  Generate
                 </span>
                 <i class="bi bi-arrow-repeat fs-1"></i>
-              </a>
-            </div>
-            <div class="my-3">
-              <a @click="generate()" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
-                <span>
-                  Download File
-                </span>
-                <i class="bi bi-cloud-arrow-down fs-1"></i>
               </a>
             </div>
           </div>
