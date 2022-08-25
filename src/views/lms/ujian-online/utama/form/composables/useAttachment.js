@@ -1,8 +1,6 @@
 import { ref, reactive, computed } from 'vue'
 import { isEmpty } from 'validate.js'
 
-import requestDevel from '@/util/requestDevel'
-
 const attachmentData = ref({})
 
 const isAttachmentActive = computed(() => !isEmpty(attachmentData.value))

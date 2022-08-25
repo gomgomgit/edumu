@@ -26,12 +26,13 @@ ini todo list untuk ujian online:
 -? tambahkan input soal dari bank soal
 -? tambahkan import soal
 - hanya perbolehkan ctrl + shift + v pada editor
+- bobot tidak bisa diubah ketika pertama kali diinitialisasi
 
 # pratinjau
 -/ ambil data dari api pada bagian header
 -/ fungsikan tombol submit untuk menyimpan urutan soal ke database
 
 # list ujian online
-- sembunyikan tombol remedial, ubah status, dan atur ulang waktu, kedalam tombol opsi dengan icon titik 3
-- tambahkan tombol untuk aktifkan/nonaktifkan ujian
-- fungsikan summary dan ganti warnanya
+-/ sembunyikan tombol remedial, ubah status, dan atur ulang waktu, kedalam tombol opsi dengan icon titik 3
+-/ tambahkan tombol untuk aktifkan/nonaktifkan ujian
+-/ fungsikan summary dan ganti warnanya

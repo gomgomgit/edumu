@@ -3,7 +3,8 @@ import { validate } from 'validate.js'
 import { useToast } from 'vue-toast-notification'
 import qs from 'qs'
 
-import { requestDevel } from '@/util'
+import { request } from '@/util'
+import store from '@/store'
 
 const initialData = {
 	exam_id: null,
@@ -42,7 +43,7 @@ async function loadExamData (examId) {
 	if (examData.exam_id) return
 	try {
 		isLoading.value = true
-		const res = await requestDevel.post(`ujian/${examId}?exam_id=${examId}`)
+		const res = await request.post(`ujian/${examId}?exam_id=${examId}`)
 		const { data, part } = res.data
 		const formattedData = {
 			exam_id: data.exam_id,
@@ -107,12 +108,11 @@ async function saveExamData (examId, immediate = false) {
 			exam_status: examData.exam_status ? 1 : 0,
 			exam_start_date: examData.exam_start_date.replace('T', ' ') + ':00',
 			exam_end_date: examData.exam_end_date.replace('T', ' ') + ':00',
-			user_login: 1
-			// user_login: store.getters.currentUser
+			user_login: store.getters.currentUser
 		}
 
 		const targetUrl = examId ? 'exam/update' : 'exam/create'
-		const res = await requestDevel.post(targetUrl, qs.stringify(payload))
+		const res = await request.post(targetUrl, qs.stringify(payload))
 
 		const { exam } = res.data.data
 		return exam

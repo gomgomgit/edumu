@@ -6,7 +6,7 @@ import { useToast } from 'vue-toast-notification';
 // import sanitizeHtml from 'sanitize-html';
 import qs from 'qs';
 
-import { requestDevel, sanitizeHtml } from '@/util';
+import { request, sanitizeHtml } from '@/util';
 import Modal from '@/components/modals/CustomModal.vue'
 import Spinner from '@/components/Spinner.vue';
 import InlineEditor from '@/components/ckeditor-inline/Index.vue';
@@ -37,7 +37,7 @@ function setActiveAttachment (attachment) {
 
 function loadAttachmentList () {
 	isLoading.value = true
-	requestDevel.post(
+	request.post(
 		'/v2dev/exam/attachment',
 		qs.stringify({ exam_id: examIdParam.value })
 	)
@@ -69,7 +69,7 @@ function saveAttachment () {
 		exam_id: examIdParam.value
 	}
 
-	requestDevel.post(targetUrl, qs.stringify(payload))
+	request.post(targetUrl, qs.stringify(payload))
 	.then(() => {
 		Object.assign(formData, { ...initialForm })
 		loadAttachmentList()

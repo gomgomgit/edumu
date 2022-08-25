@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'vue-toast-notification';
 import Swal from 'sweetalert2';
 
-import { requestDevel } from '@/util';
+import { request } from '@/util';
 import Spinner from '@/components/Spinner.vue';
 
 import useExamData from './composables/useExamData.js'
@@ -52,8 +52,8 @@ async function handleChangeTab (tab) {
 
 function getOptionData () {
 	Promise.all([
-		requestDevel.post('exam/category-mapel-kelas'),
-		requestDevel.post('user', null, { params: { level: 'guru' } }),
+		request.post('exam/category-mapel-kelas'),
+		request.post('user', null, { params: { level: 'guru' } }),
 	]).then(results => {
 		optionData.categoryList = results[0].data.data.category
 		optionData.kelasList = results[0].data.data.kelas
