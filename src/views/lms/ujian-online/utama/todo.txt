@@ -25,6 +25,7 @@ ini todo list untuk ujian online:
 --/ tambahkan modul attachment
 -? tambahkan input soal dari bank soal
 -? tambahkan import soal
+- hanya perbolehkan ctrl + shift + v pada editor
 
 # pratinjau
 -/ ambil data dari api pada bagian header
