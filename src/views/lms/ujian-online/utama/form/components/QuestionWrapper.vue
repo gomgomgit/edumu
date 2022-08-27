@@ -26,7 +26,6 @@ function removeAttachment () {
 
 function handleScoreChange () {
 	props.question.is_score_manual = 1
-
 	// resolveScore()
 }
 

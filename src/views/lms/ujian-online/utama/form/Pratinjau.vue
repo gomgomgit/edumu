@@ -18,6 +18,19 @@ const { isLoading: isLoadingQuestions, isSaving: isSavingQuestions, isChanged: i
 const { isLoading: isLoadingExam, isSaving: isSavingExam, isChanged: isChangedExam, examData, rawExamData, loadExamData, saveExamData } = useExamData();
 
 const mergedQuestions = ref([]);
+const isDragging = ref(false);
+
+const getStartDate = computed(() => reformatDate(examData.exam_start_date))
+const getEndDate = computed(() => reformatDate(examData.exam_end_date))
+const getTotalScore = computed(() => {
+	let totalScore = 0;
+	for (const wrapper of questionsData.question_types) {
+		for (const question of wrapper.questions) {
+			totalScore += parseInt(question.score) || 0
+		}
+	}
+	return totalScore
+})
 
 const currentTimezone = computed(() => {
 	const dateStr = new Date().toTimeString()
@@ -82,8 +95,14 @@ async function handleBack() {
 	router.back()
 }
 
+function onDragStart(event) {
+	if (event) isDragging.value = true
+}
+
 function onDragEnd (event) {
 	if (!event) return
+
+	isDragging.value = false
 
 	const item = mergedQuestions.value.splice(event.oldIndex, 1)[0];
 	mergedQuestions.value.splice(event.newIndex, 0, item);
@@ -150,6 +169,7 @@ async function openSubmitPopup () {
 		useToast().error('terjadi masalah saat menyimpan ujian')
 	}
 }
+
 
 const questionsSignature = computed(() => questionsData.exam_id + '-' + questionsData.question_types.length)
 const examIdParam = computed(() => route.params?.exam_id)
@@ -255,7 +275,7 @@ watch(
 								color="danger"
 								icon="uil-comment-alt-notes"
 								title="Total Nilai"
-								content="100" />
+								:content="getTotalScore" />
 						</div>
 					</div>
 				</section>
@@ -269,13 +289,13 @@ watch(
 										color="primary"
 										icon="uil-stopwatch"
 										title="Waktu Mulai"
-										:content="reformatDate(examData.exam_start_date)" />
+										:content="getStartDate" />
 
 									<PratinjauHeaderItem
 										color="info"
 										icon="uil-clock"
 										title="Waktu Selesai"
-										:content="reformatDate(examData.exam_end_date)" />
+										:content="getEndDate" />
 								</div>
 
 								<el-progress
@@ -329,6 +349,7 @@ watch(
 					ghostClass: 'opacity-50',
 					handle: '.drag-handle'
 				}"
+				@start="onDragStart"
 				@end="onDragEnd">
 				<template #item="{ element }">
 					<div class="d-flex gap-5 mt-5" :key="element.question_id">
@@ -342,7 +363,14 @@ watch(
 								v-html="element.question_text">
 							</div>
 							<div class="drag-handle border-start w-70px d-flex align-items-center justify-content-center flex-shrink-0">
-								<i class="uil uil-draggabledots fs-1"></i>
+								<el-tooltip
+									class="box-item"
+									effect="light"
+									content="tahan dan geser ke atas/bawah"
+									placement="top-end">
+									<i class="uil uil-arrows-v-alt fs-1"></i>
+									<!-- <i class="uil uil-draggabledots fs-1"></i> -->
+								</el-tooltip>
 							</div>
 						</div>
 					</div>
@@ -396,7 +424,8 @@ watch(
 	min-height: 80px;
 }
 #pratinjau-ujian .drag-handle {
-	cursor: move;
+	cursor: -webkit-grab;
+	cursor: grab;
 }
 .flip-list-move {
 	transition: transform 0.5s;

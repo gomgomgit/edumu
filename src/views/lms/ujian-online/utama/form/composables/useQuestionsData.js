@@ -4,7 +4,7 @@ import { isEmpty } from 'validate.js';
 import qs from 'qs'
 // import sanitizeHtml from 'sanitize-html';
 
-import { requestDevel, sanitizeHtml } from '@/util'
+import { request, sanitizeHtml } from '@/util'
 
 const questionTypeLabels = [
 	{ key: 'single', title: 'Pilihan Ganda', icon: 'fa-list-ul' },
@@ -78,7 +78,7 @@ function loadQuestionsData(examId) {
 
 	isLoading.value = true
 
-	requestDevel.post(
+	request.post(
 		'v2dev/exam/get-cached-soal',
 		qs.stringify({ exam_id: examId })
 	).then(res => {
@@ -109,7 +109,7 @@ async function cacheQuestionsData (immediate) {
 			}))
 		}
 		const params = qs.stringify(payload)
-		const res = await requestDevel.post(
+		const res = await request.post(
 			'/v2dev/exam/cache-soal?',
 			params
 		)
@@ -196,7 +196,7 @@ async function submitQuestionsData (bypassOrderNumber = false) {
 			}))
 		}
 		const params = qs.stringify(payload)
-		const res = await requestDevel.post('/v2dev/exam/save-soal?', params)
+		const res = await request.post('/v2dev/exam/save-soal?', params)
 
 		if (res.data.status === true) {
 			const { data } = res.data
