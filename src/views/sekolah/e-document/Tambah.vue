@@ -84,7 +84,7 @@ function postData() {
 
 function selectionChangedSiswa(params) {
   var finalArray = params.selectedRows.map((obj) => {
-    return obj.siswa_id
+    return obj.user_id
   })
   selectedSiswa.value = finalArray
 }
