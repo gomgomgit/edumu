@@ -88,7 +88,6 @@ function generateRfid() {
     .then((res) => {
       var result = res.data.data
 
-      console.log(result)
       result.map((item,i) => {
           rfidItems.push([
               i+1,
@@ -157,6 +156,11 @@ function generateData() {
                   :value="kelas.kelas_id" />
               </el-select>
             </div>
+          </div>
+        </div>
+        <div v-if="!form.kelas_id || !form.status_import" class="mt-4">
+          <div>
+            <h4 class="text-center text-danger my-5">Harap Pilih Kelas dan Jenis Import!</h4>
           </div>
         </div>
         <div v-if="form.kelas_id && form.status_import" class="d-flex justify-content-end mt-4">
