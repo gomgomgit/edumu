@@ -106,6 +106,12 @@ function generateData() {
             </div>
           </div>
         </div>
+        
+        <div v-if="!form.status_import_guru" class="mt-4">
+          <div>
+            <h4 class="text-center text-danger my-5">Harap Pilih Jenis Import!</h4>
+          </div>
+        </div>
         <div class="d-flex justify-content-end mt-4" v-if="form.status_import_guru">
           <div>
             <a @click="generate" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
