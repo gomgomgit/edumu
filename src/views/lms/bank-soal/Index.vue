@@ -22,7 +22,7 @@ const tipeFilter = ref()
 const searchSoal = ref()
 
 const mode = ref()
-const activeData = ref()
+const editId = ref()
 
 const soal = reactive({
   columns: [
@@ -65,16 +65,16 @@ function getSoal(payload) {
 
 function handleCloseForm() {
   mode.value = null
-  activeData.value = null
+  editId.value = null
 }
 function handleSubmitForm() {
   mode.value = null
-  activeData.value = null
+  editId.value = null
   getSoal()
 }
-function handleEditData(data) {
-  mode.value = 'Edit Data'
-  activeData.value = data
+function handleEditData(id) {
+  mode.value = 'Edit Soal'
+  editId.value = id
 }
 </script>
 
@@ -181,16 +181,16 @@ function handleEditData(data) {
                   </template>
                 </div>
                 <div v-if="column.field == 'action'">
-                  <!-- <a @click="handleEditData(row)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
+                  <a @click="handleEditData(row.question_id)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
                     <span class="svg-icon svg-icon-3">
                       <inline-svg src="media/icons/duotune/art/art005.svg" />
                     </span>
-                  </a> -->
-                  <router-link :to="'/lms/bank-soal/edit/' + row.question_id" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
+                  </a>
+                  <!-- <router-link :to="'/lms/bank-soal/edit/' + row.question_id" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
                     <span class="svg-icon svg-icon-3">
                       <inline-svg src="media/icons/duotune/art/art005.svg" />
                     </span>
-                  </router-link>
+                  </router-link> -->
                   <router-link :to="'/lms/bank-soal/detail/' + (row.question_id)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
                     <span class="svg-icon svg-icon-3">
                       <inline-svg src="media/icons/duotune/files/fil001.svg" />
@@ -206,9 +206,7 @@ function handleEditData(data) {
 
     <FormModalQuestion 
       :mode="mode"
-      :activeData="activeData"
-      :guruOption="guruOption"
-      :mapelOption="mapelOption"
+      :questionId="editId"
       @close="handleCloseForm"
       @submit="handleSubmitForm"
     />
