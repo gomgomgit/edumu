@@ -111,6 +111,8 @@ function generateRfid() {
 function generateData() {
     var namaKelas = kelasOption.value.find(kls => kls.kelas_id == form.kelas_id).kelas_nama
     var dataItems = [
+        [],
+        [],
         ["NO","NIS","NISN","TAHUN ANGKATAN","NAMA SISWA","JK SISWA L/P","TEMPAT LAHIR","TANGGAL LAHIR","ALAMAT SISWA","WALI","JK WALI L/P","ALAMAT WALI","TELEPON","CARD","USER WALI","PASS WALI","USER SISWA","PASS SISWA","KELAS"],
         ["no","siswa_nis","siswa_nisn","siswa_tahun","siswa_nama","siswa_gender","siswa_tempat_lahir","siswa_tanggal_lahir","siswa_alamat","wali_nama","wali_gender","wali_alamat","wali_nohp","siswa_rfid","wali_username","wali_password","siswa_username","siswa_password","kelas"],
         ["","","","","","","","","","","","","","","","","","",namaKelas]
