@@ -5,6 +5,7 @@ import qs from 'qs'
 // import sanitizeHtml from 'sanitize-html';
 
 import { request, sanitizeHtml } from '@/util'
+import { useRouter } from 'vue-router';
 
 const questionTypeLabels = [
 	{ key: 'single', title: 'Pilihan Ganda', icon: 'fa-list-ul' },
@@ -12,6 +13,8 @@ const questionTypeLabels = [
 	{ key: 'essay', title: 'Esai / Uraian', icon: 'fa-align-left' },
 	{ key: 'match', title: 'Pencocokan', icon: 'fa-wave-square' },
 ]
+
+const router = useRouter()
 
 const isLoading = ref(false)
 const isSaving = ref(false)
@@ -65,7 +68,15 @@ function getDetail(id) {
 			questions: [{				
 				ehq_order : null,
 				keterangan : result.keterangan,
-				matches: [],
+				matches: result.matches.map(match => {					
+					return {
+						is_correct: 1,
+						match_with_option_id: match.match_with_option_id, 
+						option_match_text: match.option_match_text,
+						option_match_id: match.option_match_id,
+						question_id: match.question_id,
+					}
+				}),
 				options: result.options.map(option => {					
 					return {
 						is_correct : option.is_correct,
@@ -266,11 +277,15 @@ async function submitQuestionsData (bypassOrderNumber = false) {
 			isChanged.value = false
 
 			useToast().success('Soal Berhasil ditambahkan')
-			router.push('/lms/bank-soal')
+			return true
 		}
-		else if (res.data.status === false) throw res.data.text
+		else if (res.data.status === false) {
+			throw res.data.text
+			return false
+		}
 	} catch (err) {
 		isSaving.value = false
+		return false
 	}
 }
 async function editQuestionsData (bypassOrderNumber = false) {
@@ -284,6 +299,7 @@ async function editQuestionsData (bypassOrderNumber = false) {
 		}
 
 		const payload = {
+			id:410,
 			mapel_id: questionsData.mapel_id,
 			create_by: questionsData.create_by,
 			question_type : questionsData.question_types[0].question_type,
@@ -291,6 +307,7 @@ async function editQuestionsData (bypassOrderNumber = false) {
 		}
 
 		console.log(payload)
+		console.log(qs.stringify(payload))
 		const params = qs.stringify(payload)
 		const res = await request.post('/v2dev/soal/edit', qs.stringify(payload))
 
@@ -300,7 +317,10 @@ async function editQuestionsData (bypassOrderNumber = false) {
 			useToast().success('Soal berhasil diedit!')
 			return true
 		}
-		else if (res.data.status === false) throw res.data.text
+		else if (res.data.status === false) {
+			throw res.data.text
+			return false
+		}
 	} catch (err) {
 		return false
 		// isSaving.value = false

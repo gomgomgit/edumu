@@ -145,7 +145,9 @@ function handleEditData(id) {
               </div>
               <div>
                 <FilterSelect v-model:filterValue="tipeFilter" placeholder="Pilih Tipe" @change="getSoal">
-                  <el-option value="single" label="Single Option"></el-option>
+                  <el-option value="single" label="Pilihan Ganda"></el-option>
+                  <el-option value="multi" label="Pilihan Ganda Kompleks"></el-option>
+                  <el-option value="match" label="Pencocokan"></el-option>
                   <el-option value="essay" label="Essay"></el-option>
                 </FilterSelect>
               </div>

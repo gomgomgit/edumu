@@ -34,6 +34,7 @@ function postData() {
       'Content-Type' : 'multipart/form-data'
     }
   }).then(res => {
+    useToast().success('Data berhasil Di import!')
     router.push('/sekolah/profil-pengguna/guru')
   })
 }

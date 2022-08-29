@@ -53,7 +53,9 @@ function handleAction (type, wrapperIndex) {
 }
 
 async function handleSubmit () {
-	await submitQuestionsData()
+	if (await submitQuestionsData()) {
+		router.push('/lms/bank-soal')
+	}
 }
 
 const examIdParam = computed(() => route.params?.exam_id)
