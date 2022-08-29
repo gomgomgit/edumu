@@ -10,11 +10,11 @@
       style="background-image: url('media/misc/dropdown-header-bg.png')"
     >
       <!--begin::Title-->
-      <h3 class="text-white fw-bold mb-3">Quick Links</h3>
+      <h3 class="text-white fw-bold mb-3">Tautan Web Lain</h3>
       <!--end::Title-->
 
       <!--begin::Status-->
-      <span class="badge bg-primary py-2 px-3">25 pending tasks</span>
+      <span class="badge bg-primary py-2 px-3">Majelis Dikdasmen PP Muhammadiyah</span>
       <!--end::Status-->
     </div>
     <!--end::Heading-->
@@ -24,14 +24,15 @@
       <!--begin:Item-->
       <div class="col-6">
         <a
-          href="#"
+          href="https://dikdasmenppmuhammadiyah.org/" target="_blank"
           class="d-flex flex-column flex-center h-100 p-6 bg-hover-light border-end border-bottom"
         >
-          <span class="svg-icon svg-icon-3x svg-icon-primary mb-2">
+          <img src="media/logos/Logo-Edumu.png" alt="">
+          <!-- <span class="svg-icon svg-icon-3x svg-icon-primary mb-2">
             <inline-svg src="media/icons/duotune/finance/fin009.svg" />
-          </span>
-          <span class="fs-5 fw-bold text-gray-800 mb-0">Accounting</span>
-          <span class="fs-7 text-gray-400">eCommerce</span>
+          </span> -->
+          <span class="fs-6 fw-bold text-gray-800 mb-0 text-center">Majelis Dikdasmen</span>
+          <span class="fs-7 text-gray-400">Website Resmi</span>
         </a>
       </div>
       <!--end:Item-->
@@ -39,14 +40,15 @@
       <!--begin:Item-->
       <div class="col-6">
         <a
-          href="#"
+          href="http://pd.dikdasmenppm.org/" target="_blank"
           class="d-flex flex-column flex-center h-100 p-6 bg-hover-light border-bottom"
         >
-          <span class="svg-icon svg-icon-3x svg-icon-primary mb-2">
+          <img src="media/logos/Logo-Edumu.png" alt="">
+          <!-- <span class="svg-icon svg-icon-3x svg-icon-primary mb-2">
             <inline-svg src="media/icons/duotune/communication/com010.svg" />
-          </span>
-          <span class="fs-5 fw-bold text-gray-800 mb-0">Administration</span>
-          <span class="fs-7 text-gray-400">Console</span>
+          </span> -->
+          <span class="fs-6 fw-bold text-gray-800 mb-0">Pangkalan Data</span>
+          <span class="fs-7 text-gray-400">Data Pokok Sekolah</span>
         </a>
       </div>
       <!--end:Item-->
@@ -54,14 +56,15 @@
       <!--begin:Item-->
       <div class="col-6">
         <a
-          href="#"
+          href="https://edumu.id/5000/" target="_blank"
           class="d-flex flex-column flex-center h-100 p-6 bg-hover-light border-end"
         >
-          <span class="svg-icon svg-icon-3x svg-icon-primary mb-2">
+          <img src="media/logos/Logo-Edumu.png" alt="">
+          <!-- <span class="svg-icon svg-icon-3x svg-icon-primary mb-2">
             <inline-svg src="media/icons/duotune/abstract/abs042.svg" />
-          </span>
-          <span class="fs-5 fw-bold text-gray-800 mb-0">Projects</span>
-          <span class="fs-7 text-gray-400">Pending Tasks</span>
+          </span> -->
+          <span class="fs-6 fw-bold text-gray-800 mb-0">LMS eduMU</span>
+          <span class="fs-7 text-gray-400">Website Resmi</span>
         </a>
       </div>
       <!--end:Item-->
@@ -69,14 +72,15 @@
       <!--begin:Item-->
       <div class="col-6">
         <a
-          href="#"
+          href="https://muhammadiyah.or.id/" target="_blank"
           class="d-flex flex-column flex-center h-100 p-6 bg-hover-light"
         >
-          <span class="svg-icon svg-icon-3x svg-icon-primary mb-2">
+          <img src="media/logos/Logo-Edumu.png" alt="">
+          <!-- <span class="svg-icon svg-icon-3x svg-icon-primary mb-2">
             <inline-svg src="media/icons/duotune/finance/fin006.svg" />
-          </span>
-          <span class="fs-5 fw-bold text-gray-800 mb-0">Customers</span>
-          <span class="fs-7 text-gray-400">Latest cases</span>
+          </span> -->
+          <span class="fs-6 fw-bold text-gray-800 mb-0">PP Muhammadiyah</span>
+          <span class="fs-7 text-gray-400">Website Resmi</span>
         </a>
       </div>
       <!--end:Item-->
@@ -84,14 +88,14 @@
     <!--end:Nav-->
 
     <!--begin::View more-->
-    <div class="py-2 text-center border-top">
+    <!-- <div class="py-2 text-center border-top">
       <a href="#" class="btn btn-color-gray-600 btn-active-color-primary">
         View All
         <span class="svg-icon svg-icon-5">
           <inline-svg src="media/icons/duotune/arrows/arr064.svg" />
         </span>
       </a>
-    </div>
+    </div> -->
     <!--end::View more-->
   </div>
   <!--end::Menu-->
