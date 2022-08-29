@@ -36,7 +36,7 @@ const emit = defineEmits(['togglePin', 'openAside', 'closeAside'])
           <div class="tab-content">
             <div class="submenus tab-pane fade active show" id="kt_aside_nav_tab_projects" role="tabpanel">
               <div class="m-0">
-                <div class="d-flex mb-10">
+                <!-- <div class="d-flex mb-10">
                   <div id="kt_header_search" class="d-flex align-items-center w-lg-400px" data-kt-search-keypress="true"
                     data-kt-search-min-length="2" data-kt-search-enter="enter" data-kt-search-layout="menu"
                     data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start"
@@ -613,13 +613,13 @@ const emit = defineEmits(['togglePin', 'openAside', 'closeAside'])
 
                     <Dropdown1></Dropdown1>
                   </div>
-                </div>
+                </div> -->
 
                 <div class="m-0">
                   <h1 class="text-gray-800 fw-bold mb-6 mx-5">eduMU+</h1>
 
                   <div class="mb-10">
-                    <a href="#" class="custom-list d-flex align-items-center px-5 py-4">
+                    <router-link to="dashboard" class="custom-list d-flex align-items-center px-5 py-4">
                       <div class="symbol symbol-40px me-5">
                         <span class="symbol-label">
                           <img src="media/svg/brand-logos/bebo.svg" class="h-50 align-self-center" alt="" />
@@ -633,9 +633,9 @@ const emit = defineEmits(['togglePin', 'openAside', 'closeAside'])
 
                         <span class="text-gray-400 fw-bold">Untuk siswa & guru</span>
                       </div>
-                    </a>
+                    </router-link>
 
-                    <a href="#" class="custom-list d-flex align-items-center px-5 py-4">
+                    <router-link to="dashboard" class="custom-list d-flex align-items-center px-5 py-4">
                       <div class="symbol symbol-40px me-5">
                         <span class="symbol-label">
                           <img src="media/svg/brand-logos/vimeo.svg" class="h-50 align-self-center" alt="" />
@@ -649,9 +649,9 @@ const emit = defineEmits(['togglePin', 'openAside', 'closeAside'])
 
                         <span class="text-gray-400 fw-bold">Publikasi informasi sekolah</span>
                       </div>
-                    </a>
+                    </router-link>
 
-                    <a href="#" class="custom-list d-flex align-items-center px-5 py-4">
+                    <router-link to="dashboard" class="custom-list d-flex align-items-center px-5 py-4">
                       <div class="symbol symbol-40px me-5">
                         <span class="symbol-label">
                           <img src="media/svg/brand-logos/kickstarter.svg" class="h-50 align-self-center" alt="" />
@@ -665,7 +665,7 @@ const emit = defineEmits(['togglePin', 'openAside', 'closeAside'])
 
                         <span class="text-gray-400 fw-bold">Akses dalam satu aplikasi</span>
                       </div>
-                    </a>
+                    </router-link>
                   </div>
                 </div>
               </div>
