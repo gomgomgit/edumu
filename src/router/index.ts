@@ -659,6 +659,11 @@ const routes: Array<RouteRecordRaw> = [
         name: "account-profile",
         component: () => import("@/views/account/profile/Index.vue"),
       },
+      {
+        path: "/dokumentasi-pengguna",
+        name: "dokumentasi-pengguna",
+        component: () => import("@/views/dokumentasi/Index.vue"),
+      },
     ],
   },
   {
