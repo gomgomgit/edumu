@@ -71,6 +71,7 @@ function getDetail(id) {
 						is_correct : option.is_correct,
 						option_id : option.option_id,
 						option_text : option.option_text,
+						question_id : option.question_id,
 					}
 				}),
 				question_id : result.question_id,
@@ -263,13 +264,13 @@ async function submitQuestionsData (bypassOrderNumber = false) {
 
 			isSaving.value = false
 			isChanged.value = false
-			// useToast().info('Soal ujian berhasil disimpan!')
+
+			useToast().success('Soal Berhasil ditambahkan')
+			router.push('/lms/bank-soal')
 		}
 		else if (res.data.status === false) throw res.data.text
 	} catch (err) {
 		isSaving.value = false
-		if (err !== false) handleRequestError(err)
-		throw err
 	}
 }
 async function editQuestionsData (bypassOrderNumber = false) {
@@ -283,11 +284,10 @@ async function editQuestionsData (bypassOrderNumber = false) {
 		}
 
 		const payload = {
-			id:410,
 			mapel_id: questionsData.mapel_id,
 			create_by: questionsData.create_by,
 			question_type : questionsData.question_types[0].question_type,
-			...questionsData.question_types[0].questions[0]
+			...questionsData.question_types[0].questions[0],
 		}
 
 		console.log(payload)
@@ -298,12 +298,14 @@ async function editQuestionsData (bypassOrderNumber = false) {
 			isSaving.value = false
 			isChanged.value = false
 			useToast().success('Soal berhasil diedit!')
+			return true
 		}
 		else if (res.data.status === false) throw res.data.text
 	} catch (err) {
-		isSaving.value = false
-		if (err !== false) handleRequestError(err)
-		throw err
+		return false
+		// isSaving.value = false
+		// if (err !== false) handleRequestError(err)
+		// throw err
 	}
 }
 

@@ -54,8 +54,6 @@ function handleAction (type, wrapperIndex) {
 
 async function handleSubmit () {
 	await submitQuestionsData()
-	useToast().success('Soal Berhasil ditambahkan')
-	// router.push('/lms/bank-soal')
 }
 
 const examIdParam = computed(() => route.params?.exam_id)

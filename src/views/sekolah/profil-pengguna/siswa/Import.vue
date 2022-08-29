@@ -56,7 +56,7 @@ function generate() {
       generateRfid()
     }
     if (form.status_import == 'import_data') {
-      generateRfid()
+      generateData()
     }
     // var namaKelas = kelasOption.value.find(kls => kls.kelas_id == form.kelas_id).kelas_nama
     // var dataItems = [

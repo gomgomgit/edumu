@@ -72,10 +72,6 @@ function handleAction (type, wrapperIndex) {
 	})
 }
 
-// async function handleSubmit () {
-// 	await submitQuestionsData()
-// }
-
 const examIdParam = computed(() => route.params?.exam_id)
 
 watch(
@@ -92,8 +88,10 @@ function handleClose () {
 	resetQuestionsData()
 	emits('close')
 }
-function handleSubmit () {
-	editQuestionsData()
+async function handleSubmit () {
+	if (await editQuestionsData()) {
+    emits('submit')
+  }
 }
 </script>
 
@@ -189,7 +187,7 @@ function handleSubmit () {
                     EDITOR
                   </button>
 
-                  <div class="question-action">
+                  <!-- <div class="question-action">
                     <el-tooltip
                       class="box-item"
                       effect="light"
@@ -208,7 +206,7 @@ function handleSubmit () {
                         <img src="figma-icon/question-add.png" alt="" />
                       </div>
                     </el-tooltip>
-                  </div>
+                  </div> -->
                 </div>
               </header>
 
