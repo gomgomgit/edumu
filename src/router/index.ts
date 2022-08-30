@@ -68,6 +68,12 @@ const routes: Array<RouteRecordRaw> = [
                     component: () => import("@/views/lms/ujian-online/utama/form/Pengaturan.vue")
                   },
                   {
+                    path: "pengaturan/remed/:exam_id",
+                    name: "lms-ujian-online-utama-form-pengaturan-remed",
+                    meta: { isCreateRemed: true },
+                    component: () => import("@/views/lms/ujian-online/utama/form/Pengaturan.vue")
+                  },
+                  {
                     path: "soal-ujian/:exam_id",
                     name: "lms-ujian-online-utama-form-soal-ujian",
                     component: () => import("@/views/lms/ujian-online/utama/form/SoalUjian.vue"),

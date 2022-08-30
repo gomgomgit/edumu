@@ -37,6 +37,8 @@ const optionData = reactive({
 })
 
 const examIdParam = computed(() => route.params?.exam_id)
+const isCreateRemedMeta = computed(() => route.meta?.isCreateRemed)
+const showUjianTabQuery = computed(() => route.query?.show_ujian_tab)
 
 async function handleChangeTab (tab) {
 	if (!examIdParam.value) return useToast().info('Buat event ujian online terlebih dahulu!')
@@ -63,10 +65,18 @@ function getOptionData () {
 }
 
 async function submitEvent () {
-	const res = await saveExamData(examIdParam.value)
+	const res = await saveExamData(examIdParam.value, {
+		isCreateRemed: isCreateRemedMeta.value
+	})
+
 	tabs.active = 'ujian'
 
-	if (!route.params?.exam_id) router.replace('/lms/ujian-online/utama/form/pengaturan/' + res.exam_id)
+	if (!examIdParam.value || isCreateRemedMeta.value) {
+		router.replace({
+			path: '/lms/ujian-online/utama/form/pengaturan/' + res.exam_id,
+			query: { show_ujian_tab: isCreateRemedMeta.value ? 1 : 0 }
+		})
+	}
 }
 
 async function submitUjian () {
@@ -82,6 +92,7 @@ watch(
 
 onMounted(() => {
 	getOptionData()
+	if (showUjianTabQuery.value == 1) tabs.active = 'ujian'
 })
 </script>
 
