@@ -8,22 +8,6 @@
         <span class="text-muted fw-bold fs-7">25 Jadwal Pelajaran Hari ini</span>
       </h3>
 
-      <div class="card-toolbar">
-        <!--begin::Menu-->
-        <button
-          type="button"
-          class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
-          data-kt-menu-trigger="click"
-          data-kt-menu-placement="bottom-end"
-          data-kt-menu-flip="top-end"
-        >
-          <span class="svg-icon svg-icon-2">
-            <inline-svg src="media/icons/duotune/general/gen024.svg" />
-          </span>
-        </button>
-        <Dropdown1></Dropdown1>
-        <!--end::Menu-->
-      </div>
     </div>
     <!--end::Header-->
 
@@ -56,7 +40,7 @@
               Guru 1 - Matematika
             </div>
             <div class="text-muted">
-              Outlines keep you honest. And keep structure
+              0 Tugas - 0 Materi - 0 Ujian
             </div>
           </div>
           <!--end::Text-->

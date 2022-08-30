@@ -46,19 +46,82 @@ function postData() {
       'Content-Type' : 'multipart/form-data'
     }
   }).then(res => {
+    useToast().success('Data berhasil Di import!')
     router.push('/sekolah/profil-pengguna/siswa')
   })
 }
 
 function generate() {
+    if (form.status_import == 'import_rfid') {
+      generateRfid()
+    }
+    if (form.status_import == 'import_data') {
+      generateData()
+    }
+    // var namaKelas = kelasOption.value.find(kls => kls.kelas_id == form.kelas_id).kelas_nama
+    // var dataItems = [
+    //     ["NO","NIS","NISN","TAHUN ANGKATAN","NAMA SISWA","JK SISWA L/P","TEMPAT LAHIR","TANGGAL LAHIR","ALAMAT SISWA","WALI","JK WALI L/P","ALAMAT WALI","TELEPON","CARD","USER WALI","PASS WALI","USER SISWA","PASS SISWA","KELAS"],
+    //     ["no","siswa_nis","siswa_nisn","siswa_tahun","siswa_nama","siswa_gender","siswa_tempat_lahir","siswa_tanggal_lahir","siswa_alamat","wali_nama","wali_gender","wali_alamat","wali_nohp","siswa_rfid","wali_username","wali_password","siswa_username","siswa_password","kelas"],
+    //     ["","","","","","","","","","","","","","","","","","",namaKelas]
+    //   ]
+    // var rfidItems = [
+    //     ['No',	'siswa_id',	'user_nama', 'siswa_nisn',	'kelas_nama',	'user_status',	'siswa_rfid'],
+    //     ['1',	'143', 'Adi', '7661234', namaKelas,	'Aktif', '407']
+    //   ]
+
+    // if (form.status_import == 'import_rfid') var items = rfidItems; var name = 'Format Import RFID Siswa.xlsx'
+    // if (form.status_import == 'import_data') var items = dataItems; var name = 'Format Import Data Siswa.xlsx'
+
+    // const data = XLSX.utils.aoa_to_sheet(items)
+    // const wb = XLSX.utils.book_new()
+    // XLSX.utils.book_append_sheet(wb, data, 'kelas')
+    // XLSX.writeFile(wb, name)
+}
+function generateRfid() {
     var namaKelas = kelasOption.value.find(kls => kls.kelas_id == form.kelas_id).kelas_nama
-    var dataItems = [{siswa_nisn: '',	siswa_nama: '',	siswa_username: '',	siswa_password: '',	kelas_nama: namaKelas }]
-    var rfidItems = [{No: '',	siswa_id: '',	user_nama: '',	siswa_nisn: '',	kelas_nama: namaKelas,	user_status: '',	siswa_rfid: ''}]
+    
+    var rfidItems = [
+        ['No',	'siswa_id',	'user_nama', 'siswa_nisn',	'kelas_nama',	'user_status',	'siswa_rfid'],
+      ]
 
-    if (form.status_import == 'import_rfid') var items = rfidItems; var name = 'Format Import RFID Siswa.xlsx'
-    if (form.status_import == 'import_data') var items = dataItems; var name = 'Format Import Data Siswa.xlsx'
+    request.post("/getdataimportrfid", null, {params: {kelas: form.kelas_id}})
+    .then((res) => {
+      var result = res.data.data
 
-    const data = XLSX.utils.json_to_sheet(items)
+      result.map((item,i) => {
+          rfidItems.push([
+              i+1,
+              item.siswa_id,
+              item.user_nama,
+              item.siswa_nisn,
+              item.kelas_nama,
+              item.user_status === "1" ? "Aktif" : "Non Aktif",
+              item.siswa_rfid
+          ])
+      })
+      var items = rfidItems; 
+      var name = 'Format Import RFID Siswa.xlsx'
+
+      const data = XLSX.utils.aoa_to_sheet(items)
+      const wb = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(wb, data, 'kelas')
+      XLSX.writeFile(wb, name)
+    })
+}
+function generateData() {
+    var namaKelas = kelasOption.value.find(kls => kls.kelas_id == form.kelas_id).kelas_nama
+    var dataItems = [
+        [],
+        [],
+        ["NO","NIS","NISN","TAHUN ANGKATAN","NAMA SISWA","JK SISWA L/P","TEMPAT LAHIR","TANGGAL LAHIR","ALAMAT SISWA","WALI","JK WALI L/P","ALAMAT WALI","TELEPON","CARD","USER WALI","PASS WALI","USER SISWA","PASS SISWA","KELAS"],
+        ["no","siswa_nis","siswa_nisn","siswa_tahun","siswa_nama","siswa_gender","siswa_tempat_lahir","siswa_tanggal_lahir","siswa_alamat","wali_nama","wali_gender","wali_alamat","wali_nohp","siswa_rfid","wali_username","wali_password","siswa_username","siswa_password","kelas"],
+        ["","","","","","","","","","","","","","","","","","",namaKelas]
+      ]
+
+    var items = dataItems; 
+    var name = 'Format Import Data Siswa.xlsx'
+
+    const data = XLSX.utils.aoa_to_sheet(items)
     const wb = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(wb, data, 'kelas')
     XLSX.writeFile(wb, name)
@@ -95,6 +158,11 @@ function generate() {
                   :value="kelas.kelas_id" />
               </el-select>
             </div>
+          </div>
+        </div>
+        <div v-if="!form.kelas_id || !form.status_import" class="mt-4">
+          <div>
+            <h4 class="text-center text-danger my-5">Harap Pilih Kelas dan Jenis Import!</h4>
           </div>
         </div>
         <div v-if="form.kelas_id && form.status_import" class="d-flex justify-content-end mt-4">

@@ -32,7 +32,7 @@ const nilaiData = reactive({
     { label: 'Total Jawab', field: 'en_tot_jawab', sortable: false },
     { label: 'Total Nilai', field: 'en_tot_nilai', sortable: false },
     { label: 'Nilai Siswa', field: 'en_nilai', sortable: false },
-    { label: 'Status', field: 'en_desc', sortable: false },
+    { label: 'Status', field: 'status', sortable: false },
   ],
   rows: [],
 })
@@ -59,7 +59,7 @@ function getSiswaNilai() {
     }
   }).then(res => {
     nilaiData.rows = res.data.data[0].nilai
-    console.log(nilaiData)
+    console.log(res.data.data[0].nilai)
   })
 }
 function formatingDate(date) {
@@ -171,11 +171,11 @@ function exportNilai() {
 
         </div>
         <div class="separator border-black-50 border-2 my-6"></div>
+        
         <div v-if="!kelasFilter">
-          <h4 class="text-center text-danger">Harap Pilih Kelas!</h4>
+          <h4 class="text-center text-danger my-5">Harap Pilih Kelas!</h4>
         </div>
         <ServerSideTable
-          v-if="kelasFilter"
           :totalRows="nilaiData.totalRows || 0"
           :columns="nilaiData.columns"
           :rows="nilaiData.rows"
@@ -184,9 +184,15 @@ function exportNilai() {
             enabled: false,
           }"
         >
+          <template #emptystate>
+            Data Kosong, Mohon Refresh nilai untuk mendapatkan nilai terbaru...
+          </template>
           <template #table-row="{column, row}">
-            <div v-if="column.field == 'exam_status'">
-              <span :class="'badge badge-light-' + (row.exam_status == 1 ? 'success' : 'danger')">{{row.exam_status == 1 ? 'Aktif' : 'Non Aktif'}}</span>
+            <div v-if="column.field == 'status'">
+              <button type="button" :class="`btn btn-sm ${
+                row.en_tot_jawab > 0 ? 'btn-primary' : 'btn-warning' }`" >
+                {{row.en_tot_jawab > 0 ? 'Finish' : 'Belum Ujian'}}
+              </button>
             </div>
           </template>
         </ServerSideTable>

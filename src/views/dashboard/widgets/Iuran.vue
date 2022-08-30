@@ -60,7 +60,7 @@ export default defineComponent({
     const chartOptions = {
       series: [
         {
-          name: "Net Profit",
+          name: "Total Pembayaran",
           data: [15, 25, 15, 40, 20, 50],
         },
       ],
@@ -161,7 +161,7 @@ export default defineComponent({
         },
         y: {
           formatter: function (val) {
-            return "$" + val + " thousands";
+            return "Rp " + val;
           },
         },
       },
@@ -175,7 +175,7 @@ export default defineComponent({
 
     const series = [
       {
-        name: "Net Profit",
+        name: "Total Pembayaran",
         data: [15, 25, 15, 40, 20, 50],
       },
     ];

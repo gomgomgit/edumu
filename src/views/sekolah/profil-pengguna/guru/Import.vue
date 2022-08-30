@@ -25,7 +25,7 @@ const form = reactive({
 
 function postData() {
   const formData = new FormData()
-  formData.append('status_import_guru', form.status_import)
+  formData.append('status_import_guru', form.status_import_guru)
   formData.append('user_id', userId)
   formData.append('file', form.file)
 
@@ -34,18 +34,52 @@ function postData() {
       'Content-Type' : 'multipart/form-data'
     }
   }).then(res => {
+    useToast().success('Data berhasil Di import!')
     router.push('/sekolah/profil-pengguna/guru')
   })
 }
 
 function generate() {
-    var dataItems = [{guru_nip: '',	guru_nama: '',	guru_username: '',	guru_password: ''}]
-    var rfidItems = [{No: '1',	guru_id: '58',	user_nama: 'Hikmatul Fitri, S.Pd',	guru_nip: '1070077',	user_status: 'Aktif',	guru_rfid: ''}]
+    if (form.status_import_guru == 'import_rfid') generateRfid()
+    if (form.status_import_guru == 'import_data') generateData()
+}
 
-    if (form.status_import == 'import_rfid') var items = rfidItems; var name = 'Format Import RFID Guru.xlsx'
-    if (form.status_import == 'import_data') var items = dataItems; var name = 'Format Import Data Guru.xlsx'
+function generateRfid() {
+    var rfidItems = [
+      ['No',	'guru_id',	'user_nama',	'guru_nip',	'user_status',	'guru_rfid']
+    ]
 
-    const data = XLSX.utils.json_to_sheet(items)
+    request.post("/getdataimportrfidguru", null, {params: {user_id: userId}})
+    .then((res) => {
+      var result = res.data.data
+
+      result.map((item,i) => {
+          rfidItems.push([
+              i+1,
+              item.guru_id,
+              item.user_nama,
+              item.guru_nip,
+              item.user_status === "1" ? "Aktif" : "Non Aktif", 
+              item.guru_rfid
+          ])
+      })
+
+      var items = rfidItems; var name = 'Format Import RFID Guru.xlsx'
+
+      const data = XLSX.utils.aoa_to_sheet(items)
+      const wb = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(wb, data, 'guru')
+      XLSX.writeFile(wb, name)
+    })
+}
+function generateData() {
+    var dataItems = [
+      ['guru_nip',	'guru_nama',	'guru_username',	'guru_password']
+    ]
+
+    var items = dataItems; var name = 'Format Import Data Guru.xlsx'
+
+    const data = XLSX.utils.aoa_to_sheet(items)
     const wb = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(wb, data, 'guru')
     XLSX.writeFile(wb, name)
@@ -66,14 +100,20 @@ function generate() {
               <p class="m-0 fs-4 fw-bold">Import</p>
             </div>
             <div class="col-9 align-items-center d-flex gap-4">
-              <el-select class="w-100" v-model="form.status_import" placeholder="Jenis Import">
+              <el-select class="w-100" v-model="form.status_import_guru" placeholder="Jenis Import">
                 <el-option label="Import Data Guru" value="import_data" />
                 <el-option label="Import RFID Guru" value="import_rfid" />
               </el-select>
             </div>
           </div>
         </div>
-        <div class="d-flex justify-content-end mt-4" v-if="form.status_import">
+        
+        <div v-if="!form.status_import_guru" class="mt-4">
+          <div>
+            <h4 class="text-center text-danger my-5">Harap Pilih Jenis Import!</h4>
+          </div>
+        </div>
+        <div class="d-flex justify-content-end mt-4" v-if="form.status_import_guru">
           <div>
             <a @click="generate" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
               <span>
@@ -85,12 +125,12 @@ function generate() {
         
         <div class="mt-4">
 
-          <div class="mt-4" v-if="form.status_import">
+          <div class="mt-4" v-if="form.status_import_guru">
             <p class="mb-2 fs-4 fw-bold">File Import</p>
-            <div v-if="form.status_import == 'import_data'">
+            <div v-if="form.status_import_guru == 'import_data'">
               <p class="mb-2">*Tentukan data kelas apa yg anda ingin import, Lalu generate excel format</p>
             </div>
-            <div v-if="form.status_import == 'import_rfid'">
+            <div v-if="form.status_import_guru == 'import_rfid'">
               <p class="mb-2">*Generate excel format untuk import RFID</p>
               <p class="mb-2">*Isi Data RFID guru di kolom RFID</p>
             </div>
