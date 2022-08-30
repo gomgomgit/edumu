@@ -2,39 +2,22 @@
   <!--begin::Mixed Widget 1-->
   <div class="card card-xxl-stretch">
     <!--begin::Header-->
-    <div :class="`bg-${widgetColor}`" class="card-header border-0 py-5 align-items-start rounded-3">
+    <div :class="`bg-${widgetColor}`" class="card-header border-0 py-5 rounded-3">
       <div class="d-flex align-items-center py-7 gap-5 mb-20">
-        <div>
-          <div class="rounded-circle overflow-hidden w-60px h-60px"
-            style="
-              background: url('https://images.pexels.com/photos/322920/pexels-photo-322920.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500');
+        <div class="rounded-3 overflow-hidden w-60px h-60px bg-white p-2">
+          <div class="w-100 h-100"
+            :style="`
+              background: url('/media/logos/Logo-Edumu.png');
               background-size: cover;
-            "
+            `"
             >
           </div>
         </div>
         <div class="">
-          <h3 class="card-title my-2 fw-bolder text-white">Assalamualaikum,</h3>
-          <p class="fw-bolder my-2 text-white">Farina Idris Puranama</p>
-          <p class="fw-bolder my-2 text-white">IPA 3</p>
+          <h3 class="card-title my-1 fw-bolder text-white">Sekolah Muhammadiyah Edumu,</h3>
+          <p class="fw-bolder my-1 text-white">Farina Idris Puranama</p>
+          <p class="fw-bolder my-1 text-white">IPA 3</p>
         </div>
-      </div>
-      <div class="card-toolbar">
-        <!--begin::Menu-->
-        <button
-          type="button"
-          :class="`btn-active-color-${widgetColor}`"
-          class="btn btn-sm btn-icon btn-color-white btn-active-white border-0 me-n3"
-          data-kt-menu-trigger="click"
-          data-kt-menu-placement="bottom-end"
-          data-kt-menu-flip="top-end"
-        >
-          <span class="svg-icon svg-icon-2">
-            <inline-svg src="media/icons/duotune/general/gen024.svg" />
-          </span>
-        </button>
-        <Dropdown3></Dropdown3>
-        <!--end::Menu-->
       </div>
     </div>
     <!--end::Header-->
@@ -74,7 +57,10 @@
             </span>
             <a href="#" class="text-danger fw-bold fs-6 mt-2"> Jumlah Rombel </a>
           </div>
-          <div class="col bg-light-success px-6 py-8 rounded-2">
+          <div class="col bg-light-success px-6 py-8 rounded-2 position-relative">
+            <div class="position-absolute" style="top: 10px; right: 10px;">
+              <span class="badge badge-square px-3 fw-normal fs-6 bg-success">{{siswaOnline}}</span>
+            </div>
             <span class="display-5 text-success fw-normal d-block my-2">
               255
             </span>

@@ -14,19 +14,18 @@
         data-bs-toggle="tooltip"
         data-bs-placement="top"
         data-bs-trigger="hover"
-        title="Click to add a user"
       >
-        <a
-          href="#"
-          class="btn btn-sm btn-light-primary"
-          data-bs-toggle="modal"
-          data-bs-target="#kt_modal_invite_friends"
+        <div
+          class="badge badge-primary px-5 py-3 d-flex gap-3"
         >
-          <span class="svg-icon svg-icon-3">
-            <inline-svg src="media/icons/duotune/arrows/arr075.svg" />
-          </span>
-          New Member
-        </a>
+          <div class="fs-1">
+            124 
+          </div>
+          <div class="fs-6">
+            <div>Total</div>
+            <div>Tugas</div>
+          </div>
+        </div>
       </div>
     </div>
     <!--end::Header-->
@@ -42,24 +41,10 @@
           <!--begin::Table head-->
           <thead>
             <tr class="fw-bolder text-muted">
-              <th class="w-25px">
-                <div
-                  class="form-check form-check-sm form-check-custom form-check-solid"
-                >
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    @change="
-                      checkedRows =
-                        checkedRows.length === 6 ? [] : [0, 1, 2, 3, 4, 5]
-                    "
-                  />
-                </div>
-              </th>
               <th class="min-w-150px">Guru</th>
               <th class="min-w-140px">Judul Tugas</th>
               <th class="min-w-120px">Batas Waktu</th>
-              <th class="min-w-100px text-end">Pengerjaan</th>
+              <th class="min-w-100px text-end">Pengerjaan Tugas</th>
             </tr>
           </thead>
           <!--end::Table head-->
@@ -68,18 +53,6 @@
           <tbody>
             <template v-for="(item, index) in list" :key="index">
               <tr>
-                <td>
-                  <div
-                    class="form-check form-check-sm form-check-custom form-check-solid"
-                  >
-                    <input
-                      class="form-check-input widget-9-check"
-                      type="checkbox"
-                      :value="index"
-                      v-model="checkedRows"
-                    />
-                  </div>
-                </td>
 
                 <td>
                   <div class="d-flex align-items-center">
@@ -101,15 +74,12 @@
                   </div>
                 </td>
 
-                <td>
+                <td style="max-width: 300px">
                   <a
                     href="#"
                     class="text-dark fw-bolder text-hover-primary d-block fs-6"
                     >{{ item.companyName }}</a
                   >
-                  <span class="text-muted fw-bold text-muted d-block fs-7">{{
-                    item.companySkills
-                  }}</span>
                 </td>
 
                 <td>
@@ -170,8 +140,8 @@ export default defineComponent({
       {
         image: "media/avatars/300-14.jpg",
         name: "Ana Simmons",
-        skills: "HTML, JS, ReactJS",
-        companyName: "Intertico",
+        skills: "Matematika",
+        companyName: "Bagaimana menjumlahkan semua udang di lautan luas ini sobat",
         companySkills: "Web, UI/UX Design",
         value: "50",
         dateEnd: "12-08-2022",
@@ -181,7 +151,7 @@ export default defineComponent({
         image: "media/avatars/300-2.jpg",
         name: "Jessie Clarcson",
         skills: "C#, ASP.NET, MS SQL",
-        companyName: "Agoda",
+        companyName: "Agoda lkdjf ds sflsadj saldfj sadf sladfkj sad sadlfkj sda",
         companySkills: "Houses & Hotels",
         value: "70",
         dateEnd: "12-08-2022",
@@ -191,7 +161,7 @@ export default defineComponent({
         image: "media/avatars/300-5.jpg",
         name: "Lebron Wayde",
         skills: "PHP, Laravel, VueJS",
-        companyName: "RoadGee",
+        companyName: "RoadGee lkdjf ds sflsadj saldfj sadf sladfkj sad sadlfkj sda",
         companySkills: "Transportation",
         value: "60",
         dateEnd: "12-08-2022",
@@ -201,7 +171,7 @@ export default defineComponent({
         image: "media/avatars/300-20.jpg",
         name: "Natali Goodwin",
         skills: "Python, PostgreSQL, ReactJS",
-        companyName: "The Hill",
+        companyName: "The lkdjf ds sflsadj saldfj sadf sladfkj sad sadlfkj sda Hill",
         companySkills: "Insurance",
         value: "50",
         dateEnd: "12-08-2022",
@@ -211,7 +181,7 @@ export default defineComponent({
         image: "media/avatars/300-23.jpg",
         name: "Kevin Leonard",
         skills: "HTML, JS, ReactJS",
-        companyName: "RoadGee",
+        companyName: "RoadGee lkdjf ds sflsadj saldfj sadf sladfkj sad sadlfkj sda",
         companySkills: "Art Director",
         value: "90",
         dateEnd: "12-08-2022",

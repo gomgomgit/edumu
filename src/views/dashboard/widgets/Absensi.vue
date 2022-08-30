@@ -7,10 +7,19 @@
     >
       <!--begin::Hidden-->
       <div class="d-flex flex-stack flex-wrap flex-grow-1 px-9 pt-9 pb-3">
-        <div class="me-2">
-          <span class="fw-bolder text-gray-800 d-block fs-3">Rekap Absensi Siswa</span>
+        <div class="d-flex justify-content-between align-items-center w-100">
+          <div>
+            <span class="fw-bolder text-gray-800 d-block fs-3">Rekap Absensi Siswa</span>
 
-          <span class="text-gray-400 fw-bold">Jul 1 - Jul 20 22</span>
+            <span class="text-gray-400 fw-bold">Feb 2022 - Juli 2022</span>
+          </div>
+          <div
+            class="badge badge-primary px-5 py-3 d-flex"
+          >
+            <div class="fs-6">
+              124 Siswa
+            </div>
+          </div>
         </div>
 
         <div class="fw-bolder fs-3" :class="`text-${chartColor}`"></div>
@@ -133,7 +142,7 @@ export default defineComponent({
         },
         y: {
           formatter: function (val) {
-            return "$" + val + " revenue";
+            return val + " siswa";
           },
         },
       },
@@ -154,11 +163,11 @@ export default defineComponent({
 
     const series = [
       {
-        name: "Net Profit",
+        name: "Siswa Masuk",
         data: [50, 60, 70, 80, 60, 50, 70, 60],
       },
       {
-        name: "Revenue",
+        name: "Siswa Izin/Alpha",
         data: [50, 60, 70, 80, 60, 50, 70, 60],
       },
     ];

@@ -2,30 +2,29 @@
   <!--begin::List Widget 3-->
   <div class="card" :class="widgetClasses">
     <!--begin::Header-->
-    <div class="card-header border-0">
+    <div class="card-header border-0 pt-5">
       <h3 class="card-title fw-bolder text-dark">Materi Belajar</h3>
 
       <div class="card-toolbar">
         <!--begin::Menu-->
-        <button
-          type="button"
-          class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
-          data-kt-menu-trigger="click"
-          data-kt-menu-placement="bottom-end"
-          data-kt-menu-flip="top-end"
-        >
-          <span class="svg-icon svg-icon-2">
-            <inline-svg src="media/icons/duotune/general/gen024.svg" />
-          </span>
-        </button>
-        <Dropdown2></Dropdown2>
+          <div
+            class="badge badge-primary px-5 py-3 d-flex gap-3"
+          >
+            <div class="fs-1">
+              124 
+            </div>
+            <div class="fs-6">
+              <div>Total</div>
+              <div>Materi</div>
+            </div>
+          </div>
         <!--end::Menu-->
       </div>
     </div>
     <!--end::Header-->
 
     <!--begin::Body-->
-    <div class="card-body pt-2">
+    <div class="card-body pt-5">
       <template v-for="(item, index) in datas" :key="index">
         <!--begin::Item-->
         <div
