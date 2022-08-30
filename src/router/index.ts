@@ -110,8 +110,8 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/lms/bank-soal/Import.vue")
       },
       {
-        path: "/lms/bank-soal/:type/:id?",
-        name: "lms-bank-soal-data",
+        path: "/lms/bank-soal/tambah/",
+        name: "lms-bank-soal-tambah",
         component: () => import("@/views/lms/bank-soal/Data.vue")
       },
       {

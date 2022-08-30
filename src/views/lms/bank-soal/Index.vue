@@ -2,11 +2,15 @@
 import { setCurrentPageBreadcrumbs } from '@/core/helpers/breadcrumb';
 import { onMounted, reactive, ref } from 'vue';
 import FilterSelect from '@/components/filter-select/index.vue';
-  import { Search } from '@element-plus/icons-vue'
+import { Search } from '@element-plus/icons-vue'
 import { request } from '@/util';
 import ServerSideTable from '@/components/ServerSideTable.vue';
 import FormModalQuestion from './FormModalQuestion'
+import ModalCannotDelete from './ModalCannotDelete'
 import QueryString from 'qs';
+import { useToast } from 'vue-toast-notification';
+import Swal from 'sweetalert2';
+import { deleteConfirmation } from '@/core/helpers/deleteconfirmation';
 
 onMounted(() => {
   setCurrentPageBreadcrumbs('Bank Soal', ['LMS'])
@@ -21,8 +25,13 @@ const mapelFilter = ref()
 const tipeFilter = ref()
 const searchSoal = ref()
 
+const selectedSoal = ref([])
+
 const mode = ref()
 const editId = ref()
+
+const showCannotDelete = ref(false)
+const dataCannotDelete = ref([])
 
 const soal = reactive({
   columns: [
@@ -62,10 +71,43 @@ function getSoal(payload) {
     soal.totalRows = res.data.data.total
   })
 }
+function deleteSoalMulti() {
+  if (selectedSoal.value.length <= 0) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Tidak ada soal yang dipilih!'
+    })
+    return false
+  }
+  deleteConfirmation(() => {
+    request.post("soal/delete", QueryString.stringify({
+      locale:	"id",
+      platform:	"web",
+      user_id:	"410",
+      question_id: selectedSoal.value
+    })).then(res => {
+      useToast().success('Berhasil Hapus Soal')
+      if (res.data.data.length > 0) {
+        showCannotDelete.value = true
+        dataCannotDelete.value = res.data.data
+      }
+    })
+  })
+}
 
+function selectionChangedSoal(params) {
+  var finalArray = params.selectedRows.map((obj) => {
+    return obj.question_id
+  })
+  selectedSoal.value = finalArray
+}
 function handleCloseForm() {
   mode.value = null
   editId.value = null
+}
+function handleCloseCannotDelete() {
+  showCannotDelete.value = false
+  dataCannotDelete.value = []
 }
 function handleSubmitForm() {
   mode.value = null
@@ -153,17 +195,15 @@ function handleEditData(id) {
               </div>
             </div>
 
-            <div class="d-flex w-100 w-lg-50 w-xl-25 gap-4">
-              <!-- <el-input
-                v-model="searchSoal"
-                clearable
-                class="p-2"
-                placeholder="Cari Soal"
-              >
-                <template #append>
-                  <el-button aria-disabled="true" class="pe-none" :icon="Search" />
-                </template>
-              </el-input> -->
+            <div class="d-flex justify-content-end w-100 w-lg-50 w-xl-25 gap-4">
+              <div>
+                <button @click="deleteSoalMulti()" class="btn btn-danger d-flex gap-3 align-items-center w-auto">
+                  <i class="bi bi-trash fs-1"></i>
+                  <span>
+                    Hapus soal dipilih
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -172,6 +212,16 @@ function handleEditData(id) {
               :totalRows="soal.totalRows || 0" 
               :columns="soal.columns" 
               :rows="soal.rows"
+              @selected-rows-change="selectionChangedSoal"
+              :select-options="{
+                enabled: true,
+                selectOnCheckboxOnly: false, // only select when checkbox is clicked instead of the row
+                selectionInfoClass: 'custom-class',
+                selectionText: 'rows selected',
+                clearSelectionText: 'clear',
+                disableSelectInfo: true, // disable the select info panel on top
+                selectAllByGroup: true, 
+              }"
               @loadItems="getSoal">
               <template #table-row="{column, row}">
                 <div v-if="column.field == 'question'">
@@ -212,5 +262,12 @@ function handleEditData(id) {
       @close="handleCloseForm"
       @submit="handleSubmitForm"
     />
+    <ModalCannotDelete 
+      :show="showCannotDelete"
+      :datas="dataCannotDelete"
+      @close="handleCloseCannotDelete"
+    />
+
+
   </div>
 </template> 
