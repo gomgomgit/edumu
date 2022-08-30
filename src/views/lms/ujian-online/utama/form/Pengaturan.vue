@@ -41,7 +41,7 @@ const isCreateRemedMeta = computed(() => route.meta?.isCreateRemed)
 const showUjianTabQuery = computed(() => route.query?.show_ujian_tab)
 
 async function handleChangeTab (tab) {
-	if (!examIdParam.value) return useToast().info('Buat event ujian online terlebih dahulu!')
+	if (!examIdParam.value || isCreateRemedMeta.value) return useToast().warning('Buat event ujian online terlebih dahulu!')
 
 	if (isChanged.value) {
 		const res = await Swal.fire(swalConfig)
@@ -86,7 +86,10 @@ async function submitUjian () {
 
 watch(
 	examIdParam,
-	examId => examId ? loadExamData(examId) : resetExamData(),
+	(examId, oldExamId) => {
+		if (examId && examId !== oldExamId) loadExamData(examId)
+		else resetExamData()
+	},
 	{ immediate: true }
 )
 
