@@ -6,6 +6,7 @@ import qs from 'qs'
 
 import { request, sanitizeHtml } from '@/util'
 import { useRouter } from 'vue-router';
+import { deleteConfirmation } from '@/core/helpers/deleteconfirmation';
 
 const questionTypeLabels = [
 	{ key: 'single', title: 'Pilihan Ganda', icon: 'fa-list-ul' },
@@ -374,11 +375,17 @@ function addQuestion (wrapperIndex, questionIndex) {
 }
 
 function removeQuestion (wrapperIndex, questionIndex) {
-	if (!window.confirm('Apakah anda yakin?')) return
-	questionsData.question_types[wrapperIndex].questions.splice(questionIndex, 1)
-	if (questionsData.question_types[wrapperIndex].questions.length === 0) {
-		removeQuestionType(wrapperIndex)
-	}
+	deleteConfirmation(() => {
+		questionsData.question_types[wrapperIndex].questions.splice(questionIndex, 1)
+		if (questionsData.question_types[wrapperIndex].questions.length === 0) {
+			removeQuestionType(wrapperIndex)
+		}
+	}, null, 'Anda yakin menghapus soal ini?')
+	// if (!window.confirm('Apakah anda yakin?')) return
+	// questionsData.question_types[wrapperIndex].questions.splice(questionIndex, 1)
+	// if (questionsData.question_types[wrapperIndex].questions.length === 0) {
+	// 	removeQuestionType(wrapperIndex)
+	// }
 	// else {
 	// 	cacheQuestionsData(true)
 	// }
