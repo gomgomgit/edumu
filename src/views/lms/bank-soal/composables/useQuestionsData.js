@@ -303,11 +303,29 @@ async function editQuestionsData (bypassOrderNumber = false) {
 			mapel_id: questionsData.mapel_id,
 			create_by: questionsData.create_by,
 			question_type : questionsData.question_types[0].question_type,
-			...questionsData.question_types[0].questions[0],
+			question_text : questionsData.question_types[0].questions[0].question_text,
+			question_id : questionsData.question_types[0].questions[0].question_id,
+			keterangan : questionsData.question_types[0].questions[0].keterangan,
+			options: questionsData.question_types[0].questions[0].options.map(option => {
+				return {
+					option_id: option.option_id,
+					question_id: option.question_id,
+					option_text: option.option_text,
+					is_correct: option.is_correct ? 1 : 0,
+				}
+			}),
+			matches: questionsData.question_types[0].questions[0].matches.map(match => {
+				return {
+					option_match_id: match.option_match_id,
+					question_id: match.question_id,
+					option_match_text: match.option_match_text,
+					match_with_option_id: match.match_with_option_id,
+					is_correct: 1,
+				}
+			}),
+			
 		}
 
-		console.log(payload)
-		console.log(qs.stringify(payload))
 		const params = qs.stringify(payload)
 		const res = await request.post('/v2dev/soal/edit', qs.stringify(payload))
 
