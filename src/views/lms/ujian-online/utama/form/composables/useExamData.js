@@ -21,7 +21,8 @@ const initialData = {
 	showNilai: false,
 	showResult: false,
 	exam_random: false,
-	exam_status: false,
+	exam_status: 2,
+	soal: 0
 }
 
 const isLoading = ref(false)
@@ -39,14 +40,15 @@ function resetExamData(customData = {}) {
 	})
 }
 
-async function loadExamData (examId) {
-	if (examData.exam_id) return
+async function loadExamData (examId, forceLoad = false) {
+	if (examData.exam_id && !forceLoad) return
 	try {
 		isLoading.value = true
 		const res = await request.post(`ujian/${examId}?exam_id=${examId}`)
 		const { data, part } = res.data
 		const formattedData = {
 			exam_id: data.exam_id,
+			parent_id: data.parent_id,
 			exam_cat_id: data.exam_cat_id,
 			mapel_id: data.mapel_id,
 			user_id: data.user_id,
@@ -71,7 +73,7 @@ async function loadExamData (examId) {
 	}
 }
 
-async function saveExamData (examId, immediate = false) {
+async function saveExamData (examId, options = {}) {
 	try {
 		isSaving.value = true
 		const rules = {
@@ -95,7 +97,7 @@ async function saveExamData (examId, immediate = false) {
 		if (errors) {
 			useToast().warning(errors[0])
 			throw errors[0]
-		} else if (!isChanged.value && !immediate) {
+		} else if (!isChanged.value && !options.immediate && !options.isCreateRemed) {
 			return examData
 		}
 
@@ -108,13 +110,22 @@ async function saveExamData (examId, immediate = false) {
 			exam_status: examData.exam_status ? 1 : 0,
 			exam_start_date: examData.exam_start_date.replace('T', ' ') + ':00',
 			exam_end_date: examData.exam_end_date.replace('T', ' ') + ':00',
-			user_login: store.getters.currentUser
+			user_login: store.getters.currentUser?.user_id
 		}
 
-		const targetUrl = examId ? 'exam/update' : 'exam/create'
+		if (options.isCreateRemed) {
+			payload.parentId = examId
+		}
+
+		const targetUrl = examId ? (options.isCreateRemed ? 'v2dev/exam/remed' : 'exam/update') : 'exam/create'
 		const res = await request.post(targetUrl, qs.stringify(payload))
 
 		const { exam } = res.data.data
+
+		if (options.isCreateRemed) {
+			await loadExamData(exam.exam_id, true)
+		}
+
 		return exam
 	} finally {
 		isSaving.value = false

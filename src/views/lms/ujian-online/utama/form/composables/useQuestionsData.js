@@ -130,6 +130,8 @@ async function cacheQuestionsData (immediate) {
 }
 
 function validateQuestionsData () {
+	if (questionsData.question_types.length < 1) errorBag.value[0] = 'Silahkan buat soal terlebih dahulu!'
+
 	for (const typeIndex in questionsData.question_types) {
 		const type = questionsData.question_types[typeIndex]
 		const typeTitle = questionTypeLabels.find(label => label.key === type.question_type).title
@@ -174,7 +176,7 @@ async function submitQuestionsData (bypassOrderNumber = false) {
 
 		const errors = validateQuestionsData()
 		if (errors.length) {
-			useToast().warning(errors[0], { duration: 60000 })
+			useToast().warning(errors[0], { duration: 30000 })
 			throw false
 		}
 

@@ -137,14 +137,13 @@ async function openSubmitPopup () {
 	})
 
 	const confirmRes = await swalConfirm.fire({
-		title: 'Simpan dan Aktifkan Ujian?',
-		html: `<p class="lh-lg">Ujian yang telah diaktifkan akan terlihat oleh siswa dan tidak dapat diubah lagi.</p>
+		title: examData.exam_status == 1 ? 'Simpan Ujian?' : 'Simpan dan Aktifkan Ujian?',
+		html: examData.exam_status == 1 ? '' : `<p class="lh-lg">Ujian yang telah diaktifkan akan terlihat oleh siswa dan tidak dapat diubah lagi.</p>
 			<p class="lh-lg mb-0">Ujian juga dapat diaktifkan melalui halaman daftar ujian</p>`,
 		icon: 'question',
-		showDenyButton: true,
-		confirmButtonText: 'Simpan dan Aktifkan',
+		showDenyButton: examData.exam_status != 1,
+		confirmButtonText: examData.exam_status == 1 ? 'Simpan' : 'Simpan dan Aktifkan',
 		denyButtonText: 'Hanya Simpan',
-		// reverseButtons: true,
 	})
 
 	if (confirmRes.isDismissed) return
@@ -152,9 +151,9 @@ async function openSubmitPopup () {
 	try {
 		await submitReorderedQuestions()
 
-		if (confirmRes.isConfirmed) {
+		if (confirmRes.isConfirmed && examData.exam_status !== 1) {
 			examData.exam_status = 1
-			await saveExamData(route.params.exam_id, true)
+			await saveExamData(route.params.exam_id, { immediate: true })
 		}
 
 		await Swal.fire(

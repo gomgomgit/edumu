@@ -112,10 +112,10 @@ onUnmounted(() => {
 					<div class="text-muted">Buat soal dan jawaban apda editor text</div>
 				</div>
 				<div class="d-flex gap-4">
-					<button class="btn btn-success" onclick="alert('in development')">
+					<!-- <button class="btn btn-success" onclick="alert('in development')">
 						<i class="fas fa-book me-1"></i>
 						Ambil Soal
-					</button>
+					</button> -->
 					<button
 						class="btn btn-primary pulse-white"
 						:class="{ pulse: isNoQuestion }"

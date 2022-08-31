@@ -82,11 +82,11 @@ async function handleEditExam(row) {
 		'Ujian yang telah aktif tidak boleh diedit. Silahkan nonaktifkan ujian terlebih dahulu!',
 		'warning')
 
-	const invalidExamDate = Date.now() > new Date(row.exam_start_date).getTime()
-	if (invalidExamDate) return Swal.fire(
-		'Tanggal ujian telah lewat!',
-		'Ujian yang telah berlalu tidak boleh diedit. Anda dapat melakukan remedial jika ingin menduplikasi ujian.',
-		'warning')
+	// const invalidExamDate = Date.now() > new Date(row.exam_start_date).getTime()
+	// if (invalidExamDate) return Swal.fire(
+	// 	'Tanggal ujian telah lewat!',
+	// 	'Ujian yang telah berlalu tidak boleh diedit. Anda dapat melakukan remedial jika ingin menduplikasi ujian.',
+	// 	'warning')
 
 	const confirmEditing = await Swal.fire({
 		title: 'Tetap Edit?',
@@ -100,6 +100,24 @@ async function handleEditExam(row) {
 	if (confirmEditing.isConfirmed) router.push('utama/form/pengaturan/' + row.exam_id)
 }
 
+async function handleRemedExam(row) {
+	// const invalidExamDate = Date.now() < new Date(row.exam_start_date).getTime()
+	// if (invalidExamDate) return Swal.fire(
+	// 	'Ujian belum dilaksanakan!',
+	// 	'Ujian yang belum dikerjakan tidak bisa diremedial.',
+	// 	'warning')
+
+	const confirmEditing = await Swal.fire({
+		title: 'Tetap Remedial?',
+		icon: 'question',
+		showCancelButton: true,
+		cancelButtonText: 'Batal',
+		confirmButtonText: 'Buat Remedial'
+	})
+
+	if (confirmEditing.isConfirmed) router.push('utama/form/pengaturan/remed/' + row.exam_id)
+}
+
 async function changeExamStatus (row, status) {
 	const invalidExamDate = Date.now() > new Date(row.exam_start_date).getTime()
 	if (invalidExamDate) return Swal.fire(
@@ -108,10 +126,18 @@ async function changeExamStatus (row, status) {
 		'warning')
 
 	const confirmTitle = status ? 'Tetap Aktifkan?' : 'Tetap Nonaktifkan?'
+	const confirmButton = status ? 'Aktifkan' : 'Nonaktifkan'
 	const confirmText = status
 		? 'Ujian yang aktif dapat dilihat oleh siswa, dan tidak dapat diedit lagi hingga dinonaktifkan'
 		: 'Ujian yang nonaktif tidak dapat dilihat oleh siswa'
-	const confirmPopup = await Swal.fire(confirmTitle, confirmText, 'question')
+	const confirmPopup = await Swal.fire({
+		title: confirmTitle,
+		text: confirmText,
+		icon: 'question',
+		showCancelButton: true,
+		cancelButtonText: 'Batal',
+		confirmButtonText: confirmButton
+	})
 
 	if (!confirmPopup.isConfirmed) return
 
@@ -259,26 +285,53 @@ onMounted(async () => {
 							{{ row.exam_end_date }}
 						</div>
 						<div v-if="column.field == 'exam_status'">
-							<span :class="'badge badge-light-' + (row.exam_status == 1 ? 'success' : 'danger')">
-								{{ row.exam_status == 1 ? 'Aktif' : 'Non Aktif' }}
-							</span>
-						</div>
-						<div v-if="column.field == 'action'" class="d-flex justify-content-end">
 							<div v-if="isSaving === row.originalIndex" class="h-30px d-flex align-items-center">
 								<Spinner />
 							</div>
-							<button
-								v-if="isSaving !== row.originalIndex && row.exam_status == 1"
-								class="btn btn-light btn-active-color-danger btn-sm me-2"
-								@click="changeExamStatus(row, 0)">
-								Nonaktifkan
-							</button>
-							<button
-								v-if="isSaving !== row.originalIndex && row.exam_status == 0"
-								class="btn btn-light btn-active-color-success btn-sm me-2"
-								@click="changeExamStatus(row, 1)">
-								Aktifkan
-							</button>
+							<div v-else>
+								<button
+									v-if="row.exam_status == 1"
+									class="btn btn-light btn-color-success btn-active-color-success btn-sm me-2"
+									@click="changeExamStatus(row, 0)">
+									Aktif
+								</button>
+								<button
+									v-if="row.exam_status == 0"
+									class="btn btn-light btn-color-danger btn-active-color-danger btn-sm me-2"
+									@click="changeExamStatus(row, 1)">
+									Nonaktif
+								</button>
+							</div>
+						</div>
+						<div v-if="column.field == 'action'" class="d-flex justify-content-end">
+							<el-tooltip
+								v-if="parseInt(row.exam_parent)"
+								class="box-item"
+								effect="light"
+								content="Assign Siswa"
+								placement="top-end">
+								<button
+									class="btn btn-icon btn-bg-light btn-active-color-info btn-sm me-2">
+									<span class="svg-icon svg-icon-3">
+										<inline-svg src="media/icons/duotune/communication/com013.svg" />
+									</span>
+								</button>
+							</el-tooltip>
+
+							<el-tooltip
+								v-else
+								class="box-item"
+								effect="light"
+								content="Remedial"
+								placement="top-end">
+								<button
+									class="btn btn-icon btn-bg-light btn-active-color-warning btn-sm me-2"
+									@click="handleRemedExam(row)">
+									<span class="svg-icon svg-icon-3">
+										<inline-svg src="media/icons/duotune/arrows/arr029.svg" />
+									</span>
+								</button>
+							</el-tooltip>
 
 							<el-tooltip
 								class="box-item"
@@ -305,10 +358,6 @@ onMounted(async () => {
 										<el-dropdown-item>
 											<i class="uil uil-clock me-4 fs-3"></i>
 											Atur Ulang Waktu
-										</el-dropdown-item>
-										<el-dropdown-item>
-											<i class="uil uil-redo me-4 fs-3"></i>
-											Remedial
 										</el-dropdown-item>
 										<el-dropdown-item>
 											<i class="uil uil-trash-alt me-4 fs-3"></i>

@@ -11,6 +11,7 @@ ini todo list untuk ujian online:
 -/ tukar posisi switch dan helper
 -/ helper hanya muncul saat dihover
 -/ ganti warna toast validasi ke warning
+-x status exam draft saat input // 2
 
 # soal ujian
 -/ ubah autosave menjadi persekian menit jika user telah mengubah data
@@ -27,12 +28,40 @@ ini todo list untuk ujian online:
 -? tambahkan import soal
 - hanya perbolehkan ctrl + shift + v pada editor
 - bobot tidak bisa diubah ketika pertama kali diinitialisasi
+- attachment bisa diedit dan dihapus
+- pasang user_id guru pada soal
 
 # pratinjau
 -/ ambil data dari api pada bagian header
 -/ fungsikan tombol submit untuk menyimpan urutan soal ke database
+- ganti status menjadi 0 atau 1
 
 # list ujian online
 -/ sembunyikan tombol remedial, ubah status, dan atur ulang waktu, kedalam tombol opsi dengan icon titik 3
 -/ tambahkan tombol untuk aktifkan/nonaktifkan ujian
 -/ fungsikan summary dan ganti warnanya
+
+# bank soal
+- tambahkan attachment
+
+# remed
+
++ create remed https://apiedumu.edumu.id/devel/apischool/exam/remed?id=410
+exam_cat_id: 3
+mapel_id: 17
+user_id: 231
+exam_title: test ujian kelas remed
+exam_desc: test kelas
+exam_type: ontime
+user_login: 410
+exam_random: 1
+exam_start_date: 2022-09-01 10:37:00
+exam_end_date: 2022-09-02 11:37:00
+exam_time_limit: 60
+kelas[0][kelas_id]: 6
+kelas[1][kelas_id]: 9
+kelas[2][kelas_id]: 14
+exam_id: 158
+exam_status: 0
+parentId: 158
+soal: 1 / 0 = ganti soal atau tidak

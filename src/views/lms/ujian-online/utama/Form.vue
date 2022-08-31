@@ -15,6 +15,8 @@ const route = useRoute()
 const { isChanged: isChangedQuestions } = useQuestionsData();
 const { isChanged: isChangedExam } = useExamData();
 
+const isCreateRemedMeta = computed(() => route.meta?.isCreateRemed)
+
 const tabs = computed(() => ([{
 	to: '/lms/ujian-online/utama/form/pengaturan/' + route.params?.exam_id,
 	title: 'Pengaturan',
@@ -39,7 +41,7 @@ const tabs = computed(() => ([{
 }]))
 
 async function handleTabClick (tab) {
-	if (!route.params?.exam_id) return useToast().warning('Buat event ujian online terlebih dahulu!')
+	if (!route.params?.exam_id || isCreateRemedMeta.value) return useToast().warning('Buat event ujian online terlebih dahulu!')
 
 	if (isChangedQuestions.value || isChangedExam.value) {
 		const res = await Swal.fire(swalConfig)
