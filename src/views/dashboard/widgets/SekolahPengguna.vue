@@ -2,7 +2,12 @@
   <!--begin::Mixed Widget 1-->
   <div class="card card-xxl-stretch">
     <!--begin::Header-->
-    <div :class="`bg-${widgetColor}`" class="card-header border-0 py-5 rounded-3">
+    <div class="card-header border-0 py-5 rounded-3"
+      :style="`
+        background: url('/media/patterns/header-bg.png');
+        background-size: cover;
+      `"
+    >
       <div class="d-flex align-items-center py-7 gap-5 mb-20">
         <div class="rounded-3 overflow-hidden w-60px h-60px bg-white p-2">
           <div class="w-100 h-100"
