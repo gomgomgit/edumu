@@ -3,7 +3,6 @@ import { onMounted, reactive, ref } from 'vue'
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumb";
 import { request } from '@/util';
 import { Plus } from '@element-plus/icons-vue'
-import { UploadProps, UploadUserFile } from 'element-plus'
 import QueryString from 'qs';
 import FileDrop from '@/components/file-dropzone/Index.vue';
 import { useToast } from 'vue-toast-notification';

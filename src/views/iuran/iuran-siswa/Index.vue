@@ -11,7 +11,7 @@ import { Search } from '@element-plus/icons-vue'
 import PembayaranIuran from './PembayaranIuran.vue';
 
 import { Doughnut } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, Plugin } from 'chart.js'
+import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js'
 import { computed } from '@vue/reactivity';
 import { useRouter } from 'vue-router';
 import axios from 'axios';

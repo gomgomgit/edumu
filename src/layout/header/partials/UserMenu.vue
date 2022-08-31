@@ -9,7 +9,7 @@
       <div class="menu-content d-flex align-items-center px-3">
         <!--begin::Avatar-->
         <div class="symbol symbol-50px me-5">
-          <img alt="Logo" :src="userData.user_foto ?? userData.sekolah_foto" />
+          <img :src="userData.user_foto !== 'null' ? userData.user_foto : '/media/avatars/blank.png'" />
         </div>
         <!--end::Avatar-->
 
