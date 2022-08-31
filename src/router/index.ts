@@ -262,6 +262,13 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/sekolah/profil-pengguna/guru/Edit.vue"),
       },
       {
+        path: "/sekolah/profil-pengguna/staff",
+        name: "sekolah-profil-pengguna-staff",
+        component: () => import("@/views/sekolah/profil-pengguna/staff/Index.vue"),
+      },
+
+
+      {
         path: "/sekolah/akademik/tahun-ajar",
         name: "sekolah-akademik-tahun-ajar",
         component: () => import("@/views/sekolah/akademik/tahun-ajar/Index.vue"),
