@@ -102,6 +102,11 @@ import { useStore } from "vuex";
                   'Aktif' : 'Non Aktif'}}</span>
               </div>
               <div v-if="column.field == 'action'">
+                <router-link :to="`/sekolah/informasi/event/detail/${row.event_id}`" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
+                  <span class="svg-icon svg-icon-3">
+                    <i class="bi bi-eye-fill fs-3"></i>
+                  </span>
+                </router-link>
                 <router-link :to="'/sekolah/informasi/event/edit/' + row.event_id" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
                   <span class="svg-icon svg-icon-3">
                     <inline-svg src="media/icons/duotune/art/art005.svg" />

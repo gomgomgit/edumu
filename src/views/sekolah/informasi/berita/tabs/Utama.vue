@@ -137,6 +137,11 @@ const apiUrl = `${process.env.VUE_APP_API_URL}/${currentUser.sekolah_kode}/apisc
                   'Aktif' : 'Non Aktif'}}</span>
               </div>
               <div v-if="column.field == 'action'">
+                <router-link :to="`/sekolah/informasi/berita/detail/${row.content_id}`" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
+                  <span class="svg-icon svg-icon-3">
+                    <i class="bi bi-eye-fill fs-3"></i>
+                  </span>
+                </router-link>
                 <router-link :to="'/sekolah/informasi/berita/edit/' + row.content_id" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
                   <span class="svg-icon svg-icon-3">
                     <inline-svg src="media/icons/duotune/art/art005.svg" />
