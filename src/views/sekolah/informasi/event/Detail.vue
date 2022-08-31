@@ -44,9 +44,9 @@ function formatingDate(date) {
       <div class="page-content">
         <div class="mb-4">
           <div class="d-flex justify-content-between">
-            <h2 class="fs-1 fw-bold py-4">Detail Pengumuman</h2>
+            <h2 class="fs-1 fw-bold py-4">Detail Event</h2>
             <div>
-              <router-link :to="'/sekolah/informasi/pengumuman'" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
+              <router-link :to="'/sekolah/informasi/event'" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
                 <i class="bi bi-arrow-left-circle fs-1"></i>
                 <span>
                   Kembali
