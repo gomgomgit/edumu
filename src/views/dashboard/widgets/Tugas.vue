@@ -21,7 +21,7 @@
           <div class="fs-1">
             124 
           </div>
-          <div class="fs-6">
+          <div class="text-start" style="font-size: 0.75 rem">
             <div>Total</div>
             <div>Tugas</div>
           </div>
