@@ -16,7 +16,7 @@ import { useStore } from "vuex";
   
 const store = useStore()
 const currentUser = store.getters.currentUser;
-const apiUrl = `${process.env.VUE_APP_API_URL}/${currentUser.sekolah_kode}/apischool/public`;
+const apiUrl = `${process.env.VUE_APP_STORAGE_URL}/${currentUser.sekolah_kode}/apischool/public`;
 
   function getBerita (payload) {
       request.post('konten', null, {
