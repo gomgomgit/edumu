@@ -619,7 +619,7 @@ const emit = defineEmits(['togglePin', 'openAside', 'closeAside'])
                   <h1 class="text-gray-800 fw-bold mb-6 mx-5">eduMU+</h1>
 
                   <div class="mb-10">
-                    <router-link to="dashboard" class="custom-list d-flex align-items-center px-5 py-4">
+                    <router-link to="/dashboard" class="custom-list d-flex align-items-center px-5 py-4">
                       <div class="symbol symbol-40px me-5">
                         <span class="symbol-label">
                           <img src="media/svg/brand-logos/bebo.svg" class="h-50 align-self-center" alt="" />
@@ -635,7 +635,7 @@ const emit = defineEmits(['togglePin', 'openAside', 'closeAside'])
                       </div>
                     </router-link>
 
-                    <router-link to="dashboard" class="custom-list d-flex align-items-center px-5 py-4">
+                    <router-link to="/dashboard" class="custom-list d-flex align-items-center px-5 py-4">
                       <div class="symbol symbol-40px me-5">
                         <span class="symbol-label">
                           <img src="media/svg/brand-logos/vimeo.svg" class="h-50 align-self-center" alt="" />
@@ -651,7 +651,7 @@ const emit = defineEmits(['togglePin', 'openAside', 'closeAside'])
                       </div>
                     </router-link>
 
-                    <router-link to="dashboard" class="custom-list d-flex align-items-center px-5 py-4">
+                    <router-link to="/dashboard" class="custom-list d-flex align-items-center px-5 py-4">
                       <div class="symbol symbol-40px me-5">
                         <span class="symbol-label">
                           <img src="media/svg/brand-logos/kickstarter.svg" class="h-50 align-self-center" alt="" />

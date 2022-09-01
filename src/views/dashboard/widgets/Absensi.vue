@@ -14,10 +14,14 @@
             <span class="text-gray-400 fw-bold">Feb 2022 - Juli 2022</span>
           </div>
           <div
-            class="badge badge-primary px-5 py-3 d-flex"
+            class="badge badge-primary px-5 py-3 d-flex gap-3"
           >
-            <div class="fs-6">
-              124 Siswa
+            <div class="fs-1">
+              124 
+            </div>
+            <div class="text-start" style="font-size: 0.75 rem">
+              <div>Total</div>
+              <div>Siswa</div>
             </div>
           </div>
         </div>
