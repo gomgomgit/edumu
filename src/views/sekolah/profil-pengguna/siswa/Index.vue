@@ -151,6 +151,7 @@ import Swal from "sweetalert2";
         <div>
           <div class="">
             <div class="d-flex justify-content-between gap-4 align-items-center">
+                <div>
                   <el-input
                     v-model="searchSiswa"
                     clearable
@@ -162,6 +163,8 @@ import Swal from "sweetalert2";
                       <el-button aria-disabled="true" class="pe-none" :icon="Search" />
                     </template>
                   </el-input>
+                </div>
+                <div>
                   <FilterSelect v-model:filterValue="kelasFilter" placeholder="Pilih Kelas" @changeFilter="getSiswa()" class="ms-6">
                     <el-option
                       v-for="kelas in kelasOption"
@@ -170,6 +173,7 @@ import Swal from "sweetalert2";
                       :value="kelas.kelas_id"
                     />
                   </FilterSelect>
+                </div>
             </div>
 
             <div class="mt-5 position-relative d-flex flex-wrap gap-4 justify-content-end">
