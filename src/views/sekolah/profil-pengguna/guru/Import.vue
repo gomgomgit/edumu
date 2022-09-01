@@ -81,7 +81,7 @@ function generateData() {
 
     const data = XLSX.utils.aoa_to_sheet(items)
     const wb = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(wb, data, 'guru')
+    XLSX.utils.book_append_sheet(wb, data, 'kelas')
     XLSX.writeFile(wb, name)
 }
 </script>
