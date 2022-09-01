@@ -37,7 +37,7 @@ function handleSubmit () {
 
 watch(
 	() => props.activeData,
-	activeData => !isEmpty(activeData) && Object.assign(formData, { ...activeData, shift_id: activeData.id }),
+	activeData => !isEmpty(activeData) && Object.assign(formData, { start: activeData.start, end: activeData.end, name: activeData.name, shift_id: activeData.id }),
 	{ deep: true }
 )
 </script>
@@ -68,7 +68,7 @@ watch(
 					placeholder="Jam Masuk"
 				/>
 			</div>
-			<div class="col-4 d-flex align-items-center fw-bold fs-4">Jam Pulang {{formData.end}}</div>
+			<div class="col-4 d-flex align-items-center fw-bold fs-4">Jam Pulang</div>
 			<div class="col-8">
 				<el-time-picker
 					v-model="formData.end"
