@@ -8,6 +8,7 @@
   import { request } from "@/util";
 import QueryString from "qs";
 import { useToast } from "vue-toast-notification";
+import { deleteConfirmation } from "@/core/helpers/deleteconfirmation";
   
   onMounted(() => {
     setCurrentPageBreadcrumbs("Wali Kelas", ['Sekolah', "Akademik"]);
@@ -42,6 +43,15 @@ import { useToast } from "vue-toast-notification";
     }).then(res => {
       listKls.value = res.data.data
     })
+    request.post('thn_ajar')
+    .then(res => {
+      var listtahunajar = res.data.data.map(item => {
+          return item.thn_ajar_value
+        }
+      )
+      var filtered = listtahunajar.filter((v, i, a) => a.indexOf(v) === i);
+      listTahun.value = filtered
+    })
   }
 
   const waliKelas = reactive({
@@ -60,6 +70,7 @@ import { useToast } from "vue-toast-notification";
 
   const listWK = ref([])
   const listKls = ref([])
+  const listTahun = ref([])
 
   const modalData = ref(false)
 
@@ -103,11 +114,6 @@ import { useToast } from "vue-toast-notification";
     Object.assign(formData, initialFormData)
   }
 
-  function getData(event) {
-    console.log(event)
-    console.log('getData')
-  }
-
   function editData(data) {
     formData.wk_status = data.wk_status
     formData.wk_id = data.wk_id
@@ -115,6 +121,15 @@ import { useToast } from "vue-toast-notification";
     formData.user_id = data.user_id
     formData.kelas_id = data.kelas_id
     modalData.value = 'Edit Data'
+  }
+  function deleteData(id) {
+    deleteConfirmation(() => {
+      request.get('walikelas/delete/' + id)
+      .then(res => {
+        useToast().success('Berhasil Hapus Data')
+        getWaliKelas()
+      })
+    })
   }
 </script>
 
@@ -156,7 +171,7 @@ import { useToast } from "vue-toast-notification";
                     <inline-svg src="media/icons/duotune/art/art005.svg" />
                   </span>
                 </button>
-                <button class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+                <button @click="deleteData(row.wk_id)" class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm">
                   <span class="svg-icon svg-icon-3">
                     <inline-svg src="media/icons/duotune/general/gen027.svg"/>
                   </span>
@@ -194,15 +209,17 @@ import { useToast } from "vue-toast-notification";
                   />
                 </el-select>
               </div>
-              <!-- <div class="col-4 d-flex align-items-center fw-bold fs-4">Tahun Ajar</div>
+              <div class="col-4 d-flex align-items-center fw-bold fs-4">Tahun Ajar</div>
               <div class="col-8">
-                <select  v-model="formData.tahun_ajar" class="form-select form-select-solid" aria-label="Select example">
-                  <option>Pilih Tahun Ajar</option>
-                  <template v-for="(tahun, tahunIndex) in tahunAjar" :key="tahunIndex">
-                    <option value="1">{{tahun.name}}</option>
-                  </template>
-                </select>
-              </div> -->
+                <el-select class="w-100" v-model="formData.thn_ajar" filterable placeholder="Pilih Tahun Ajar">
+                  <el-option
+                    v-for="tahun in listTahun"
+                    :key="tahun"
+                    :label="tahun"
+                    :value="tahun"
+                  />
+                </el-select>
+              </div>
               <div class="col-4 d-flex align-items-center fw-bold fs-4">Kelas</div>
               <div class="col-8">
                 <!-- <select  v-model="formData.kelas" class="form-select form-select-solid" aria-label="Select example">
