@@ -20,7 +20,7 @@ const route = useRoute()
 
 const store = useStore()
 const currentUser = store.getters.currentUser;
-const apiUrl = `${process.env.VUE_APP_API_URL}/${currentUser.sekolah_kode}/apischool/public`;
+const storageUrl = `${process.env.VUE_APP_STORAGE_URL}/${currentUser.sekolah_kode}/apischool/public`;
 
 const beritaId = route.params.id
 
@@ -91,7 +91,7 @@ function postBerita() {
     <div class="card mb-5 mb-xxl-8">
       <div class="card-body py-6">
         <div>
-          <h2 class="fs-1 fw-bold py-6">Tambah Data Berita</h2>
+          <h2 class="fs-1 fw-bold py-6">Edit Data Berita</h2>
         </div>
         <div class="separator border-black-50 border-2 my-6"></div>
         <div class="d-flex flex-column gap-4">
@@ -120,7 +120,7 @@ function postBerita() {
               <p class="m-0 fs-4 fw-bold">Gambar</p>
             </div>
             <div class="col-9 align-items-center d-flex gap-4">
-              <ImageCropper  v-model:fileInputData="form.content_image" :ratio="16/9" :cropRequire="true" :oldImage="apiUrl + '/images/konten/' + oldImage"/>
+              <ImageCropper  v-model:fileInputData="form.content_image" :ratio="16/9" :cropRequire="true" :oldImage="storageUrl + '/images/konten/' + oldImage"/>
             </div>
           </div>
           <div class="row">
