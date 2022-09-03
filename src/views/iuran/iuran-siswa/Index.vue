@@ -51,8 +51,8 @@ const iuranData = reactive({
 	columns: [
 		{ label: 'Kelas', field: 'kelas_nama', sortable: false },
 		{ label: 'Siswa', field: 'user_nama', sortable: false },
-		{ label: 'Nominal', field: 'payment_nominal', sortable: false },
-		{ label: 'Jenis Iuran', field: 'tipe_nama', sortable: false },
+		{ label: 'Total Tagihan', field: 'totalTagihan', sortable: false },
+		{ label: 'Lunas', field: 'totalPayed', sortable: false },
 		{ label: 'Status', field: 'status', sortable: false, width: '200px' },
 		{ label: 'Opsi', field: 'option', sortable: false, width: '200px' },
 	],
@@ -73,7 +73,7 @@ const chartData = computed(() => {
 		}],
 	}
 })
-const chartDataData = ref([12,12])
+const chartDataData = ref([0,0])
 const totalChart = ref(0)
 
 const isMobile = () => {
@@ -137,36 +137,72 @@ function getData() {
 	})
 }
 
-function getTransaksi (payload) {
-	request.get('iuran/transaksi', {
-		params: {
-			user_nama: searchFilter.value,
-			kelas_id: kelasFilter.value,
-			jenis: tipeFilter.value,
-			tahun: tahunAjarFilter.value,
-			page: payload?.page ?? 1,
-			sortby: payload?.sort?.type
-		}
-	}).then(res => {
-		transaksiData.rows = res.data.data.data
-		transaksiData.totalRows = res.data.data.total
-	})
-}
+// function getTransaksi (payload) {
+// 	request.get('iuran/transaksi', {
+// 		params: {
+// 			user_nama: searchFilter.value,
+// 			kelas_id: kelasFilter.value,
+// 			jenis: tipeFilter.value,
+// 			tahun: tahunAjarFilter.value,
+// 			page: payload?.page ?? 1,
+// 			sortby: payload?.sort?.type
+// 		}
+// 	}).then(res => {
+// 		transaksiData.rows = res.data.data.data
+// 		transaksiData.totalRows = res.data.data.total
+// 	})
+// }
 function getIuran (payload) {
-	request.get('siswa/finance', {
+	request.get('siswa/financev1', {
 		params: {
 			user_nama: searchFilter.value,
 			kelas_id: kelasFilter.value,
 			jenis: tipeFilter.value,
 			tahun: tahunAjarFilter.value,
 			page: payload?.page ?? 1,
-			sortby: payload?.sort?.type
 		}
 	}).then(res => {
 		iuranData.rows = res.data.data.siswa.data
 		iuranData.totalRows = res.data.data.siswa.total
+	})
+	// request.get('siswa/finance', {
+	// 	params: {
+	// 		user_nama: searchFilter.value,
+	// 		kelas_id: kelasFilter.value,
+	// 		jenis: tipeFilter.value,
+	// 		tahun: tahunAjarFilter.value,
+	// 		page: payload?.page ?? 1,
+	// 		sortby: payload?.sort?.type
+	// 	}
+	// }).then(res => {
+	// 	iuranData.rows = res.data.data.siswa.data
+	// 	iuranData.totalRows = res.data.data.siswa.total
 
-		updateChart([res.data.data.totSukses, res.data.data.totKurang], res.data.data.totBayar)
+	// 	updateChart([res.data.data.totSukses, res.data.data.totKurang], res.data.data.totBayar)
+	// })
+}
+function getIuranChart () {
+	request.get('siswa/financev1', {
+		params: {
+			user_nama: searchFilter.value,
+			kelas_id: kelasFilter.value,
+			jenis: tipeFilter.value,
+			tahun: tahunAjarFilter.value,
+			startDate: periodeFilter.value[0],
+			endDate: periodeFilter.value[1],
+		}
+	}).then(res => {
+		var result = res.data.data.siswa
+		let tottagihan = 0
+		let totlunas = 0
+		
+		const sum = result.forEach(data => {
+			tottagihan += Number(data.totalTagihan)
+			totlunas += Number(data.totalPayed)
+		});
+		let totnotlunas = tottagihan - totlunas
+
+		updateChart([totlunas, totnotlunas], moneyFormat(tottagihan))
 	})
 }
 function updateChart(val, tot) {
@@ -195,17 +231,22 @@ function changeTableTab(val) {
 }
 function changeFilter() {
 	getIuran()
-	getTransaksi()
+	getIuranChart()
+	// getTransaksi()
+}
+function moneyFormat(money) {
+	return Intl.NumberFormat('id-ID').format(money)
 }
 
-function printInvoice(id) {
-	request.get(`iuran/transaksi/invoice/${id}`)
-}
+// function printInvoice(id) {
+// 	request.get(`iuran/transaksi/invoice/${id}`)
+// }
 
 onMounted(() => {
 	setCurrentPageBreadcrumbs("Iuran Siswa", ['Iuran']);
 	getData()
 	getIuran()
+	getIuranChart()
 })
 </script>
 
@@ -264,6 +305,7 @@ onMounted(() => {
               <div>
                 <div class="block">
 									<el-date-picker
+										@change="getIuranChart()"
 										v-model="periodeFilter"
 										type="daterange"
 										start-placeholder="Start date"
@@ -297,10 +339,18 @@ onMounted(() => {
 							<div class="col-12 col-lg-5">
 								<h2 class="fs-2">Keterangan</h2>
 								<div class="d-flex align-items-center mt-3 gap-3">
-									<span class="keterangan-block blue"></span> <span class="fs-4 fw-bold">Lunas</span>
+									<span class="keterangan-block blue"></span> 
+									<span class="fs-4 fw-bold">
+										<div>Lunas :</div>
+										<div>Rp {{moneyFormat(chartDataData[0])}}</div>
+									</span>
 								</div>
 								<div class="d-flex align-items-center mt-3 gap-3">
-									<span class="keterangan-block red"></span> <span class="fs-4 fw-bold">Belum Lunas</span>
+									<span class="keterangan-block red"></span> 
+									<span class="fs-4 fw-bold">
+										<div>Belum Lunas :</div>
+										<div>Rp {{moneyFormat(chartDataData[1])}}</div>
+									</span>
 								</div>
 							</div>
 						</div>
@@ -309,7 +359,7 @@ onMounted(() => {
 			</div>
 		</div>
 
-		<div class="d-flex w-100 justify-content-between pb-8 pt-4 px-10">
+		<!-- <div class="d-flex w-100 justify-content-between pb-8 pt-4 px-10">
 			<div class="d-flex w-100 gap-4 w-sm-auto">
 				<ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap">
 						<li class="nav-item">
@@ -330,9 +380,9 @@ onMounted(() => {
 						</li>
 				</ul>
 			</div>
-		</div>
+		</div> -->
 
-		<div class="card mb-5 mb-xxl-8" v-if="tableTab == 'transaksi'">
+		<!-- <div class="card mb-5 mb-xxl-8" v-if="tableTab == 'transaksi'">
 			<div class="card-body">
         <div class="page-content">
           <div class="d-flex flex-wrap justify-content-between align-items-center">
@@ -372,13 +422,13 @@ onMounted(() => {
 					</template>
 				</ServerSideTable>
 			</div>
-		</div>
-		<div class="card mb-5 mb-xxl-8" v-if="tableTab == 'iuran'">
+		</div> -->
+		<div class="card mb-5 mb-xxl-8">
 			<div class="card-body">
         <div class="page-content">
           <div class="d-flex flex-wrap justify-content-between align-items-center">
             <div class="d-flex gap-4">
-              <h2 class="fs-1 fw-bold py-6 m-0">Iuran</h2>
+              <h2 class="fs-1 fw-bold py-6 m-0">Iuran Siswa</h2>
             </div>
           </div>
           <div class="separator border-black-50 border-2 my-3"></div>
@@ -390,6 +440,12 @@ onMounted(() => {
 					:rows="iuranData.rows"
 					@loadItems="getIuran">
 					<template #table-row="{column, row}">
+						<div v-if="column.field == 'totalTagihan'">
+							Rp {{moneyFormat(row.totalTagihan)}}
+						</div>
+						<div v-if="column.field == 'totalPayed'">
+							Rp {{moneyFormat(row.totalPayed)}}
+						</div>
 						<div v-if="column.field == 'status'">
 							<span :class="'badge badge-light-' + (row.status == 'Berhasil' ? 'success' : 'danger')">
 								{{row.status}}
