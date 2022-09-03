@@ -237,6 +237,9 @@ function changeFilter() {
 function moneyFormat(money) {
 	return Intl.NumberFormat('id-ID').format(money)
 }
+function encrypt(text) {
+	return btoa(text)
+}
 
 // function printInvoice(id) {
 // 	request.get(`iuran/transaksi/invoice/${id}`)
@@ -452,13 +455,21 @@ onMounted(() => {
 							</span>
 						</div>
 						<div v-if="column.field == 'option'">
-							<button
+							<router-link
+								class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2"
+								:to="`/iuran/iuran-siswa/keuangan/${row.siswa_id}/${encrypt(row.user_nama)}/${encrypt(row.kelas_nama)}`"
+								@click="dataPembayaran = row">
+								<span class="svg-icon svg-icon-3">
+									<i class="bi bi-receipt"></i>
+								</span>
+							</router-link>
+							<!-- <button
 								class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2"
 								@click="dataPembayaran = row">
 								<span class="svg-icon svg-icon-3">
 									<i class="bi bi-receipt"></i>
 								</span>
-							</button>
+							</button> -->
 						</div>
 					</template>
 				</ServerSideTable>

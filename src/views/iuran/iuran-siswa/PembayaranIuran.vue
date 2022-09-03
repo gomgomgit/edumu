@@ -3,15 +3,18 @@ import { reactive, watch } from "vue"
 import qs from 'qs'
 import { useToast } from "vue-toast-notification"
 import { isEmpty } from "validate.js"
-
 import Modal from "@/components/modals/CustomModal.vue"
 import { request } from "@/util";
+import { useStore } from "vuex"
+
+const store = useStore()
+const userId = store.getters.currentUser.user_id
 
 const props = defineProps({
 	activeData: { type: Object, required: true },
 })
 
-const emits = defineEmits(['close'])
+const emits = defineEmits(['close', 'submit'])
 
 const initialForm = { payment_nominal: null, payment_remark: null, payment_status: 'Berhasil', channel_id: 1 }
 
@@ -19,7 +22,9 @@ const formData = reactive({...initialForm})
 
 watch(
 	() => props.activeData,
-	activeData => !isEmpty(activeData) && Object.assign(formData, {siswa_id: activeData.siswa_id, finance_id: activeData.id, finance_name: activeData.tipe_nama, nominal_balance: activeData.master_nominal}),
+	activeData => !isEmpty(activeData) && Object.assign(formData, {
+		created_by: userId, siswa_id: activeData.siswa_id, finance_id: activeData.finance_id, payment_id: activeData.payment_id, finance_name: activeData.tipe_nama, payment_code: activeData.payment_code, nominal_balance: activeData.master_nominal ?? activeData.totSisa
+	}),
 	{ deep: true }
 )
 
@@ -29,12 +34,11 @@ function handleClose () {
 }
 
 function handleSubmit () {
-  // return console.log(formData)
-	const endpoint = 'siswa/iuran/bayar'
+	const endpoint = props.activeData.finance_id ? 'siswa/iuran/bayar' : 'siswa/iuran/confirmpayment'
 	request.post(endpoint, qs.stringify(formData)).then(() => {
 		Object.assign(formData, initialForm)
 		useToast().success('Pembayaran Berhasil!')
-		emits('close')
+		emits('submit')
 	})
 }
 </script>
@@ -47,7 +51,7 @@ function handleSubmit () {
 		@closeModal="handleClose"
 		@confirm="handleSubmit"
 		@dismiss="handleClose">
-		<div class="row gy-6">
+		<div class="row gy-6 mb-6" v-if="formData.finance_id">
 			<div class="col-4 d-flex align-items-center fw-bold fs-4">Nama Tagihan</div>
 			<div class="col-8">
 				<input
@@ -56,6 +60,18 @@ function handleSubmit () {
           readonly
 					class="form-control" />
 			</div>
+		</div>
+		<div class="row gy-6 mb-6" v-if="formData.payment_id">
+			<div class="col-4 d-flex align-items-center fw-bold fs-4">Nomor Tagihan</div>
+			<div class="col-8">
+				<input
+					v-model="formData.payment_code"
+					type="text"
+          readonly
+					class="form-control" />
+			</div>
+		</div>
+		<div class="row gy-6">
 			<div class="col-4 d-flex align-items-center fw-bold fs-4">Nominal Tagihan</div>
 			<div class="col-8">
 				<input
