@@ -36,7 +36,7 @@ import { useStore } from "vuex";
       { label: 'Gambar', field: 'event_foto', sortable: false },
       { label: 'Tipe', field: 'event_type', sortable: false },
       { label: 'Judul', field: 'event_judul', sortable: false },
-      { label: 'Tanggal', field: 'event_tanggal', sortable: false },
+      { label: 'Tanggal Mulai - Selesai', field: 'event_tanggal', sortable: false },
       { label: 'Status', field: 'event_status', sortable: false },
       { label: 'ACTION', field: 'action', sortable: false, width: '200px' },
     ],

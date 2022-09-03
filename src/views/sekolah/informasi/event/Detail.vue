@@ -64,6 +64,14 @@ function formatingDate(date) {
               <img class="mw-100"  :src="`${storageUrl}/${currentUser.sekolah_kode}/apischool/public` + '/images/event/' + detailData.event_foto" alt="">
             </div>
           </div>
+          <div class="mt-6">
+            <div class="fs-3 fw-bold">
+              Tanggal Mulai dan Selesai :
+            </div>
+            <div class="fs-4">
+              {{detailData.event_mulai}} - {{detailData.event_selesai}}
+            </div>
+          </div>
           <div class="mt-6 fs-4" v-html="detailData.event_desc"></div>
         </div>
       </div>
