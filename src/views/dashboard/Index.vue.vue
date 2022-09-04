@@ -35,7 +35,7 @@
 
   <div class="row gy-5 gx-xl-8">
     <div class="col-xxl-4">
-      <Materi :datas="datas?.dataMateri" widget-classes="card-xxl-stretch mb-xl-3"></Materi>
+      <!-- <Materi :datas="datas?.dataMateri" widget-classes="card-xxl-stretch mb-xl-3"></Materi> -->
     </div>
     <div class="col-xxl-8">
       <Tugas
@@ -47,7 +47,7 @@
 
   <div class="row gy-5 g-xl-8">
     <div class="col-xxl-4">
-      <Notifikasi widget-classes="card-xl-stretch mb-xl-8"></Notifikasi>
+      <Notifikasi widget-classes="card-xl-stretch mb-xl-8" :datas="datas?.notifs"></Notifikasi>
     </div>
     <div class="col-xxl-8">
       <Calendar
