@@ -36,6 +36,7 @@
   <div class="row gy-5 gx-xl-8">
     <div class="col-xxl-4">
       <!-- <Materi :datas="datas?.dataMateri" widget-classes="card-xxl-stretch mb-xl-3"></Materi> -->
+      <Materi widget-classes="card-xxl-stretch mb-xl-3"></Materi>
     </div>
     <div class="col-xxl-8">
       <Tugas
@@ -51,7 +52,7 @@
     </div>
     <div class="col-xxl-8">
       <Calendar
-        :datas="datas?.dataTugas"
+        :datas="datas?.calendars"
         widget-classes="card-xxl-stretch mb-5 mb-xl-8"
       ></Calendar>
     </div>
@@ -81,8 +82,11 @@ onMounted(() => {
 
 const datas = ref()
 
+const store = useStore()
+const userId = store.getters.currentUser.user_id
+
 function getData() {
-  request.post('dashboard-revamp', QueryString.stringify({user_id: 410}))
+  request.post('dashboard-revamp', QueryString.stringify({user_id: userId}))
   .then(res => {
     datas.value = res.data.data
   })
