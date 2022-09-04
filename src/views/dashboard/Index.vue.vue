@@ -26,7 +26,9 @@
       <Absensi
         widget-classes="card-xxl-stretch-50 mb-5 mb-xl-8"
         chart-color="primary"
-        chart-height="168"
+        chart-height="150"
+        :total="datas?.count.countSiswa"
+        :datas="datas?.absensi"
       ></Absensi>
     </div>
   </div>

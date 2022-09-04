@@ -17,7 +17,7 @@
             class="badge badge-primary px-5 py-3 d-flex gap-3"
           >
             <div class="fs-1">
-              124 
+              {{total}}
             </div>
             <div class="text-start" style="font-size: 0.75 rem">
               <div>Total</div>
@@ -37,6 +37,7 @@
         :series="series"
         type="bar"
         :height="chartHeight"
+        ref='chartAbsensi'
       ></apexchart>
       <!--end::Chart-->
     </div>
@@ -44,142 +45,172 @@
   <!--end::Mixed Widget 10-->
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from "vue";
+<script setup>
+import { defineComponent, ref, watch } from "vue";
 import { getCSSVariableValue } from "@/assets/ts/_utils";
+import { isEmpty } from "validate.js";
 
-export default defineComponent({
-  name: "widget-12",
-  props: {
-    widgetClasses: String,
-    chartColor: String,
-    chartHeight: String,
+
+const props = defineProps({
+  widgetClasses: String,
+  chartColor: String,
+  chartHeight: String,
+  total: Number,
+  datas: Object,
+})
+
+
+watch (
+	() => props.datas,
+	datas => {
+    if (!isEmpty(datas)) {
+      var monthArray = Object.keys(datas)
+
+      var hadir = []
+      var alpha = []
+      monthArray.forEach((key) => {
+        hadir.push(datas[key].hadir)
+        alpha.push(datas[key].alpha)
+      })
+
+      chartAbsensi.value.updateOptions({
+        xaxis: {
+          categories: monthArray
+        }
+      })
+      chartAbsensi.value.updateSeries([
+        {
+          name: "Siswa Masuk",
+          data: hadir,
+        },
+        {
+          name: "Siswa Izin/Alpha",
+          data: alpha,
+        },
+      ])
+    } 
   },
-  setup(props) {
-    const color = ref(props.chartColor);
+	{ deep: true }
+)
 
-    const labelColor = getCSSVariableValue("--bs-gray-500");
-    const borderColor = getCSSVariableValue("--bs-gray-200");
-    const secondaryColor = getCSSVariableValue("--bs-gray-300");
-    const baseColor = getCSSVariableValue("--bs-" + color.value);
+const chartAbsensi = ref()
+const color = ref(props.chartColor);
 
-    const chartOptions = {
-      chart: {
-        fontFamily: "inherit",
-        type: "bar",
-        height: props.chartHeight,
-        toolbar: {
-          show: false,
-        },
+const labelColor = getCSSVariableValue("--bs-gray-500");
+const borderColor = getCSSVariableValue("--bs-gray-200");
+const secondaryColor = getCSSVariableValue("--bs-gray-300");
+const baseColor = getCSSVariableValue("--bs-" + color.value);
+
+const chartOptions = {
+  chart: {
+    fontFamily: "inherit",
+    type: "bar",
+    height: props.chartHeight,
+    toolbar: {
+      show: false,
+    },
+  },
+  plotOptions: {
+    bar: {
+      horizontal: false,
+      columnWidth: ["50%"],
+      endingShape: "rounded",
+    },
+  },
+  legend: {
+    show: false,
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  stroke: {
+    show: true,
+    width: 2,
+    colors: ["transparent"],
+  },
+  xaxis: {
+    categories: ["Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"],
+    axisBorder: {
+      show: false,
+    },
+    axisTicks: {
+      show: false,
+    },
+    labels: {
+      style: {
+        colors: labelColor,
+        fontSize: "12px",
       },
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: ["50%"],
-          endingShape: "rounded",
-        },
+    },
+  },
+  yaxis: {
+    y: 0,
+    offsetX: 0,
+    offsetY: 0,
+    labels: {
+      style: {
+        colors: labelColor,
+        fontSize: "12px",
       },
-      legend: {
-        show: false,
+    },
+  },
+  fill: {
+    type: "solid",
+  },
+  states: {
+    normal: {
+      filter: {
+        type: "none",
+        value: 0,
       },
-      dataLabels: {
-        enabled: false,
+    },
+    hover: {
+      filter: {
+        type: "none",
+        value: 0,
       },
-      stroke: {
+    },
+    active: {
+      allowMultipleDataPointsSelection: false,
+      filter: {
+        type: "none",
+        value: 0,
+      },
+    },
+  },
+  tooltip: {
+    style: {
+      fontSize: "12px",
+    },
+    y: {
+      formatter: function (val) {
+        return val + " siswa";
+      },
+    },
+  },
+  colors: [baseColor, secondaryColor],
+  grid: {
+    padding: {
+      top: 10,
+    },
+    borderColor: borderColor,
+    strokeDashArray: 4,
+    yaxis: {
+      lines: {
         show: true,
-        width: 2,
-        colors: ["transparent"],
       },
-      xaxis: {
-        categories: ["Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"],
-        axisBorder: {
-          show: false,
-        },
-        axisTicks: {
-          show: false,
-        },
-        labels: {
-          style: {
-            colors: labelColor,
-            fontSize: "12px",
-          },
-        },
-      },
-      yaxis: {
-        y: 0,
-        offsetX: 0,
-        offsetY: 0,
-        labels: {
-          style: {
-            colors: labelColor,
-            fontSize: "12px",
-          },
-        },
-      },
-      fill: {
-        type: "solid",
-      },
-      states: {
-        normal: {
-          filter: {
-            type: "none",
-            value: 0,
-          },
-        },
-        hover: {
-          filter: {
-            type: "none",
-            value: 0,
-          },
-        },
-        active: {
-          allowMultipleDataPointsSelection: false,
-          filter: {
-            type: "none",
-            value: 0,
-          },
-        },
-      },
-      tooltip: {
-        style: {
-          fontSize: "12px",
-        },
-        y: {
-          formatter: function (val) {
-            return val + " siswa";
-          },
-        },
-      },
-      colors: [baseColor, secondaryColor],
-      grid: {
-        padding: {
-          top: 10,
-        },
-        borderColor: borderColor,
-        strokeDashArray: 4,
-        yaxis: {
-          lines: {
-            show: true,
-          },
-        },
-      },
-    };
-
-    const series = [
-      {
-        name: "Siswa Masuk",
-        data: [50, 60, 70, 80, 60, 50, 70, 60],
-      },
-      {
-        name: "Siswa Izin/Alpha",
-        data: [50, 60, 70, 80, 60, 50, 70, 60],
-      },
-    ];
-
-    return {
-      chartOptions,
-      series,
-    };
+    },
   },
-});
+};
+
+const series = [
+  {
+    name: "Siswa Masuk",
+    data: [],
+  },
+  {
+    name: "Siswa Izin/Alpha",
+    data: [],
+  },
+];
 </script>
