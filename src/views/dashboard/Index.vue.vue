@@ -7,10 +7,7 @@
         widget-color="danger"
         chart-height="200"
         stroke-color="#cb1e46"
-        :siswa="datas?.countSiswa"
-        :siswaOnline="datas?.siswaOnline"
-        :guru="datas?.countGuru"
-        :guruOnline="datas?.guruOnline"
+        :count="datas?.count"
       ></SekolahPengguna>
     </div>
     <div class="col-xxl-4">
@@ -23,6 +20,8 @@
         widget-classes="card-xxl-stretch-50 mb-5 mb-xl-8"
         chart-color="primary"
         chart-height="150"
+        :total="datas?.count.totalPaymen"
+        :datas="datas?.transactions"
       ></Iuran>
       <Absensi
         widget-classes="card-xxl-stretch-50 mb-5 mb-xl-8"
@@ -71,6 +70,7 @@ import Calendar from "./widgets/Calendar.vue";
 import { setCurrentPageTitle, setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumb";
 import { useStore } from "vuex";
 import { request } from "@/util";
+import QueryString from "qs"
 
 onMounted(() => {
   setCurrentPageBreadcrumbs("Dashboard", []);
@@ -80,7 +80,7 @@ onMounted(() => {
 const datas = ref()
 
 function getData() {
-  request.post('dashboard')
+  request.post('dashboard-revamp', QueryString.stringify({user_id: 410}))
   .then(res => {
     datas.value = res.data.data
   })

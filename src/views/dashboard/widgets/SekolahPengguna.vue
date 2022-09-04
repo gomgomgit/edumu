@@ -36,19 +36,19 @@
         <div class="row m-0">
           <div class="col bg-light-warning px-6 py-8 rounded-2 me-7 mb-7 position-relative">
             <div class="position-absolute" style="top: 10px; right: 10px;">
-              <span class="badge badge-square px-3 fw-normal fs-6" style="background: #dc9504">{{siswaOnline}}</span>
+              <span class="badge badge-square px-3 fw-normal fs-6" style="background: #dc9504">{{count?.siswaOnline ?? 0}}</span>
             </div>
             <span class="display-5 fw-normal d-block my-2" style="color: #dc9504">
-              {{siswa}}
+              {{count?.countSiswa ?? 0}}
             </span>
             <a href="#" class="text-warning fw-bold fs-6"> Jumlah Siswa </a>
           </div>
           <div class="col bg-light-primary px-6 py-8 rounded-2 mb-7 position-relative">
             <div class="position-absolute" style="top: 10px; right: 10px;">
-              <span class="badge badge-square px-3 fw-normal fs-6 bg-primary">{{guruOnline}}</span>
+              <span class="badge badge-square px-3 fw-normal fs-6 bg-primary">{{count?.guruOnline ?? 0}}</span>
             </div>
             <span class="display-5 text-primary fw-normal d-block my-2">
-              {{guru}}
+              {{count?.countGuru ?? 0}}
             </span>
             <a href="#" class="text-primary fw-bold fs-6"> Jumlah Guru </a>
           </div>
@@ -58,16 +58,16 @@
         <div class="row m-0">
           <div class="col bg-light-danger px-6 py-8 rounded-2 me-7">
             <span class="display-5 text-danger fw-normal d-block my-2">
-              255
+              {{count?.countKelas ?? 0}}
             </span>
             <a href="#" class="text-danger fw-bold fs-6 mt-2"> Jumlah Rombel </a>
           </div>
           <div class="col bg-light-success px-6 py-8 rounded-2 position-relative">
             <div class="position-absolute" style="top: 10px; right: 10px;">
-              <span class="badge badge-square px-3 fw-normal fs-6 bg-success">{{siswaOnline}}</span>
+              <span class="badge badge-square px-3 fw-normal fs-6 bg-success">{{count?.pegawaiOnline ?? 0}}</span>
             </div>
             <span class="display-5 text-success fw-normal d-block my-2">
-              255
+              {{count?.pegawaiCount ?? 0}}
             </span>
             <a href="#" class="text-success fw-bold fs-6 mt-2"> Jumlah Pegawai </a>
           </div>
@@ -95,10 +95,7 @@ export default defineComponent({
     widgetClasses: String,
     widgetColor: String,
     strokeColor: String,
-    siswa: Number,
-    siswaOnline: Number,
-    guru: Number,
-    guruOnline: Number,
+    count: Array
   },
   setup(props) {
     const labelColor = getCSSVariableValue("--bs-gray-500");
