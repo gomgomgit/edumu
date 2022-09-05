@@ -30,6 +30,7 @@
         chart-height="150"
         :total="datas?.count.countSiswa"
         :datas="datas?.absensi"
+        :month="datas?.monthAbsensi"
       ></Absensi>
     </div>
   </div>

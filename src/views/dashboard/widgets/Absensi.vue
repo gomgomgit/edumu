@@ -11,7 +11,7 @@
           <div>
             <span class="fw-bolder text-gray-800 d-block fs-3">Rekap Absensi Siswa</span>
 
-            <span class="text-gray-400 fw-bold">Feb 2022 - Juli 2022</span>
+            <span class="text-gray-400 fw-bold">{{month && month[0]}} - {{month && month.at(-1)}} {{getYear()}}</span>
           </div>
           <div
             class="badge badge-primary px-5 py-3 d-flex gap-3"
@@ -49,6 +49,7 @@
 import { defineComponent, ref, watch } from "vue";
 import { getCSSVariableValue } from "@/assets/ts/_utils";
 import { isEmpty } from "validate.js";
+import moment from "moment";
 
 
 const props = defineProps({
@@ -57,6 +58,7 @@ const props = defineProps({
   chartHeight: String,
   total: Number,
   datas: Object,
+  month: Array,
 })
 
 
@@ -100,6 +102,10 @@ const labelColor = getCSSVariableValue("--bs-gray-500");
 const borderColor = getCSSVariableValue("--bs-gray-200");
 const secondaryColor = getCSSVariableValue("--bs-gray-300");
 const baseColor = getCSSVariableValue("--bs-" + color.value);
+
+function getYear() {
+  return moment().format('YYYY')
+}
 
 const chartOptions = {
   chart: {
