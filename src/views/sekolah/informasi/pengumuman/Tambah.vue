@@ -34,20 +34,28 @@ function getKelas() {
       classes.value = res.data.data
     })
 }
-
-function postBerita() {
+function kelasChange() {
   let selectedClass = ''
   if (form.kelas_id.includes('all')) {
     selectedClass = classes.value.map(function (obj) {
       return obj.kelas_id
     })
-  } else {
-    selectedClass = form.kelas_id
+    form.kelas_id = selectedClass
   }
+}
+function postBerita() {
+  // let selectedClass = ''
+  // if (form.kelas_id.includes('all')) {
+  //   selectedClass = classes.value.map(function (obj) {
+  //     return obj.kelas_id
+  //   })
+  // } else {
+  //   selectedClass = form.kelas_id
+  // }
   
   const formData = new FormData()
   formData.append('cat_id', '')
-  formData.append('kelas_id', selectedClass)
+  formData.append('kelas_id', form.kelas_id)
   formData.append('content_name', form.content_name)
   formData.append('content_type', 'pengumuman')
   formData.append('content_shortdesc', form.content_shortdesc)
@@ -86,6 +94,7 @@ function postBerita() {
             </div>
             <div class="col-9 align-items-center d-flex">
               <el-select
+                @change="kelasChange()"
                 v-model="form.kelas_id"
                 multiple
                 placeholder="Pilih Kelas"
