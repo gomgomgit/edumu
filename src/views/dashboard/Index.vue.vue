@@ -13,6 +13,7 @@
     <div class="col-xxl-4">
       <Aktifitas
         widget-classes="card-xxl-stretch mb-5 mb-xl-10"
+        :datas="datas?.dataJadwal"
       ></Aktifitas>
     </div>
     <div class="col-xxl-4">

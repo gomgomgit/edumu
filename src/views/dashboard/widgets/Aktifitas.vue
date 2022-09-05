@@ -16,176 +16,37 @@
       <!--begin::Timeline-->
       <div class="timeline-label">
         <!--begin::Item-->
-        <div class="timeline-item">
-          <!--begin::Label-->
-          <div class="timeline-label fw-bolder text-gray-800 fs-6">
-            <div>
-              08:42
+        <template v-for="data in aktifitas" :key="data.jadwal_id" >
+          <div class="timeline-item">
+            <!--begin::Label-->
+            <div class="timeline-label fw-bolder text-gray-800 fs-6">
+              <div>
+                {{timeFormat(data.jadwal_mulai)}}
+              </div>
+              <div class="fw-normal fs-7">
+                {{timeFormat(data.jadwal_selesai)}}
+              </div>
             </div>
-            <div class="fw-normal fs-7">
-              09:42
+            <!--end::Label-->
+
+            <!--begin::Badge-->
+            <div class="timeline-badge">
+              <i class="fa fa-genderless text-warning fs-1"></i>
             </div>
-          </div>
-          <!--end::Label-->
+            <!--end::Badge-->
 
-          <!--begin::Badge-->
-          <div class="timeline-badge">
-            <i class="fa fa-genderless text-warning fs-1"></i>
-          </div>
-          <!--end::Badge-->
-
-          <!--begin::Text-->
-          <div class="fw-normal timeline-content ps-3">
-            <div class="fw-bold">
-              Guru 1 - Matematika
+            <!--begin::Text-->
+            <div class="fw-normal timeline-content ps-3">
+              <div class="fw-bold">
+                {{data.user_nama}} - {{data.mapel_nama}}
+              </div>
+              <div class="text-muted">
+                {{data.countTugas ?? 0}} Tugas - {{data.countMateri ?? 0}} Materi - {{data.countUjian ?? 0}} Ujian
+              </div>
             </div>
-            <div class="text-muted">
-              0 Tugas - 0 Materi - 0 Ujian
-            </div>
+            <!--end::Text-->
           </div>
-          <!--end::Text-->
-        </div>
-        <!--end::Item-->
-
-        <!--begin::Item-->
-        <div class="timeline-item">
-          <!--begin::Label-->
-          <div class="timeline-label fw-bolder text-gray-800 fs-6">10:00</div>
-          <!--end::Label-->
-
-          <!--begin::Badge-->
-          <div class="timeline-badge">
-            <i class="fa fa-genderless text-success fs-1"></i>
-          </div>
-          <!--end::Badge-->
-
-          <!--begin::Content-->
-          <div class="timeline-content d-flex">
-            <span class="fw-bolder text-gray-800 ps-3">AEOL meeting</span>
-          </div>
-          <!--end::Content-->
-        </div>
-        <!--end::Item-->
-
-        <!--begin::Item-->
-        <div class="timeline-item">
-          <!--begin::Label-->
-          <div class="timeline-label fw-bolder text-gray-800 fs-6">14:37</div>
-          <!--end::Label-->
-
-          <!--begin::Badge-->
-          <div class="timeline-badge">
-            <i class="fa fa-genderless text-danger fs-1"></i>
-          </div>
-          <!--end::Badge-->
-
-          <!--begin::Desc-->
-          <div class="timeline-content fw-bolder text-gray-800 ps-3">
-            Make deposit
-            <a href="#" class="text-primary">USD 700</a>. to ESL
-          </div>
-          <!--end::Desc-->
-        </div>
-        <!--end::Item-->
-
-        <!--begin::Item-->
-        <div class="timeline-item">
-          <!--begin::Label-->
-          <div class="timeline-label fw-bolder text-gray-800 fs-6">16:50</div>
-          <!--end::Label-->
-
-          <!--begin::Badge-->
-          <div class="timeline-badge">
-            <i class="fa fa-genderless text-primary fs-1"></i>
-          </div>
-          <!--end::Badge-->
-
-          <!--begin::Text-->
-          <div class="timeline-content fw-mormal text-muted ps-3">
-            Indulging in poorly driving and keep structure keep great
-          </div>
-          <!--end::Text-->
-        </div>
-        <!--end::Item-->
-
-        <!--begin::Item-->
-        <div class="timeline-item">
-          <!--begin::Label-->
-          <div class="timeline-label fw-bolder text-gray-800 fs-6">21:03</div>
-          <!--end::Label-->
-
-          <!--begin::Badge-->
-          <div class="timeline-badge">
-            <i class="fa fa-genderless text-danger fs-1"></i>
-          </div>
-          <!--end::Badge-->
-
-          <!--begin::Desc-->
-          <div class="timeline-content fw-bold text-gray-800 ps-3">
-            New order placed <a href="#" class="text-primary">#XF-2356</a>.
-          </div>
-          <!--end::Desc-->
-        </div>
-        <!--end::Item-->
-
-        <!--begin::Item-->
-        <div class="timeline-item">
-          <!--begin::Label-->
-          <div class="timeline-label fw-bolder text-gray-800 fs-6">16:50</div>
-          <!--end::Label-->
-
-          <!--begin::Badge-->
-          <div class="timeline-badge">
-            <i class="fa fa-genderless text-primary fs-1"></i>
-          </div>
-          <!--end::Badge-->
-
-          <!--begin::Text-->
-          <div class="timeline-content fw-mormal text-muted ps-3">
-            Indulging in poorly driving and keep structure keep great
-          </div>
-          <!--end::Text-->
-        </div>
-        <!--end::Item-->
-
-        <!--begin::Item-->
-        <div class="timeline-item">
-          <!--begin::Label-->
-          <div class="timeline-label fw-bolder text-gray-800 fs-6">21:03</div>
-          <!--end::Label-->
-
-          <!--begin::Badge-->
-          <div class="timeline-badge">
-            <i class="fa fa-genderless text-danger fs-1"></i>
-          </div>
-          <!--end::Badge-->
-
-          <!--begin::Desc-->
-          <div class="timeline-content fw-bold text-gray-800 ps-3">
-            New order placed <a href="#" class="text-primary">#XF-2356</a>.
-          </div>
-          <!--end::Desc-->
-        </div>
-        <!--end::Item-->
-
-        <!--begin::Item-->
-        <div class="timeline-item">
-          <!--begin::Label-->
-          <div class="timeline-label fw-bolder text-gray-800 fs-6">10:30</div>
-          <!--end::Label-->
-
-          <!--begin::Badge-->
-          <div class="timeline-badge">
-            <i class="fa fa-genderless text-success fs-1"></i>
-          </div>
-          <!--end::Badge-->
-
-          <!--begin::Text-->
-          <div class="timeline-content fw-mormal text-muted ps-3">
-            Finance KPI Mobile app launch preparion meeting
-          </div>
-          <!--end::Text-->
-        </div>
+        </template>
         <!--end::Item-->
       </div>
       <!--end::Timeline-->
@@ -195,17 +56,28 @@
   <!--end: List Widget 5-->
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup>
+import { defineComponent, ref, watch } from "vue";
 import Dropdown1 from "@/components/dropdown/Dropdown1.vue";
+import { isEmpty } from "validate.js";
+import moment from "moment";
 
-export default defineComponent({
-  name: "kt-widget-5",
-  props: {
-    widgetClasses: String,
-  },
-  components: {
-    Dropdown1,
-  },
-});
+watch(() => props.datas,
+  (datas) => {
+    if (!isEmpty(datas)) {
+      aktifitas.value = datas
+    }
+  }
+)
+
+const props = defineProps({
+  widgetClasses: String,
+  datas: Array
+})
+
+const aktifitas = ref()
+
+function timeFormat(time) {
+  return moment(time, 'HH:mm:ss').format('HH:mm');
+}
 </script>
