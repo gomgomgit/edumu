@@ -9,19 +9,23 @@
       `"
     >
       <div class="d-flex align-items-center py-7 gap-5 mb-20">
-        <div class="rounded-3 overflow-hidden w-60px h-60px bg-white p-2">
-          <div class="w-100 h-100"
-            :style="`
-              background: url('/media/logos/Logo-Edumu.png');
-              background-size: cover;
-            `"
-            >
+        <div>
+          <div class="rounded-3 overflow-hidden w-60px h-60px bg-white p-2">
+            <div class="w-100 h-100"
+              :style="`
+                background: url('${currentUser.sekolah_foto}');
+                background-size: cover;
+              `"
+              >
+            </div>
           </div>
         </div>
         <div class="">
-          <h3 class="card-title my-1 fw-bolder text-white">Sekolah Muhammadiyah Edumu,</h3>
-          <p class="fw-bolder my-1 text-white">Farina Idris Puranama</p>
-          <p class="fw-bolder my-1 text-white">IPA 3</p>
+          <h3 class="card-title my-1 fw-bolder text-white">{{currentUser.sekolah_nama}},</h3>
+          <p class="fw-bolder my-1 text-white"><span class="bi bi-geo-alt-fill me-2"></span>{{currentUser.sekolah_alamat}}</p>
+          <p class="fw-bolder my-1 text-white"><span class="me-2"><span class="bi bi-telephone-fill me-2"></span>{{currentUser.sekolah_telepon}}</span><span class="bi bi-envelope-fill me-2"></span>{{currentUser.sekolah_email}}</p>
+          <!-- <p class="fw-bolder my-1 text-white"><span class="bi bi-telephone-fill me-2"></span>{{currentUser.sekolah_telepon}}</p>
+          <p class="fw-bolder my-1 text-white"><span class="bi bi-envelope-fill me-2"></span>{{currentUser.sekolah_email}}</p> -->
         </div>
       </div>
     </div>
@@ -81,158 +85,149 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup>
 import { defineComponent, ref } from "vue";
 import Dropdown3 from "@/components/dropdown/Dropdown3.vue";
 import { getCSSVariableValue } from "@/assets/ts/_utils";
+import { useStore } from "vuex";
 
-export default defineComponent({
-  name: "widget-1",
-  components: {
-    Dropdown3,
-  },
-  props: {
+  const props = ({
     widgetClasses: String,
     widgetColor: String,
     strokeColor: String,
     count: Array
-  },
-  setup(props) {
-    const labelColor = getCSSVariableValue("--bs-gray-500");
-    const borderColor = getCSSVariableValue("--bs-gray-200");
+  })
+  const store = useStore()
+  const currentUser = store.getters.currentUser
 
-    const color = getCSSVariableValue("--bs-" + props.widgetColor);
+  const labelColor = getCSSVariableValue("--bs-gray-500");
+  const borderColor = getCSSVariableValue("--bs-gray-200");
 
-    const strokeColor = ref(props.strokeColor);
+  const color = getCSSVariableValue("--bs-" + props.widgetColor);
 
-    const chartOptions = {
-      chart: {
-        fontFamily: "inherit",
-        type: "area",
-        toolbar: {
-          show: false,
-        },
-        zoom: {
-          enabled: false,
-        },
-        sparkline: {
-          enabled: true,
-        },
-        dropShadow: {
-          enabled: true,
-          enabledOnSeries: undefined,
-          top: 5,
-          left: 0,
-          blur: 3,
-          color: strokeColor.value,
-          opacity: 0.5,
-        },
-      },
-      plotOptions: {},
-      legend: {
+  const strokeColor = ref(props.strokeColor);
+
+  const chartOptions = {
+    chart: {
+      fontFamily: "inherit",
+      type: "area",
+      toolbar: {
         show: false,
       },
-      dataLabels: {
+      zoom: {
         enabled: false,
       },
-      fill: {
-        type: "solid",
-        opacity: 0,
+      sparkline: {
+        enabled: true,
       },
-      stroke: {
-        curve: "smooth",
-        show: true,
-        width: 3,
-        colors: [strokeColor.value],
+      dropShadow: {
+        enabled: true,
+        enabledOnSeries: undefined,
+        top: 5,
+        left: 0,
+        blur: 3,
+        color: strokeColor.value,
+        opacity: 0.5,
       },
-      xaxis: {
-        categories: ["Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"],
-        axisBorder: {
-          show: false,
-        },
-        axisTicks: {
-          show: false,
-        },
-        labels: {
-          show: false,
-          style: {
-            colors: labelColor,
-            fontSize: "12px",
-          },
-        },
-        crosshairs: {
-          show: false,
-          position: "front",
-          stroke: {
-            color: borderColor,
-            width: 1,
-            dashArray: 3,
-          },
-        },
+    },
+    plotOptions: {},
+    legend: {
+      show: false,
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    fill: {
+      type: "solid",
+      opacity: 0,
+    },
+    stroke: {
+      curve: "smooth",
+      show: true,
+      width: 3,
+      colors: [strokeColor.value],
+    },
+    xaxis: {
+      categories: ["Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"],
+      axisBorder: {
+        show: false,
       },
-      yaxis: {
-        min: 0,
-        max: 80,
-        labels: {
-          show: false,
-          style: {
-            colors: labelColor,
-            fontSize: "12px",
-          },
-        },
+      axisTicks: {
+        show: false,
       },
-      states: {
-        normal: {
-          filter: {
-            type: "none",
-            value: 0,
-          },
-        },
-        hover: {
-          filter: {
-            type: "none",
-            value: 0,
-          },
-        },
-        active: {
-          allowMultipleDataPointsSelection: false,
-          filter: {
-            type: "none",
-            value: 0,
-          },
-        },
-      },
-      tooltip: {
+      labels: {
+        show: false,
         style: {
+          colors: labelColor,
           fontSize: "12px",
         },
-        y: {
-          formatter: function (val) {
-            return "$" + val + " thousands";
-          },
+      },
+      crosshairs: {
+        show: false,
+        position: "front",
+        stroke: {
+          color: borderColor,
+          width: 1,
+          dashArray: 3,
         },
-        marker: {
-          show: false,
+      },
+    },
+    yaxis: {
+      min: 0,
+      max: 80,
+      labels: {
+        show: false,
+        style: {
+          colors: labelColor,
+          fontSize: "12px",
         },
       },
-      markers: {
-        colors: [color],
-        strokeColor: [strokeColor.value],
-        strokeWidth: 3,
+    },
+    states: {
+      normal: {
+        filter: {
+          type: "none",
+          value: 0,
+        },
       },
-    };
-
-    const series = [
-      {
-        name: "Net Profit",
-        data: [30, 45, 32, 70, 40, 40, 40],
+      hover: {
+        filter: {
+          type: "none",
+          value: 0,
+        },
       },
-    ];
+      active: {
+        allowMultipleDataPointsSelection: false,
+        filter: {
+          type: "none",
+          value: 0,
+        },
+      },
+    },
+    tooltip: {
+      style: {
+        fontSize: "12px",
+      },
+      y: {
+        formatter: function (val) {
+          return "$" + val + " thousands";
+        },
+      },
+      marker: {
+        show: false,
+      },
+    },
+    markers: {
+      colors: [color],
+      strokeColor: [strokeColor.value],
+      strokeWidth: 3,
+    },
+  };
 
-    return {
-      series,
-      chartOptions,
-    };
-  },
-});
+  const series = [
+    {
+      name: "Net Profit",
+      data: [30, 45, 32, 70, 40, 40, 40],
+    },
+  ];
 </script>
