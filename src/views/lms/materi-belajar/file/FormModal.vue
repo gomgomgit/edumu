@@ -39,21 +39,30 @@ function handleClose () {
 	emits('close')
 }
 
-function handleSubmit () {
+function kelasChange() {
   let selectedClass = ''
   if (form.kelas_id.includes('all')) {
     selectedClass = props.dataOption.kelasOption.map(function (obj) {
       return obj.kelas_id
     })
-  } else {
-    selectedClass = form.kelas_id
+    form.kelas_id = selectedClass
   }
+}
+function handleSubmit () {
+  // let selectedClass = ''
+  // if (form.kelas_id.includes('all')) {
+  //   selectedClass = props.dataOption.kelasOption.map(function (obj) {
+  //     return obj.kelas_id
+  //   })
+  // } else {
+  //   selectedClass = form.kelas_id
+  // }
   
   const formData = new FormData()
   formData.append('code', currentUser.sekolah_kode)
   formData.append('user_login', currentUser.user_id)
   formData.append('materi_id', form.materi_id)
-  formData.append('kelas_id', selectedClass)
+  formData.append('kelas_id', form.kelas_id)
   formData.append('mapel_id', form.mapel_id)
   formData.append('user_id', form.user_id)
   formData.append('materi_judul', form.materi_judul)
@@ -99,6 +108,7 @@ watch(
         </div>
         <div class="col-9 align-items-center d-flex">
           <el-select
+            @change="kelasChange()"
             v-model="form.kelas_id"
             multiple
             placeholder="Pilih Kelas"

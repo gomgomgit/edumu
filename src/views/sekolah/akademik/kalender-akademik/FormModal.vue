@@ -27,19 +27,28 @@ function handleClose () {
 	emits('close')
 }
 
-function handleSubmit () {
+function kelasChange() {
 	let selectedClass = ''
 	if (form.kelas_id.includes('all')) {
-		selectedClass = kelas.value.map(function (obj) {
+		selectedClass = props.kelas.map(function (obj) {
 			return obj.kelas_id
 		})
-	} else {
-		selectedClass = form.kelas_id
+		form.kelas_id = selectedClass
 	}
+}
+function handleSubmit () {
+	// let selectedClass = ''
+	// if (form.kelas_id.includes('all')) {
+	// 	selectedClass = kelas.value.map(function (obj) {
+	// 		return obj.kelas_id
+	// 	})
+	// } else {
+	// 	selectedClass = form.kelas_id
+	// }
 	
 	const formData = new FormData()
 	formData.append('libur_id', form.libur_id)
-	formData.append('kelas_id', selectedClass)
+	formData.append('kelas_id', form.kelas_id)
 	formData.append('libur_desc', form.libur_desc)
 	if (props.activeData) {
 		formData.append('libur_tanggal', liburTanggal.value)
@@ -94,6 +103,7 @@ watch(
 				<div class="col-4 d-flex align-items-center fw-bold fs-4">Kelas</div>
 				<div class="col-8">
 					<el-select
+						@change="kelasChange()"
 						v-model="form.kelas_id"
 						multiple
 						placeholder="Pilih Kelas"

@@ -50,19 +50,28 @@ import { useToast } from 'vue-toast-notification';
     form.libur_selesai = dateRange.value[1]
   }
 
-  function postKalender() {  
+  function kelasChange() {
     let selectedClass = ''
     if (form.kelas_id.includes('all')) {
       selectedClass = kelas.value.map(function (obj) {
         return obj.kelas_id
       })
-    } else {
-      selectedClass = form.kelas_id
+      form.kelas_id = selectedClass
     }
+  }
+  function postKalender() {  
+    // let selectedClass = ''
+    // if (form.kelas_id.includes('all')) {
+    //   selectedClass = kelas.value.map(function (obj) {
+    //     return obj.kelas_id
+    //   })
+    // } else {
+    //   selectedClass = form.kelas_id
+    // }
     
     const formData = new FormData()
     formData.append('libur_id', form.libur_id)
-    formData.append('kelas_id', selectedClass)
+    formData.append('kelas_id', form.kelas_id)
     formData.append('libur_desc', form.libur_desc)
     if (liburId) {
       formData.append('libur_tanggal', liburTanggal.value)
