@@ -20,6 +20,12 @@
       <!--end::Calendar-->
     </div>
     <!--end::Card body-->
+    
+    <ModalCalendar 
+      :show="modalDetail"
+      @close="handleCloseDetail"
+      :datas="dataDetail"
+    ></ModalCalendar>
   </div>
   <!--end::Card-->
 </template>
@@ -34,6 +40,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import events from "@/core/data/events";
 import { TODAY } from "@/core/data/events";
 import NewEventModal from "@/components/modals/forms/NewEventModal.vue";
+import ModalCalendar from "./compenents/ModalCalendar.vue";
 import { Modal } from "bootstrap";
 import { isEmpty } from "validate.js";
 import moment from "moment";
@@ -53,7 +60,7 @@ watch(() => props.datas,
           start: cal.calendar_time_start,
           end: cal.calendar_time_end,
           description: cal.calendar_desc,
-          className: "fc-event-success",
+          className:  cal.calendar_type,
           color: '#04C8C8'
         }
       })
@@ -62,7 +69,7 @@ watch(() => props.datas,
           title: cal.calendar_title,
           start: cal.calendar_date,
           description: cal.calendar_desc,
-          className: "fc-event-danger fc-event-solid-warning",
+          className:  cal.calendar_type,
           color: '#F1416C'
         }
       })
@@ -71,12 +78,23 @@ watch(() => props.datas,
   }
 ) 
 
-const calendars = ref()
+const modalDetail = ref(false)
+const initDetail = {title: '', desc: '', type: '', start: '', end: ''}
+const dataDetail = reactive({...initDetail})
 
-const newEvent = () => {
-  const modal = new Modal(document.getElementById("kt_modal_add_event"));
-  modal.show();
-};
+function showEvent(e) {
+  modalDetail.value = true
+  dataDetail.title = e.event.title
+  dataDetail.desc = e.event.desc
+  dataDetail.type = e.event.classNames[0]
+  dataDetail.start = e.event.start
+  dataDetail.end = e.event.end
+}
+
+function handleCloseDetail() {
+  modalDetail.value = false
+  Object.assign(dataDetail, {...initDetail})
+}
 
 const calendarOptions = reactive({
   plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
@@ -99,8 +117,7 @@ const calendarOptions = reactive({
   editable: true,
   dayMaxEvents: true, // allow "more" link when too many events
   events: [],
-  dateClick: newEvent,
-  eventClick: newEvent,
+  eventClick: showEvent,
 })
 </script>
 
