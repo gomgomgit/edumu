@@ -14,40 +14,42 @@
     <!--begin::Body-->
     <div class="card-body pt-5">
       <!--begin::Timeline-->
-      <div class="timeline-label">
-        <!--begin::Item-->
-        <template v-for="data in aktifitas" :key="data.jadwal_id" >
-          <div class="timeline-item">
-            <!--begin::Label-->
-            <div class="timeline-label fw-bolder text-gray-800 fs-6">
-              <div>
-                {{timeFormat(data.jadwal_mulai)}}
+      <div style="height: 220px; overflow: scroll">
+        <div class="timeline-label">
+          <!--begin::Item-->
+          <template v-for="data in aktifitas" :key="data.jadwal_id" >
+            <div class="timeline-item">
+              <!--begin::Label-->
+              <div class="timeline-label fw-bolder text-gray-800 fs-6">
+                <div>
+                  {{timeFormat(data.jadwal_mulai)}}
+                </div>
+                <div class="fw-normal fs-7">
+                  {{timeFormat(data.jadwal_selesai)}}
+                </div>
               </div>
-              <div class="fw-normal fs-7">
-                {{timeFormat(data.jadwal_selesai)}}
-              </div>
-            </div>
-            <!--end::Label-->
+              <!--end::Label-->
 
-            <!--begin::Badge-->
-            <div class="timeline-badge">
-              <i class="fa fa-genderless text-warning fs-1"></i>
-            </div>
-            <!--end::Badge-->
+              <!--begin::Badge-->
+              <div class="timeline-badge">
+                <i class="fa fa-genderless text-warning fs-1"></i>
+              </div>
+              <!--end::Badge-->
 
-            <!--begin::Text-->
-            <div class="fw-normal timeline-content ps-3">
-              <div class="fw-bold">
-                {{data.user_nama}} - {{data.mapel_nama}}
+              <!--begin::Text-->
+              <div class="fw-normal timeline-content ps-3">
+                <div class="fw-bold">
+                  {{data.user_nama}} - {{data.mapel_nama}}
+                </div>
+                <div class="text-muted">
+                  {{data.countTugas ?? 0}} Tugas - {{data.countMateri ?? 0}} Materi - {{data.countUjian ?? 0}} Ujian
+                </div>
               </div>
-              <div class="text-muted">
-                {{data.countTugas ?? 0}} Tugas - {{data.countMateri ?? 0}} Materi - {{data.countUjian ?? 0}} Ujian
-              </div>
+              <!--end::Text-->
             </div>
-            <!--end::Text-->
-          </div>
-        </template>
-        <!--end::Item-->
+          </template>
+          <!--end::Item-->
+        </div>
       </div>
       <!--end::Timeline-->
     </div>
