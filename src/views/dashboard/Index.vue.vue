@@ -37,7 +37,11 @@
   <div class="row gy-5 gx-xl-8">
     <div class="col-xxl-4">
       <!-- <Materi :datas="datas?.dataMateri" widget-classes="card-xxl-stretch mb-xl-3"></Materi> -->
-      <Materi widget-classes="card-xxl-stretch mb-xl-3"></Materi>
+      <Materi 
+        widget-classes="card-xxl-stretch mb-xl-3"
+        :total="datas?.count?.countMateri"
+        :datas="datas?.dataMateri"
+      ></Materi>
     </div>
     <div class="col-xxl-8">
       <Tugas
