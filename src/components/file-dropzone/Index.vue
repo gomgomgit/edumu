@@ -53,11 +53,11 @@ function selectedFile() {
 
 function deleteFile() {
     if (props.multiple) {
-      dropzoneFile.value = null
-      emits('update:fileInputData', null)
+      dropzoneFile.value = ""
+      emits('update:fileInputData', "")
     } else {
-      dropzoneFile.value = null
-      emits('update:fileInputData', null)
+      dropzoneFile.value = ""
+      emits('update:fileInputData', "")
     }
 }
 </script>
@@ -81,7 +81,7 @@ function deleteFile() {
     </div>
   </div>
   <div class="d-flex gap-4">
-    <div class="mt-3">
+    <div class="mt-3" v-if="dropzoneFile">
       <button @click="deleteFile()" class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm">
         <span class="svg-icon svg-icon-3">
           <inline-svg src="media/icons/duotune/general/gen027.svg"/>
@@ -94,7 +94,7 @@ function deleteFile() {
           File: {{ file.name }} - {{file.size}} bytes 
         </p>
       </template>
-      <template v-if="!multiple">
+      <template v-if="!multiple && dropzoneFile">
         <p class="m-0 fs-4">File: {{ dropzoneFile.name }} - {{dropzoneFile.size}} bytes</p>
       </template>
     </div>
