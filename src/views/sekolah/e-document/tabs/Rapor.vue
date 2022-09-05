@@ -79,6 +79,15 @@ import { deleteConfirmation } from "@/core/helpers/deleteconfirmation";
           <div class="py-6 d-flex justify-content-between align-items-center">
             <h2 class="fs-1 fw-bold">Sudah Upload</h2>
             
+            <div>
+              <router-link to="/sekolah/e-document/tambah-rapor"
+                class="btn btn-primary d-flex gap-3 align-items-center w-auto w-lg-100">
+                <i class="bi bi-plus fs-1 p-0"></i>
+                <span class="d-none d-lg-inline">
+                  Upload Rapor
+                </span>
+              </router-link>
+            </div>
           </div>
           <div class="separator border-black-50 border-2 my-3"></div>
           <div>

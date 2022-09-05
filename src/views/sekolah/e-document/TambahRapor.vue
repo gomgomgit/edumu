@@ -11,7 +11,7 @@ import FileDrop from '@/components/file-dropzone/Index.vue';
 import { useStore } from 'vuex';
 
 onMounted(() => {
-  setCurrentPageBreadcrumbs("Tambah Dokumen", ['Sekolah', 'E Dokumen']);
+  setCurrentPageBreadcrumbs("Tambah Rapor", ['Sekolah', 'E Dokumen']);
   getData()
 })
 
@@ -27,7 +27,6 @@ const searchSiswa = ref()
 const selectedSiswa = ref([])
 
 const form = reactive({
-  arsip_cat_id: '',
   kelas_id: '',
 })
 
@@ -42,10 +41,6 @@ const siswa = reactive({
 })
 
 function getData() {
-  request.post('arsip/catlist')
-  .then(res => {
-    kategoriOption.value = res.data.data
-  })
   request.post('kelas')
   .then(res => {
     kelasOption.value = res.data.data
@@ -67,9 +62,11 @@ function getSiswa(payload) {
 
 function postData() {
   const formData = new FormData()
-  formData.append('arsip_cat_id', form.arsip_cat_id)
+  formData.append('arsip_cat_id', '')
+  formData.append('arsip_type', 'rapor')
   formData.append('siswaSelect', selectedSiswa.value)
   formData.append('user_id', userId)
+  formData.append('kelas_id', form.kelas_id)
   formData.append('file', form.file)
 
   request.post('arsip/upload', formData, {
@@ -77,8 +74,8 @@ function postData() {
       'Content-Type' : 'multipart/form-data'
     }
   }).then(res => {
-    useToast().success('Berhasil upload dokumen!')
-    router.push('/sekolah/e-document/dokumen')
+    useToast().success('Berhasil upload rapor!')
+    router.push('/sekolah/e-document/rapor')
   })
 }
 
@@ -98,21 +95,10 @@ function selectionChangedSiswa(params) {
         <div class="card mb-5 mb-xxl-8">
           <div class="card-body py-6">
             <div>
-              <h2 class="fs-1 fw-bold py-6 m-0">Tambah Dokumen</h2>
+              <h2 class="fs-1 fw-bold py-6 m-0">Tambah Rapor</h2>
             </div>
             <div class="separator border-black-50 border-2 my-6"></div>
             <div class="d-flex flex-column gap-4">
-              <div class="row">
-                <div class="col-3 align-items-center d-flex">
-                  <p class="m-0 fs-4 fw-bold">Pilih Kategori</p>
-                </div>
-                <div class="col-9 align-items-center d-flex gap-4">
-                  <el-select class="w-100" v-model="form.arsip_cat_id" filterable clearable placeholder="Select">
-                    <el-option v-for="kategori in kategoriOption" :key="kategori.arsip_cat_id" :label="kategori.arsip_cat_name"
-                      :value="kategori.arsip_cat_id" />
-                  </el-select>
-                </div>
-              </div>
               <div class="row">
                 <div class="col-3 align-items-center d-flex">
                   <p class="m-0 fs-4 fw-bold">Pilih Kelas</p>
