@@ -5,7 +5,7 @@
     <div class="card-header align-items-center border-0 mt-4">
       <h3 class="card-title align-items-start flex-column">
         <span class="fw-bolder mb-2 text-dark">Aktifitas Kelas</span>
-        <span class="text-muted fw-bold fs-7">25 Jadwal Pelajaran Hari ini</span>
+        <span class="text-muted fw-bold fs-7">{{aktifitas.length}} Jadwal Pelajaran Hari ini</span>
       </h3>
 
     </div>
@@ -75,7 +75,7 @@ const props = defineProps({
   datas: Array
 })
 
-const aktifitas = ref()
+const aktifitas = ref([])
 
 function timeFormat(time) {
   return moment(time, 'HH:mm:ss').format('HH:mm');
