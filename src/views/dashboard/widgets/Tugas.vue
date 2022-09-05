@@ -6,7 +6,7 @@
       <h3 class="card-title align-items-start flex-column">
         <span class="card-label fw-bolder fs-3 mb-1">Tugas Belajar</span>
 
-        <span class="text-muted mt-1 fw-bold fs-7">14 tugas telah dibuat</span>
+        <span class="text-muted mt-1 fw-bold fs-7">{{created}} tugas telah dibuat</span>
       </h3>
 
       <div
@@ -19,7 +19,7 @@
           class="badge badge-primary px-5 py-3 d-flex gap-3"
         >
           <div class="fs-1">
-            124 
+            {{total}}
           </div>
           <div class="text-start" style="font-size: 0.75 rem">
             <div>Total</div>
@@ -51,24 +51,24 @@
 
           <!--begin::Table body-->
           <tbody>
-            <template v-for="(item, index) in list" :key="index">
+            <template v-for="(item, index) in tugas" :key="index">
               <tr>
 
                 <td>
                   <div class="d-flex align-items-center">
                     <div class="symbol symbol-45px me-5">
-                      <img :src="item.image" alt="" />
+                      <img :src="item.user.user_foto ? (storageUrl + '/images/guru/' + item.user.user_foto) : '/media/avatars/blank.png'" alt="" />
                     </div>
                     <div class="d-flex justify-content-start flex-column">
                       <a
                         href="#"
                         class="text-dark fw-bolder text-hover-primary fs-6"
-                        >{{ item.name }}</a
+                        >{{ item.user.user_nama }}</a
                       >
 
                       <span
                         class="text-muted fw-bold text-muted d-block fs-7"
-                        >{{ item.skills }}</span
+                        >{{ item.mapel.mapel_nama }}</span
                       >
                     </div>
                   </div>
@@ -78,21 +78,19 @@
                   <a
                     href="#"
                     class="text-dark fw-bolder text-hover-primary d-block fs-6"
-                    >{{ item.companyName }}</a
+                    >{{ item.tugas_judul }}</a
                   >
                 </td>
 
                 <td>
-                  <span class="text-dark fw-bold d-block fs-7">{{
-                    item.dateEnd
-                  }}</span>
+                  <span class="text-dark fw-bold d-block fs-7">{{item.tugas_due_date}}</span>
                 </td>
 
                 <td class="text-end">
                   <div class="d-flex flex-column w-100 me-2">
                     <div class="d-flex flex-stack mb-2">
                       <span class="text-muted me-2 fs-7 fw-bold">
-                        {{ item.value }}%
+                        {{getProgress(item.siswaCount, item.siswaAnswerCount)}}%
                       </span>
                     </div>
 
@@ -101,8 +99,8 @@
                         class="progress-bar"
                         :class="`bg-${item.color}`"
                         role="progressbar"
-                        :style="{ width: item.value + '%' }"
-                        :aria-valuenow="item.value"
+                        :style="{ width: getProgress(item.siswaCount, item.siswaAnswerCount) + '%' }"
+                        :aria-valuenow="getProgress(item.siswaCount, item.siswaAnswerCount)"
                         aria-valuemin="0"
                         aria-valuemax="100"
                       ></div>
@@ -123,76 +121,36 @@
   <!--end::Tables Widget 9-->
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from "vue";
+<script setup>
+import { isEmpty } from "validate.js";
+import { defineComponent, ref, watch } from "vue";
+import { useStore } from "vuex";
 
-export default defineComponent({
-  name: "kt-widget-9",
-  components: {},
-  props: {
-    widgetClasses: String,
-    datas: Array,
-  },
-  setup() {
-    const checkedRows = ref([]);
+watch(() => props.datas,
+  (datas) => {
+    if (!isEmpty(datas)) {
+      tugas.value = datas
+    }
+  }
+)
 
-    const list = [
-      {
-        image: "media/avatars/300-14.jpg",
-        name: "Ana Simmons",
-        skills: "Matematika",
-        companyName: "Bagaimana menjumlahkan semua udang di lautan luas ini sobat",
-        companySkills: "Web, UI/UX Design",
-        value: "50",
-        dateEnd: "12-08-2022",
-        color: "primary",
-      },
-      {
-        image: "media/avatars/300-2.jpg",
-        name: "Jessie Clarcson",
-        skills: "C#, ASP.NET, MS SQL",
-        companyName: "Agoda lkdjf ds sflsadj saldfj sadf sladfkj sad sadlfkj sda",
-        companySkills: "Houses & Hotels",
-        value: "70",
-        dateEnd: "12-08-2022",
-        color: "danger",
-      },
-      {
-        image: "media/avatars/300-5.jpg",
-        name: "Lebron Wayde",
-        skills: "PHP, Laravel, VueJS",
-        companyName: "RoadGee lkdjf ds sflsadj saldfj sadf sladfkj sad sadlfkj sda",
-        companySkills: "Transportation",
-        value: "60",
-        dateEnd: "12-08-2022",
-        color: "success",
-      },
-      {
-        image: "media/avatars/300-20.jpg",
-        name: "Natali Goodwin",
-        skills: "Python, PostgreSQL, ReactJS",
-        companyName: "The lkdjf ds sflsadj saldfj sadf sladfkj sad sadlfkj sda Hill",
-        companySkills: "Insurance",
-        value: "50",
-        dateEnd: "12-08-2022",
-        color: "warning",
-      },
-      {
-        image: "media/avatars/300-23.jpg",
-        name: "Kevin Leonard",
-        skills: "HTML, JS, ReactJS",
-        companyName: "RoadGee lkdjf ds sflsadj saldfj sadf sladfkj sad sadlfkj sda",
-        companySkills: "Art Director",
-        value: "90",
-        dateEnd: "12-08-2022",
-        color: "info",
-      },
-    ];
+const store = useStore()
+const currentUser = store.getters.currentUser
+const storageUrl = `${process.env.VUE_APP_STORAGE_URL}/${currentUser.sekolah_kode}/apischool/public`;
 
-    return {
-      list,
-      checkedRows,
-    };
-  },
-});
+const props = defineProps ({
+  widgetClasses: String,
+  total: Number,
+  created: Number,
+  datas: Array,
+})
+
+const checkedRows = ref([]);
+    
+const tugas = ref([])
+
+function getProgress(siswa, answered) {
+  var percent = answered / siswa * 100 
+  return percent ? percent : 0
+}
 </script>
