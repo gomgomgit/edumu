@@ -15,6 +15,7 @@
       <!--begin::Calendar-->
       <FullCalendar
         class="calendar"
+        ref="calendar"
         :options="calendarOptions"
       ></FullCalendar>
       <!--end::Calendar-->
@@ -53,7 +54,16 @@ const props = defineProps({
 watch(() => props.datas,
   (datas) => {
     if (!isEmpty(datas)) {
-      var events = []
+      var events = datas.event.map((cal) => {
+        return {
+          title: cal.calendar_title,
+          start: cal.calendar_time_start,
+          end: cal.calendar_time_end,
+          description: cal.calendar_desc,
+          className:  [cal.calendar_type, cal.calendar_desc],
+          color: '#04C8C8'
+        }
+      })
       var academic = datas.academic.map((cal) => {
         return {
           title: cal.calendar_title,
@@ -78,6 +88,8 @@ watch(() => props.datas,
   }
 ) 
 
+const calendar = ref()
+
 const modalDetail = ref(false)
 const initDetail = {title: '', desc: '', type: '', start: '', end: ''}
 const dataDetail = reactive({...initDetail})
@@ -89,6 +101,8 @@ function showEvent(e) {
   dataDetail.type = e.event.classNames[0]
   dataDetail.start = e.event.start
   dataDetail.end = e.event.end
+
+  document.getElementsByClassName('fc-popover-close')[0] && document.getElementsByClassName('fc-popover-close')[0].click()
 }
 
 function handleCloseDetail() {
