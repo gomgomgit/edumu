@@ -91,12 +91,13 @@ import Dropdown3 from "@/components/dropdown/Dropdown3.vue";
 import { getCSSVariableValue } from "@/assets/ts/_utils";
 import { useStore } from "vuex";
 
-  const props = ({
-    widgetClasses: String,
-    widgetColor: String,
-    strokeColor: String,
-    count: Array
-  })
+const props = defineProps({
+  widgetClasses: String,
+  widgetColor: String,
+  strokeColor: String,
+  count: Object
+})
+
   const store = useStore()
   const currentUser = store.getters.currentUser
 
