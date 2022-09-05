@@ -60,7 +60,7 @@ watch(() => props.datas,
       var todo = datas.todo.map((cal) => {
         return {
           title: cal.calendar_title,
-          start: moment(cal.calendar_time_date,).format("YYYY-MM-DD"),
+          start: cal.calendar_date,
           description: cal.calendar_desc,
           className: "fc-event-danger fc-event-solid-warning",
           color: '#F1416C'
