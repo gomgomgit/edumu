@@ -44,7 +44,6 @@ import moment from "moment";
   const monthRange = ref([])
 
   function changeMonth() {
-    console.log(monthRange.value)
     formData.thn_ajar_start = moment(monthRange.value[0]).format('YYYY-MM')
     formData.thn_ajar_end = moment(monthRange.value[1]).format('YYYY-MM')
   }
