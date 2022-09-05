@@ -42,7 +42,7 @@ function handleClose () {
 function handleSubmit () {
   let selectedClass = ''
   if (form.kelas_id.includes('all')) {
-    selectedClass = kelasOption.value.map(function (obj) {
+    selectedClass = props.dataOption.kelasOption.map(function (obj) {
       return obj.kelas_id
     })
   } else {
