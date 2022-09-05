@@ -20,7 +20,7 @@ function handleClose () {
 	emits('close')
 }
 function timeFormat(time) {
-  return moment(time).format('LLLL')
+  return moment(time).locale('id').format('LLLL')
 }
 </script>
 
@@ -56,20 +56,32 @@ function timeFormat(time) {
             <circle fill="currentColor" cx="12" cy="12" r="8"></circle>
           </svg>
         </span>
-        <div class="fs-6">
-          <span class="fw-bold me-3">Starts</span>
-          <span>{{timeFormat(datas.start)}}</span>
+        <div class="fs-6 w-100 my-2">
+          <div class="row">
+            <div class="col-2">
+              <span class="fw-bold me-3">Mulai</span>
+            </div>
+            <div class="col-10">
+              <span>{{timeFormat(datas.start)}}</span>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="d-flex align-items-center mb-9">
+      <div class="d-flex align-items-center mb-9" v-if="datas.end">
         <span class="svg-icon svg-icon-1 svg-icon-danger me-5">
           <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
             <circle fill="currentColor" cx="12" cy="12" r="8"></circle>
           </svg>
         </span>
-        <div class="fs-6">
-          <span class="fw-bold me-3">Ends</span>
-          <span>{{timeFormat(datas.end)}}</span>
+        <div class="fs-6 w-100 my-2">
+          <div class="row">
+            <div class="col-2">
+              <span class="fw-bold me-3">Selesai</span>
+            </div>
+            <div class="col-10">
+              <span>{{timeFormat(datas.end)}}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

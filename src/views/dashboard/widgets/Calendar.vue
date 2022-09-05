@@ -60,7 +60,7 @@ watch(() => props.datas,
           start: cal.calendar_time_start,
           end: cal.calendar_time_end,
           description: cal.calendar_desc,
-          className:  cal.calendar_type,
+          className:  [cal.calendar_type, cal.calendar_desc],
           color: '#04C8C8'
         }
       })
@@ -69,7 +69,7 @@ watch(() => props.datas,
           title: cal.calendar_title,
           start: cal.calendar_date,
           description: cal.calendar_desc,
-          className:  cal.calendar_type,
+          className:  [cal.calendar_type, cal.calendar_desc],
           color: '#F1416C'
         }
       })
@@ -85,7 +85,7 @@ const dataDetail = reactive({...initDetail})
 function showEvent(e) {
   modalDetail.value = true
   dataDetail.title = e.event.title
-  dataDetail.desc = e.event.desc
+  dataDetail.desc = e.event.classNames[1] ?? ''
   dataDetail.type = e.event.classNames[0]
   dataDetail.start = e.event.start
   dataDetail.end = e.event.end
@@ -99,20 +99,14 @@ function handleCloseDetail() {
 const calendarOptions = reactive({
   plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
   headerToolbar: {
-    left: "",
+    right: '',
     center: "title",
-    right: "dayGridMonth,timeGridWeek,timeGridDay",
+    left: ''
   },
   initialDate: TODAY,
-  navLinks: true, // can click day/week names to navigate views
-  selectable: true,
-  selectMirror: true,
-
-  views: {
-    dayGridMonth: { buttonText: "month" },
-    timeGridWeek: { buttonText: "week" },
-    timeGridDay: { buttonText: "day" },
-  },
+  navLinks: false, // can click day/week names to navigate views
+  selectable: false,
+  selectMirror: false,
 
   editable: true,
   dayMaxEvents: true, // allow "more" link when too many events
