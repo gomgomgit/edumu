@@ -19,6 +19,7 @@ const initialForm = {
   materi_id: '',
   kelas_id: '',
   mapel_id: '',
+  user_id: '',
   materi_judul: '',
   materi_status: '',
   materi_file: null,
@@ -54,6 +55,7 @@ function handleSubmit () {
   formData.append('materi_id', form.materi_id)
   formData.append('kelas_id', form.kelas_id)
   formData.append('mapel_id', form.mapel_id)
+  formData.append('user_id', form.user_id)
   formData.append('materi_judul', form.materi_judul)
   formData.append('materi_status', form.materi_status)
   formData.append('materi_file', form.materi_file)
@@ -129,6 +131,26 @@ watch(
               :key="mapel.mapel_id"
               :label="mapel.mapel_nama"
               :value="mapel.mapel_id"
+            />
+          </el-select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-3 d-flex">
+          <p class="m-0 fs-4 fw-bold">Guru</p>
+        </div>
+        <div class="col-9 align-items-center d-flex">
+          <el-select
+            v-model="form.user_id"
+            placeholder="Pilih Guru"
+            style="width: 100%"
+            filterable
+          >
+            <el-option
+              v-for="guru in props.dataOption.guruOption"
+              :key="guru.user_id"
+              :label="guru.user_nama"
+              :value="guru.user_id"
             />
           </el-select>
         </div>
