@@ -53,6 +53,7 @@ function postData() {
       'Content-Type' : 'multipart/form-data'
     }
   }).then(res => {
+    useToast().success('Berhasil Import Data')
     router.push('/sekolah/akademik/kalender-akademik')
   })
 }

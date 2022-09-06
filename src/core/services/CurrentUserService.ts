@@ -15,6 +15,9 @@ export const getUser = () => {
     sekolah_kode: window.localStorage.getItem('sekolah_kode'),
     sekolah_nama: window.localStorage.getItem('sekolah_nama'),
     sekolah_foto: window.localStorage.getItem('sekolah_foto'),
+    sekolah_alamat: window.localStorage.getItem('sekolah_alamat'),
+    sekolah_telepon: window.localStorage.getItem('sekolah_telepon'),
+    sekolah_email: window.localStorage.getItem('sekolah_email'),
   };
   return user;
 };
@@ -34,6 +37,9 @@ export const saveUser = (user): void => {
   window.localStorage.setItem('sekolah_kode', user.sekolah_kode);
   window.localStorage.setItem('sekolah_nama', user.sekolah_nama);
   window.localStorage.setItem('sekolah_foto', user.sekolah_foto);
+  window.localStorage.setItem('sekolah_alamat', `${user.sekolah_alamat}, ${user.sekolah_kota}, ${user.sekolah_provinsi}` );
+  window.localStorage.setItem('sekolah_telepon', user.sekolah_cp_telepon);
+  window.localStorage.setItem('sekolah_email', user.sekolah_cp_email);
 };
 
 /**
@@ -50,6 +56,9 @@ export const destroyUser = (): void => {
   window.localStorage.removeItem('sekolah_kode');
   window.localStorage.removeItem('sekolah_nama');
   window.localStorage.removeItem('sekolah_foto');
+  window.localStorage.removeItem('sekolah_alamat');
+  window.localStorage.removeItem('sekolah_email');
+  window.localStorage.removeItem('sekolah_telepon');
 };
 
 export default { getUser, saveUser, destroyUser };

@@ -71,6 +71,15 @@ function getPengumuman() {
     })
 }
 
+function kelasChange() {
+  let selectedClass = ''
+  if (form.kelas_id.includes('all')) {
+    selectedClass = classes.value.map(function (obj) {
+      return obj.kelas_id
+    })
+    form.kelas_id = selectedClass
+  }
+}
 function postBerita() {
   const formData = new FormData()
   formData.append('cat_id', '')
@@ -114,11 +123,14 @@ function postBerita() {
             </div>
             <div class="col-9 align-items-center d-flex">
               <el-select
+                @change="kelasChange()"
                 v-model="form.kelas_id"
                 multiple
                 placeholder="Pilih Kelas"
                 style="width: 100%"
               > 
+                <el-option label="Pilih Semua" value="all"
+                />
                 <el-option
                   v-for="clas in classes"
                   :key="clas.kelas_id"

@@ -16,7 +16,7 @@ import { useStore } from "vuex";
   
 const store = useStore()
 const currentUser = store.getters.currentUser;
-const apiUrl = `${process.env.VUE_APP_API_URL}/${currentUser.sekolah_kode}/apischool/public`;
+const storageUrl = `${process.env.VUE_APP_STORAGE_URL}/${currentUser.sekolah_kode}/apischool/public`;
 
   function getBerita (payload) {
       request.post('konten', null, {
@@ -125,7 +125,7 @@ const apiUrl = `${process.env.VUE_APP_API_URL}/${currentUser.sekolah_kode}/apisc
               <div v-if="column.field == 'content_image'">
                 <div class="p-2 bg-secondary d-inline-block">
                   <template v-if="row.content_image">
-                    <img class="image-thumbnail"  :src="apiUrl + '/images/konten/' + row.content_image" alt="">
+                    <img class="image-thumbnail"  :src="storageUrl + '/images/konten/' + row.content_image" alt="">
                   </template>
                   <template v-if="!row.content_image">
                     <span class="fw-bold fs-6 mx-2">NO IMAGE</span>
@@ -137,12 +137,17 @@ const apiUrl = `${process.env.VUE_APP_API_URL}/${currentUser.sekolah_kode}/apisc
                   'Aktif' : 'Non Aktif'}}</span>
               </div>
               <div v-if="column.field == 'action'">
+                <router-link :to="`/sekolah/informasi/berita/detail/${row.content_id}`" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
+                  <span class="svg-icon svg-icon-3">
+                    <i class="bi bi-eye-fill fs-3"></i>
+                  </span>
+                </router-link>
                 <router-link :to="'/sekolah/informasi/berita/edit/' + row.content_id" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
                   <span class="svg-icon svg-icon-3">
                     <inline-svg src="media/icons/duotune/art/art005.svg" />
                   </span>
                 </router-link>
-                <button @click="deleteBerita(row.content_id)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+                <button @click="deleteBerita(row.content_id)" class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm">
                   <span class="svg-icon svg-icon-3">
                     <inline-svg src="media/icons/duotune/general/gen027.svg" />
                   </span>

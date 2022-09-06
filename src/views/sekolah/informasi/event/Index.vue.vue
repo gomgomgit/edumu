@@ -36,7 +36,7 @@ import { useStore } from "vuex";
       { label: 'Gambar', field: 'event_foto', sortable: false },
       { label: 'Tipe', field: 'event_type', sortable: false },
       { label: 'Judul', field: 'event_judul', sortable: false },
-      { label: 'Tanggal', field: 'event_tanggal', sortable: false },
+      { label: 'Tanggal Mulai - Selesai', field: 'event_tanggal', sortable: false },
       { label: 'Status', field: 'event_status', sortable: false },
       { label: 'ACTION', field: 'action', sortable: false, width: '200px' },
     ],
@@ -102,6 +102,11 @@ import { useStore } from "vuex";
                   'Aktif' : 'Non Aktif'}}</span>
               </div>
               <div v-if="column.field == 'action'">
+                <router-link :to="`/sekolah/informasi/event/detail/${row.event_id}`" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
+                  <span class="svg-icon svg-icon-3">
+                    <i class="bi bi-eye-fill fs-3"></i>
+                  </span>
+                </router-link>
                 <router-link :to="'/sekolah/informasi/event/edit/' + row.event_id" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2">
                   <span class="svg-icon svg-icon-3">
                     <inline-svg src="media/icons/duotune/art/art005.svg" />

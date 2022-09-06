@@ -50,6 +50,16 @@ function selectedFile() {
     }
   }
 };
+
+function deleteFile() {
+    if (props.multiple) {
+      dropzoneFile.value = ""
+      emits('update:fileInputData', "")
+    } else {
+      dropzoneFile.value = ""
+      emits('update:fileInputData', "")
+    }
+}
 </script>
 
 <template>
@@ -70,13 +80,24 @@ function selectedFile() {
       <input @change="selectedFile" type="file" :multiple="props.multiple" id="dropzoneFile" class="dropzoneFile" />
     </div>
   </div>
-  <div class="d-flex flex-column gap-2 mt-3">
-    <template v-if="multiple" v-for="file in dropzoneFile">
-      <p class="m-0 fs-4">File: {{ file.name }} - {{file.size}} bytes</p>
-    </template>
-    <template v-if="!multiple">
-      <p class="m-0 fs-4">File: {{ dropzoneFile.name }} - {{dropzoneFile.size}} bytes</p>
-    </template>
+  <div class="d-flex gap-4">
+    <div class="mt-3" v-if="dropzoneFile">
+      <button @click="deleteFile()" class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm">
+        <span class="svg-icon svg-icon-3">
+          <inline-svg src="media/icons/duotune/general/gen027.svg"/>
+        </span>
+      </button>
+    </div>
+    <div class="d-flex flex-column gap-2 mt-3">
+      <template v-if="multiple" v-for="file, fileIndex in dropzoneFile" :key="fileIndex">
+        <p class="m-0 fs-4">
+          File: {{ file.name }} - {{file.size}} bytes 
+        </p>
+      </template>
+      <template v-if="!multiple && dropzoneFile">
+        <p class="m-0 fs-4">File: {{ dropzoneFile.name }} - {{dropzoneFile.size}} bytes</p>
+      </template>
+    </div>
   </div>
 </div>
 </template>

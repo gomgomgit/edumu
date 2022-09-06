@@ -262,6 +262,13 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/sekolah/profil-pengguna/guru/Edit.vue"),
       },
       {
+        path: "/sekolah/profil-pengguna/staff",
+        name: "sekolah-profil-pengguna-staff",
+        component: () => import("@/views/sekolah/profil-pengguna/staff/Index.vue"),
+      },
+
+
+      {
         path: "/sekolah/akademik/tahun-ajar",
         name: "sekolah-akademik-tahun-ajar",
         component: () => import("@/views/sekolah/akademik/tahun-ajar/Index.vue"),
@@ -353,6 +360,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/sekolah/informasi/pengumuman/Index.vue"),
       },
       {
+        path: "/sekolah/informasi/pengumuman/detail/:id",
+        name: "sekolah-informasi-pengumuman-detail",
+        component: () => import("@/views/sekolah/informasi/pengumuman/Detail.vue"),
+      },
+      {
         path: "/sekolah/informasi/pengumuman/tambah",
         name: "sekolah-informasi-pengumuman-tambah",
         component: () => import("@/views/sekolah/informasi/pengumuman/Tambah.vue"),
@@ -368,6 +380,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/sekolah/informasi/prestasi/Index.vue"),
       },
       {
+        path: "/sekolah/informasi/prestasi/detail/:id",
+        name: "sekolah-informasi-prestasi-detail",
+        component: () => import("@/views/sekolah/informasi/prestasi/Detail.vue"),
+      },
+      {
         path: "/sekolah/informasi/prestasi/tambah",
         name: "sekolah-informasi-prestasi-tambah",
         component: () => import("@/views/sekolah/informasi/prestasi/Tambah.vue"),
@@ -381,6 +398,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/sekolah/informasi/event",
         name: "sekolah-informasi-event",
         component: () => import("@/views/sekolah/informasi/event/Index.vue"),
+      },
+      {
+        path: "/sekolah/informasi/event/detail/:id",
+        name: "sekolah-informasi-event-detail",
+        component: () => import("@/views/sekolah/informasi/event/Detail.vue"),
       },
       {
         path: "/sekolah/informasi/event/tambah",
@@ -414,6 +436,11 @@ const routes: Array<RouteRecordRaw> = [
               import("@/views/sekolah/informasi/berita/tabs/Kategori.vue"),
           },
         ],
+      },
+      {
+        path: "/sekolah/informasi/berita/detail/:id",
+        name: "sekolah-informasi-berita-detail",
+        component: () => import("@/views/sekolah/informasi/berita/Detail.vue"),
       },
       {
         path: "/sekolah/informasi/berita/tambah",
@@ -458,6 +485,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/sekolah/e-document/tambah",
         name: "sekolah-e-document-tambah",
         component: () => import("@/views/sekolah/e-document/Tambah.vue"),
+      },
+      {
+        path: "/sekolah/e-document/tambah-rapor",
+        name: "sekolah-e-document-tambah-rapor",
+        component: () => import("@/views/sekolah/e-document/TambahRapor.vue"),
       },
       {
         path: "/sekolah/e-document/detail/:id/:name",
@@ -546,6 +578,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/iuran/iuran-siswa",
         name: "iuran-iuran-siswa",
         component: () => import("@/views/iuran/iuran-siswa/Index.vue"),
+      },
+      {
+        path: "/iuran/iuran-siswa/keuangan/:id/:nama/:kelas",
+        name: "iuran-iuran-siswa-keuangan",
+        component: () => import("@/views/iuran/iuran-siswa/Keuangan.vue"),
       },
       {
         path: "/iuran/iuran-siswa/konfirmasi/:id",

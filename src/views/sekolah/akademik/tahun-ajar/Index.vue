@@ -8,6 +8,7 @@
   import FilterSelect from '@/components/filter-select'
   import { useToast } from "vue-toast-notification"
 import { deleteConfirmation } from "@/core/helpers/deleteconfirmation";
+import moment from "moment";
 
   onMounted(() => {
     setCurrentPageBreadcrumbs("Tahun Ajar", ['Sekolah', "Akademik"]);
@@ -43,8 +44,8 @@ import { deleteConfirmation } from "@/core/helpers/deleteconfirmation";
   const monthRange = ref([])
 
   function changeMonth() {
-    formData.thn_ajar_start = monthRange.value[0]
-    formData.thn_ajar_end = monthRange.value[1]
+    formData.thn_ajar_start = moment(monthRange.value[0]).format('YYYY-MM')
+    formData.thn_ajar_end = moment(monthRange.value[1]).format('YYYY-MM')
   }
 
   const semesterOption = [
