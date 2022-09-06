@@ -150,7 +150,7 @@ const checkedRows = ref([]);
 const tugas = ref([])
 
 function getProgress(siswa, answered) {
-  var percent = answered / siswa * 100 
+  var percent = Math.round(answered / siswa * 100)
   return percent ? percent : 0
 }
 </script>
