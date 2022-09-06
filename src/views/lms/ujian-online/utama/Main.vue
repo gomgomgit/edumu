@@ -1,22 +1,22 @@
 <script setup>
 import { reactive, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router';
+import { useToast } from 'vue-toast-notification';
+import Swal from 'sweetalert2';
+import qs from 'qs';
 
 import { request } from '@/util'
 import ServerSideTable from '@/components/ServerSideTable.vue'
 import FilterSelect from '@/components/filter-select/index.vue'
-import Swal from 'sweetalert2';
-import qs from 'qs';
 import Spinner from '@/components/Spinner.vue';
-import { useToast } from 'vue-toast-notification';
-// import FormModal from './FormModal.vue'
+import AssignStudentModal from './AssignStudentModal.vue'
 
 const router = useRouter()
 
 const tableRef = ref()
 const summaryData = ref({})
 const formMode = ref('')
-const activeData = ref({})
+const activeAssignData = ref({})
 const isSaving = ref(false)
 const isLoading = ref(false)
 
@@ -155,11 +155,6 @@ async function changeExamStatus (row, status) {
 	} finally {
 		isSaving.value = false
 	}
-}
-
-function handleFormClose(row) {
-	activeData.value = {}
-	formMode.value = ''
 }
 
 
@@ -371,6 +366,8 @@ onMounted(async () => {
 				</ServerSideTable>
 			</div>
 		</div>
+
+		<AssignStudentModal :active-data="activeAssignData" />
 	</div>
 </template>
 
