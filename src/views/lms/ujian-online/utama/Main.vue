@@ -117,6 +117,9 @@ async function handleRemedExam(row) {
 
 	if (confirmEditing.isConfirmed) router.push('utama/form/pengaturan/remed/' + row.exam_id)
 }
+function handleAssignStudent (row) {
+	activeAssignData.value = row
+}
 
 async function changeExamStatus (row, status) {
 	const invalidExamDate = Date.now() > new Date(row.exam_start_date).getTime()
@@ -306,7 +309,8 @@ onMounted(async () => {
 								content="Assign Siswa"
 								placement="top-end">
 								<button
-									class="btn btn-icon btn-bg-light btn-active-color-info btn-sm me-2">
+									class="btn btn-icon btn-bg-light btn-active-color-info btn-sm me-2"
+									@click="handleAssignStudent(row)">
 									<span class="svg-icon svg-icon-3">
 										<inline-svg src="media/icons/duotune/communication/com013.svg" />
 									</span>
@@ -367,7 +371,7 @@ onMounted(async () => {
 			</div>
 		</div>
 
-		<AssignStudentModal :active-data="activeAssignData" />
+		<AssignStudentModal :active-data="activeAssignData" @close-modal="activeAssignData = {}" />
 	</div>
 </template>
 
