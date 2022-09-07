@@ -217,10 +217,10 @@ export default defineComponent({
                 heading: "Guru",
                 route: "/sekolah/profil-pengguna/guru",
               },
-              {
-                heading: "Staff",
-                route: "/sekolah/profil-pengguna/staff",
-              },
+              // {
+              //   heading: "Staff",
+              //   route: "/sekolah/profil-pengguna/staff",
+              // },
             ],
           },
           {
@@ -304,12 +304,12 @@ export default defineComponent({
               // },
             ]
           },
-          {
-            heading: "Akreditasi",
-            route: "/sekolah/akreditasi",
-            svgIcon: "media/icons/duotune/general/gen022.svg",
-            fontIcon: "bi-archive",
-          },
+          // {
+          //   heading: "Akreditasi",
+          //   route: "/sekolah/akreditasi",
+          //   svgIcon: "media/icons/duotune/general/gen022.svg",
+          //   fontIcon: "bi-archive",
+          // },
           {
             heading: "Media",
             route: "/sekolah/media",

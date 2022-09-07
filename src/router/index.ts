@@ -261,11 +261,11 @@ const routes: Array<RouteRecordRaw> = [
         name: "sekolah-profil-pengguna-guru-edit",
         component: () => import("@/views/sekolah/profil-pengguna/guru/Edit.vue"),
       },
-      {
-        path: "/sekolah/profil-pengguna/staff",
-        name: "sekolah-profil-pengguna-staff",
-        component: () => import("@/views/sekolah/profil-pengguna/staff/Index.vue"),
-      },
+      // {
+      //   path: "/sekolah/profil-pengguna/staff",
+      //   name: "sekolah-profil-pengguna-staff",
+      //   component: () => import("@/views/sekolah/profil-pengguna/staff/Index.vue"),
+      // },
 
 
       {
@@ -502,41 +502,41 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/sekolah/laporan/user-online/Index.vue"),
       },
 
-      {
-        path: "/sekolah/akreditasi",
-        name: "sekolah-informasi-akreditasi",
-        component: () => import("@/views/sekolah/akreditasi/Index.vue"),
-        children: [
-          {
-            path: "",
-            redirect: "/sekolah/akreditasi/akreditasi",
-          },
-          {
-            path: "akreditasi",
-            name: "sekolah-akreditasi-akreditasi",
-            component: () =>
-              import("@/views/sekolah/akreditasi/tabs/Akreditasi.vue"),
-          },
-          {
-            path: "website",
-            name: "sekolah-akreditasi-website",
-            component: () =>
-              import("@/views/sekolah/akreditasi/tabs/Website.vue"),
-          },
-          {
-            path: "unduh-pdf",
-            name: "sekolah-akreditasi-unduh-pdf",
-            component: () =>
-              import("@/views/sekolah/akreditasi/tabs/UnduhPdf.vue"),
-          },
-          {
-            path: "video",
-            name: "sekolah-akreditasi-video",
-            component: () =>
-              import("@/views/sekolah/akreditasi/tabs/Video.vue"),
-          },
-        ],
-      },
+      // {
+      //   path: "/sekolah/akreditasi",
+      //   name: "sekolah-informasi-akreditasi",
+      //   component: () => import("@/views/sekolah/akreditasi/Index.vue"),
+      //   children: [
+      //     {
+      //       path: "",
+      //       redirect: "/sekolah/akreditasi/akreditasi",
+      //     },
+      //     {
+      //       path: "akreditasi",
+      //       name: "sekolah-akreditasi-akreditasi",
+      //       component: () =>
+      //         import("@/views/sekolah/akreditasi/tabs/Akreditasi.vue"),
+      //     },
+      //     {
+      //       path: "website",
+      //       name: "sekolah-akreditasi-website",
+      //       component: () =>
+      //         import("@/views/sekolah/akreditasi/tabs/Website.vue"),
+      //     },
+      //     {
+      //       path: "unduh-pdf",
+      //       name: "sekolah-akreditasi-unduh-pdf",
+      //       component: () =>
+      //         import("@/views/sekolah/akreditasi/tabs/UnduhPdf.vue"),
+      //     },
+      //     {
+      //       path: "video",
+      //       name: "sekolah-akreditasi-video",
+      //       component: () =>
+      //         import("@/views/sekolah/akreditasi/tabs/Video.vue"),
+      //     },
+      //   ],
+      // },
       {
         path: "/sekolah/media",
         name: "sekolah-media",

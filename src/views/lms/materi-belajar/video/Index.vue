@@ -37,6 +37,13 @@ import FormModal from "./FormModal.vue";
     }).then(res => {
       guruOption.value = res.data.data
     })
+    request.post('user', null, {
+      params: {
+        level: 'guru'
+      }
+    }).then(res => {
+      guruOption.value = res.data.data
+    })
     request.post('kelas', null)
     .then(res => {
       kelasOption.value = res.data.data
@@ -93,7 +100,7 @@ import FormModal from "./FormModal.vue";
     formMode.value = 'Edit Data'
   }
   function handleFormClose (row) {
-    activeData.value = {}
+    activeData.value = null
     formMode.value = ''
   }
 </script>
@@ -202,7 +209,7 @@ import FormModal from "./FormModal.vue";
     <FormModal 
 			:mode="formMode"
 			:activeData="activeData"
-      :dataOption="{kelasOption: kelasOption, mapelOption: mapelOption}"
+      :dataOption="{guruOption: guruOption, kelasOption: kelasOption, mapelOption: mapelOption}"
 			@close="handleFormClose"
 			@submit="tableRef.loadItems()" />
   </div>
