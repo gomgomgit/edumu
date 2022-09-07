@@ -10,7 +10,7 @@ onMounted(() => {
 <template>
   <div>
     <div class="card mb-5 mb-xxl-8">
-      <div class="card-body py-6">
+      <div class="card-body p-0 overflow-hidden rounded-3">
         <!-- <div>
           <h2 class="fs-1 fw-bold py-6">Dokumentasi</h2>
         </div>

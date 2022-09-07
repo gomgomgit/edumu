@@ -304,12 +304,12 @@ export default defineComponent({
               // },
             ]
           },
-          {
-            heading: "Akreditasi",
-            route: "/sekolah/akreditasi",
-            svgIcon: "media/icons/duotune/general/gen022.svg",
-            fontIcon: "bi-archive",
-          },
+          // {
+          //   heading: "Akreditasi",
+          //   route: "/sekolah/akreditasi",
+          //   svgIcon: "media/icons/duotune/general/gen022.svg",
+          //   fontIcon: "bi-archive",
+          // },
           {
             heading: "Media",
             route: "/sekolah/media",
