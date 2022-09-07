@@ -7,6 +7,7 @@ import { useRoute } from 'vue-router';
 import FilterSelect from '@/components/filter-select/index.vue';
 import { Search } from '@element-plus/icons-vue'
 import ServerSideTable from '@/components/ServerSideTable.vue';
+import * as XLSX from 'xlsx';
 
 onMounted(() => {
   getData()
@@ -50,6 +51,43 @@ function getData() {
   })
 }
 
+function exportNilai() {
+  let presensi = [["Guru",detailData.value.user_nama]]
+        presensi.push(["Mata Pelajaran",detailData.value.mapel_nama])
+        presensi.push(["Tanggal Mulai",detailData.value.tugas_create_date])
+        presensi.push(["Batas Pengumpulan",detailData.value.tugas_due_date])
+        presensi.push([""])
+        presensi.push(["NAMA", "NISN", "NILAI"])
+
+        detailData.value.jawab.map(item => {
+            presensi.push([
+                item.user_nama,
+                item.siswa_nisn,
+                item.ta_nilai
+            ])
+        })
+
+        let notExam = [["NAMA", "NISN", "NILAI"]]
+
+        detailData.value.notJawab.map(item => {
+            notExam.push([
+                item.user_nama,
+                item.siswa_nisn,
+                '0',
+                ''
+            ])
+        })
+
+        const wb = XLSX.utils.book_new()
+        const wsAll = XLSX.utils.aoa_to_sheet(presensi)
+        const wsNotEx = XLSX.utils.aoa_to_sheet(notExam)
+
+        XLSX.utils.book_append_sheet(wb, wsAll, detailData.value.kelasNama + 'Ujian')
+        XLSX.utils.book_append_sheet(wb, wsNotEx, detailData.value.kelasNama + 'Belum')
+
+        XLSX.writeFile(wb, "Rekap Nilai-"+ detailData.value.kelasNama+"-"+ detailData.value.tugas_judul +".xlsx")
+}
+
 function formatingDate(date) {
   return {
     date: moment(date).format('DD/MM/Y'),
@@ -61,8 +99,16 @@ function formatingDate(date) {
   <div class="card mb-5 mb-xxl-8">
     <div class="card-body pt-5 pb-5">
       <div class="page-content">
-        <div class="mb-4">
+        <div class="mb-4 d-flex justify-content-between">
           <h2 class="fs-1 fw-bold py-6">Detail Laporan Nilai Tugas Offline</h2>
+          <div class="d-flex align-items-center">
+            <a @click="exportNilai()" class="btn btn-primary d-flex gap-3 align-items-center w-auto">
+              <span>
+                Export Nilai
+              </span>
+              <i class="bi bi-printer-fill fs-2"></i>
+            </a>
+          </div>
         </div>
         <div class="separator border-black-50 border-2 my-6"></div>
         <div class="d-flex flex-column gap-8 py-4">
