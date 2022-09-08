@@ -16,7 +16,7 @@ onMounted(() => {
         </div>
         <div class="separator border-black-50 border-2 my-6"></div> -->
         <div class="vh-100">
-          <iframe src="learnenglish.britishcouncil.org" frameborder="0" height="100%" width="100%"></iframe>
+          <iframe src="https://learnenglish.britishcouncil.org/" frameborder="0" height="100%" width="100%"></iframe>
         </div>
       </div>
     </div>
