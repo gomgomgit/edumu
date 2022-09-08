@@ -267,6 +267,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/lms/external/bank-soal-rumah-belajar/Index.vue"),
       },
       {
+        path: "/lms/external/british-council-learn-english",
+        name: "lms-external-british-council-learn-english",
+        component: () => import("@/views/lms/external/british-council-learn-english/Index.vue"),
+      },
+      {
         path: "/lms/external/learningx",
         name: "lms-external-learningx",
         component: () => import("@/views/lms/external/learningx/Index.vue"),

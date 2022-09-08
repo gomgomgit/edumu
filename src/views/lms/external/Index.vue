@@ -102,11 +102,11 @@ onMounted(() => {
           <span class="text-black-50 mt-1 fw-bold fs-6 ">Learn English online and improve your skills through our high-quality courses and resources</span>
         </div>
         <div class="text-center mb-7">
-          <button class="btn btn-primary rounded-3" style="width: 80%" >
+          <router-link to="/lms/external/british-council-learn-english" class="btn btn-primary rounded-3" style="width: 80%" >
             <span>
               Selengkapnya
             </span>
-          </button>
+          </router-link>
         </div>
       </div>
     </div>
