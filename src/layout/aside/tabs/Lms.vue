@@ -95,8 +95,8 @@ export default defineComponent({
       {
         icon: "media/icons/duotune/general/gen017.svg",
         color: "warning",
-        title: "Materi Belajar External",
-        description: "Kumpulan materi pembelajaran external dan nasional",
+        title: "Sumber Belajar",
+        description: "Kumpulan sumber pembelajaran external dan nasional",
         route: "/lms/external"
       },
     ];

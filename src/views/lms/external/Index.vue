@@ -3,7 +3,7 @@ import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumb";
 import { onMounted } from "@vue/runtime-core";
 
 onMounted(() => {
-  setCurrentPageBreadcrumbs('Materi Belajar External', ['LMS'])
+  setCurrentPageBreadcrumbs('Sumber Belajar', ['LMS'])
 })
 </script>
 

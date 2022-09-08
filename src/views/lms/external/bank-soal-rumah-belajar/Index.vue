@@ -3,7 +3,7 @@ import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumb";
 import { onMounted } from "@vue/runtime-core";
 
 onMounted(() => {
-  setCurrentPageBreadcrumbs('Bank Soal Rumah Belajar', ['LMS', 'Materi Belajar External'])
+  setCurrentPageBreadcrumbs('Bank Soal Rumah Belajar', ['LMS', 'Sumber Belajar'])
 })
 </script>
 
