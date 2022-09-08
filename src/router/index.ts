@@ -197,6 +197,85 @@ const routes: Array<RouteRecordRaw> = [
         name: "lms-laporan-nilai-tugas-offline-detail",
         component: () => import("@/views/lms/laporan-nilai/tugas-offline/Detail.vue"),
       },
+      
+      {
+        path: "/lms/external",
+        name: "lms-external",
+        component: () => import("@/views/lms/external/Index.vue"),
+      },
+      {
+        path: "/lms/external/buku-sekolah-elektronik",
+        name: "lms-external-buku-sekolah-elektronik",
+        component: () => import("@/views/lms/external/buku-sekolah-elektronik/Index.vue"),
+      },
+      {
+        path: "/lms/external/sumber-belajar",
+        name: "lms-sumber-belajar",
+        component: () => import("@/views/lms/external/sumber-belajar/Index.vue"),
+        children: [
+          {
+            path: "",
+            redirect: "/lms/external/sumber-belajar/paud",
+          },
+          {
+            path: "paud",
+            name: "lms-external-sumber-belajar-paud",
+            component: () =>
+              import("@/views/lms/external/sumber-belajar/Paud.vue"),
+          },
+          {
+            path: "sd",
+            name: "lms-external-sumber-belajar-sd",
+            component: () =>
+              import("@/views/lms/external/sumber-belajar/Sd.vue"),
+          },
+          {
+            path: "smp",
+            name: "lms-external-sumber-belajar-smp",
+            component: () =>
+              import("@/views/lms/external/sumber-belajar/Smp.vue"),
+          },
+          {
+            path: "sma",
+            name: "lms-external-sumber-belajar-sma",
+            component: () =>
+              import("@/views/lms/external/sumber-belajar/Sma.vue"),
+          },
+          {
+            path: "smk",
+            name: "lms-external-sumber-belajar-smk",
+            component: () =>
+              import("@/views/lms/external/sumber-belajar/Smk.vue"),
+          },
+          {
+            path: "umum",
+            name: "lms-external-sumber-belajar-umum",
+            component: () =>
+              import("@/views/lms/external/sumber-belajar/Umum.vue"),
+          },
+          {
+            path: "slb",
+            name: "lms-external-sumber-belajar-slb",
+            component: () =>
+              import("@/views/lms/external/sumber-belajar/Slb.vue"),
+          },
+        ],
+      },
+      {
+        path: "/lms/external/bank-soal-rumah-belajar",
+        name: "lms-external-bank-soal-rumah-belajar",
+        component: () => import("@/views/lms/external/bank-soal-rumah-belajar/Index.vue"),
+      },
+      {
+        path: "/lms/external/learningx",
+        name: "lms-external-learningx",
+        component: () => import("@/views/lms/external/learningx/Index.vue"),
+      },
+      {
+        path: "/lms/external/quizizz",
+        name: "lms-external-quizizz",
+        component: () => import("@/views/lms/external/quizizz/Index.vue"),
+      },
 
       //Sekolah
 
