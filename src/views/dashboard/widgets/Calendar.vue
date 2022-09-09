@@ -74,16 +74,16 @@ watch(() => props.datas,
           color: '#04C8C8'
         }
       })
-      var todo = datas.todo.map((cal) => {
-        return {
-          title: cal.calendar_title,
-          start: cal.calendar_date,
-          description: cal.calendar_desc,
-          className:  [cal.calendar_type, cal.calendar_desc],
-          color: '#F1416C'
-        }
-      })
-      calendarOptions.events = [...events, ...academic, ...todo]
+      // var todo = datas.todo.map((cal) => {
+      //   return {
+      //     title: cal.calendar_title,
+      //     start: cal.calendar_date,
+      //     description: cal.calendar_desc,
+      //     className:  [cal.calendar_type, cal.calendar_desc],
+      //     color: '#F1416C'
+      //   }
+      // })
+      calendarOptions.events = [...events, ...academic]
     }
   }
 ) 
