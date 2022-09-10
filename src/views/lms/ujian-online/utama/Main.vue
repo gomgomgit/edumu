@@ -10,13 +10,14 @@ import ServerSideTable from '@/components/ServerSideTable.vue'
 import FilterSelect from '@/components/filter-select/index.vue'
 import Spinner from '@/components/Spinner.vue';
 import AssignStudentModal from './AssignStudentModal.vue'
+import ChangeTimeModal from './ChangeTimeModal.vue';
 
 const router = useRouter()
 
 const tableRef = ref()
 const summaryData = ref({})
-const formMode = ref('')
 const activeAssignData = ref({})
+const activeChangeTimeData = ref({})
 const isSaving = ref(false)
 const isLoading = ref(false)
 
@@ -117,8 +118,13 @@ async function handleRemedExam(row) {
 
 	if (confirmEditing.isConfirmed) router.push('utama/form/pengaturan/remed/' + row.exam_id)
 }
+
 function handleAssignStudent (row) {
 	activeAssignData.value = row
+}
+
+function handleChangeTime (row) {
+	activeChangeTimeData.value = row
 }
 
 async function changeExamStatus (row, status) {
@@ -354,7 +360,7 @@ onMounted(async () => {
 								</button>
 								<template #dropdown>
 									<el-dropdown-menu>
-										<el-dropdown-item>
+										<el-dropdown-item @click="handleChangeTime(row)">
 											<i class="uil uil-clock me-4 fs-3"></i>
 											Atur Ulang Waktu
 										</el-dropdown-item>
@@ -372,6 +378,7 @@ onMounted(async () => {
 		</div>
 
 		<AssignStudentModal :active-data="activeAssignData" @close-modal="activeAssignData = {}" />
+		<ChangeTimeModal :active-data="activeChangeTimeData" @close-modal="activeChangeTimeData = {}" @submit-data="getTableData" />
 	</div>
 </template>
 
