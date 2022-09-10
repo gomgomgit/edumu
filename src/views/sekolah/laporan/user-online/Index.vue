@@ -74,6 +74,48 @@ import { deleteConfirmation } from "@/core/helpers/deleteconfirmation";
   <div>
     <div class="mb-6 d-flex gap-5 justify-content-between">
       <div class="w-100">
+        <section class="summary-item bg-success bg-opacity-10 p-4 rounded-2 h-100">
+          <p class="display-5 text-success">{{userOnline.userAktif}}</p>
+          <div class="h5">Total User</div>
+          <div class="text-dark small">Aktif</div>
+          <i class="summary-icon text-success uil uil-users-alt opacity-25"></i>
+        </section>
+      </div>
+      <div class="w-100">
+        <section class="summary-item bg-primary bg-opacity-10 p-4 rounded-2 h-100">
+          <p class="display-5 text-primary">{{userOnline.siswaAktif}}</p>
+          <div class="h5">Siswa Aktif</div>
+          <div class="text-dark small">Online: {{userOnline.siswaOn}}</div>
+          <i class="summary-icon text-primary uil uil-graduation-cap opacity-25"></i>
+        </section>
+      </div>
+      <div class="w-100">
+        <section class="summary-item bg-info bg-opacity-10 p-4 rounded-2 h-100">
+          <p class="display-5 text-info">{{userOnline.guruAktif}}</p>
+          <div class="h5">Guru Aktif</div>
+          <div class="text-dark small">Online: {{userOnline.guruOn}}</div>
+          <i class="summary-icon text-info uil uil-presentation-lines-alt opacity-25"></i>
+        </section>
+      </div>
+      <div class="w-100">
+        <section class="summary-item bg-warning bg-opacity-10 p-4 rounded-2 h-100">
+          <p class="display-5 text-warning">{{userOnline.waliAktif}}</p>
+          <div class="h5">Wali Aktif</div>
+          <div class="text-dark small">Aktif</div>
+          <i class="summary-icon text-warning uil uil-house-user opacity-25"></i>
+        </section>
+      </div>
+      <div class="w-100">
+        <section class="summary-item bg-danger bg-opacity-10 p-4 rounded-2 h-100">
+          <p class="display-5 text-danger">{{listOnline.totalRows}}</p>
+          <div class="h5">Total Hasil Filter</div>
+          <div class="text-dark small"></div>
+          <i class="summary-icon text-danger uil uil-file-search-alt opacity-25"></i>
+        </section>
+      </div>
+    </div>
+    <!-- <div class="mb-6 d-flex gap-5 justify-content-between">
+      <div class="w-100">
         <div class="card h-100 w-100">
           <div class="card-body d-flex flex-column px-9 pt-6 pb-8">
             <div class="fs-3tx fw-bolder mb-3">
@@ -158,7 +200,7 @@ import { deleteConfirmation } from "@/core/helpers/deleteconfirmation";
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div class="card mb-5 mb-xxl-8">
       <div class="card-body py-6">
@@ -226,3 +268,18 @@ import { deleteConfirmation } from "@/core/helpers/deleteconfirmation";
     </div>
   </div>
 </template>
+<style scoped>
+.border-dashed {
+	border: 2px dashed #000;
+}
+.summary-item {
+	position: relative;
+}
+.summary-icon {
+	position: absolute;
+	right: 16px;
+	top: 50%;
+	transform: translateY(-50%);
+	font-size: 84px;
+}
+</style>
