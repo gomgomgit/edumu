@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue"
+import { ref, onMounted, computed } from "vue"
 import { VueGoodTable } from 'vue-good-table-next'
 
 import 'vue-good-table-next/dist/vue-good-table-next.css'
@@ -17,11 +17,17 @@ const props = defineProps({
 	paginationOptions: { type: Object, default: () => ({}) },
 	sortOptions: { type: Object, default: () => ({}) },
 	searchOptions: { type: Object, default: () => ({}) },
+	isLoading: { type: Boolean, default: false }
 })
 
-const emit = defineEmits(['loadItems'])
+const emit = defineEmits(['loadItems', 'update:isLoading'])
 
 defineExpose({ loadItems })
+
+const isLoadingComputed = computed({
+	get: () => props.isLoading,
+	set: val => emit('update:isLoading', val)
+})
 
 const serverParams = ref({
 	columnFilters: {},
@@ -72,6 +78,7 @@ function onColumnFilter(params) {
 		:search-options="{ ...optionsDefault.searchOptions,  ...props.searchOptions}"
 		:rows="props.rows"
 		:columns="props.columns"
+		:isLoading.sync="isLoadingComputed"
 		@page-change="onPageChange"
 		@sort-change="onSortChange"
 		@column-filter="onColumnFilter"

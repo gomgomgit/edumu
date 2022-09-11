@@ -27,14 +27,21 @@ const filteredStudentRemedList = ref([])
 
 const isShow = computed(() => !isEmpty(props.activeData))
 
+function evaluateUniqueStudents (data) {
+	return data.filter(function({user_id, siswa_id}) {
+		const key = `${user_id}-${siswa_id}`;
+		return !this.has(key) && this.add(key);
+	}, new Set);
+}
+
 function getStudentList () {
 	isLoading.value = true
 	request.post('ujian/siswa/remed', qs.stringify({
 		exam_id: props.activeData.exam_id,
 		participant_id: activeClass.value
 	})).then(res => {
-		studentList.value = res.data.data.userAll
-		studentRemedList.value = res.data.data.userRemed
+		studentList.value = evaluateUniqueStudents(res.data.data.userAll)
+		studentRemedList.value = evaluateUniqueStudents(res.data.data.userRemed)
 	}).finally(() => {
 		isLoading.value = false
 	})
@@ -109,6 +116,7 @@ watch(activeClass, () => !isEmpty(classList.value) && getStudentList())
 <template>
 	<Modal
 		title="Pilih Siswa Remedial"
+		confirm-text="Selesai"
 		:show="isShow"
 		@closeModal="closeModal"
 		@confirm="closeModal"

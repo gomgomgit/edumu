@@ -20,6 +20,8 @@ const activeAssignData = ref({})
 const activeChangeTimeData = ref({})
 const isSaving = ref(false)
 const isLoading = ref(false)
+const isLoadingTableData = ref(false)
+const isDeleting = ref(false)
 
 const filterData = reactive({
 	options: {
@@ -46,6 +48,7 @@ const tableData = reactive({
 
 
 function getTableData(payload) {
+	isLoadingTableData.value = true
 	request.post('ujian', null, {
 		params: {
 			page: payload?.page ?? 1,
@@ -57,6 +60,8 @@ function getTableData(payload) {
 	}).then(res => {
 		tableData.rows = res.data.data.data
 		tableData.totalRows = res.data.data.total
+	}).finally(() => {
+		isLoadingTableData.value = false
 	})
 }
 
@@ -164,6 +169,29 @@ async function changeExamStatus (row, status) {
 	} finally {
 		isSaving.value = false
 	}
+}
+
+async function handleDeleteExam (row) {
+	const confirmDelete = await Swal.fire({
+		title: 'Anda Yakin?',
+		text: 'Ujian yang telah dihapus tidak dapat dikembalikan lagi',
+		icon: 'warning',
+		showCancelButton: true,
+		cancelButtonText: 'Batal',
+		confirmButtonText: 'Hapus Ujian'
+	})
+
+	if (!confirmDelete.isConfirmed) return
+
+	isDeleting.value = row.exam_id
+	request.post('deleteujian', qs.stringify({
+		exam_id: row.exam_id,
+		user_id: row.user_id,
+	})).then(() => {
+		getTableData()
+	}).finally(() => {
+		isDeleting.value = false
+	})
 }
 
 
@@ -275,6 +303,7 @@ onMounted(async () => {
 					:columns="tableData.columns"
 					:rows="tableData.rows"
 					:sort-options="{ enabled: false }"
+					:isLoading.sync="isLoadingTableData"
 					@loadItems="getTableData">
 					<template #table-row="{ column, row }">
 						<div v-if="column.field == 'type'">
@@ -307,70 +336,76 @@ onMounted(async () => {
 								</button>
 							</div>
 						</div>
-						<div v-if="column.field == 'action'" class="d-flex justify-content-end">
-							<el-tooltip
-								v-if="parseInt(row.exam_parent)"
-								class="box-item"
-								effect="light"
-								content="Assign Siswa"
-								placement="top-end">
-								<button
-									class="btn btn-icon btn-bg-light btn-active-color-info btn-sm me-2"
-									@click="handleAssignStudent(row)">
-									<span class="svg-icon svg-icon-3">
-										<inline-svg src="media/icons/duotune/communication/com013.svg" />
-									</span>
-								</button>
-							</el-tooltip>
+						<div v-if="column.field == 'action'">
+							<div v-if="isDeleting == row.exam_id" class="d-flex justify-content-center">
+								<Spinner />
+							</div>
 
-							<el-tooltip
-								v-else
-								class="box-item"
-								effect="light"
-								content="Remedial"
-								placement="top-end">
-								<button
-									class="btn btn-icon btn-bg-light btn-active-color-warning btn-sm me-2"
-									@click="handleRemedExam(row)">
-									<span class="svg-icon svg-icon-3">
-										<inline-svg src="media/icons/duotune/arrows/arr029.svg" />
-									</span>
-								</button>
-							</el-tooltip>
+							<div v-else class="d-flex justify-content-end">
+								<el-tooltip
+									v-if="parseInt(row.exam_parent)"
+									class="box-item"
+									effect="light"
+									content="Assign Siswa"
+									placement="top-end">
+									<button
+										class="btn btn-icon btn-bg-light btn-active-color-info btn-sm me-2"
+										@click="handleAssignStudent(row)">
+										<span class="svg-icon svg-icon-3">
+											<inline-svg src="media/icons/duotune/communication/com013.svg" />
+										</span>
+									</button>
+								</el-tooltip>
 
-							<el-tooltip
-								class="box-item"
-								effect="light"
-								content="Edit Ujian"
-								placement="top-end">
-								<button
-									class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2"
-									@click="handleEditExam(row)">
-									<span class="svg-icon svg-icon-3">
-										<inline-svg src="media/icons/duotune/art/art005.svg" />
-									</span>
-								</button>
-							</el-tooltip>
+								<el-tooltip
+									v-else
+									class="box-item"
+									effect="light"
+									content="Remedial"
+									placement="top-end">
+									<button
+										class="btn btn-icon btn-bg-light btn-active-color-warning btn-sm me-2"
+										@click="handleRemedExam(row)">
+										<span class="svg-icon svg-icon-3">
+											<inline-svg src="media/icons/duotune/arrows/arr029.svg" />
+										</span>
+									</button>
+								</el-tooltip>
 
-							<el-dropdown size="large">
-								<button class="btn btn-icon btn-bg-light btn-active-color-success btn-sm">
-									<span class="svg-icon svg-icon-3">
-										<inline-svg src="media/icons/duotune/general/gen053.svg" />
-									</span>
-								</button>
-								<template #dropdown>
-									<el-dropdown-menu>
-										<el-dropdown-item @click="handleChangeTime(row)">
-											<i class="uil uil-clock me-4 fs-3"></i>
-											Atur Ulang Waktu
-										</el-dropdown-item>
-										<el-dropdown-item>
-											<i class="uil uil-trash-alt me-4 fs-3"></i>
-											Hapus
-										</el-dropdown-item>
-									</el-dropdown-menu>
-								</template>
-							</el-dropdown>
+								<el-tooltip
+									class="box-item"
+									effect="light"
+									content="Edit Ujian"
+									placement="top-end">
+									<button
+										class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2"
+										@click="handleEditExam(row)">
+										<span class="svg-icon svg-icon-3">
+											<inline-svg src="media/icons/duotune/art/art005.svg" />
+										</span>
+									</button>
+								</el-tooltip>
+
+								<el-dropdown size="large">
+									<button class="btn btn-icon btn-bg-light btn-active-color-success btn-sm">
+										<span class="svg-icon svg-icon-3">
+											<inline-svg src="media/icons/duotune/general/gen053.svg" />
+										</span>
+									</button>
+									<template #dropdown>
+										<el-dropdown-menu>
+											<el-dropdown-item @click="handleChangeTime(row)">
+												<i class="uil uil-clock me-4 fs-3"></i>
+												Atur Ulang Waktu
+											</el-dropdown-item>
+											<el-dropdown-item @click="handleDeleteExam(row)">
+												<i class="uil uil-trash-alt me-4 fs-3"></i>
+												Hapus
+											</el-dropdown-item>
+										</el-dropdown-menu>
+									</template>
+								</el-dropdown>
+							</div>
 						</div>
 					</template>
 				</ServerSideTable>
