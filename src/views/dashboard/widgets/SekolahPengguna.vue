@@ -40,7 +40,7 @@
         <div class="row m-0">
           <div class="col bg-light-warning px-6 py-8 rounded-2 me-7 mb-7 position-relative">
             <div class="position-absolute" style="top: 10px; right: 10px;">
-              <span class="badge badge-square px-3 fw-normal fs-6" style="background: #dc9504">{{count?.siswaOnline ?? 0}}</span>
+              <span class="badge badge-square px-3 fw-normal fs-6" style="background: #dc9504"><img height="15" src="media/illustrations/User-Online.png" class="me-2">{{count?.siswaOnline ?? 0}}</span>
             </div>
             <span class="display-5 fw-normal d-block my-2" style="color: #dc9504">
               {{count?.countSiswa ?? 0}}
@@ -49,7 +49,7 @@
           </div>
           <div class="col bg-light-primary px-6 py-8 rounded-2 mb-7 position-relative">
             <div class="position-absolute" style="top: 10px; right: 10px;">
-              <span class="badge badge-square px-3 fw-normal fs-6 bg-primary">{{count?.guruOnline ?? 0}}</span>
+              <span class="badge badge-square px-3 fw-normal fs-6 bg-primary"><img height="15" src="media/illustrations/User-Online.png" class="me-2">{{count?.guruOnline ?? 0}}</span>
             </div>
             <span class="display-5 text-primary fw-normal d-block my-2">
               {{count?.countGuru ?? 0}}
@@ -68,7 +68,7 @@
           </div>
           <div class="col bg-light-success px-6 py-8 rounded-2 position-relative">
             <div class="position-absolute" style="top: 10px; right: 10px;">
-              <span class="badge badge-square px-3 fw-normal fs-6 bg-success">{{count?.pegawaiOnline ?? 0}}</span>
+              <span class="badge badge-square px-3 fw-normal fs-6 bg-success"><img height="15" src="media/illustrations/User-Online.png" class="me-2">{{count?.pegawaiOnline ?? 0}}</span>
             </div>
             <span class="display-5 text-success fw-normal d-block my-2">
               {{count?.pegawaiCount ?? 0}}
