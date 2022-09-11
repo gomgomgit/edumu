@@ -136,8 +136,7 @@ onMounted(() => {
 						<div
 							v-if="isNoQuestion"
 							class="d-flex flex-column align-items-center gap-5 py-10">
-							<h2>Belum ada soal yang dibuat</h2>
-							<img src="figma-icon/no-data.png">
+							<img src="media/illustrations/no-soal.jpg" style="max-height: 400px">
 						</div>
 
 						<div class="d-flex flex-column gap-15">

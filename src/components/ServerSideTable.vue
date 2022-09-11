@@ -80,6 +80,11 @@ function onColumnFilter(params) {
 		<template #table-row="tableRowProps">
 			<slot name="table-row" v-bind="tableRowProps"></slot>
 		</template>
+		<template #emptystate>
+			<div class="text-center">
+				<img src="media/illustrations/no-data.jpg" style="max-height: 400px">
+			</div>
+		</template>
 	</vue-good-table>
 </template>
 

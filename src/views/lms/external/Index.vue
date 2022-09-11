@@ -19,7 +19,7 @@ onMounted(() => {
           <p class="text-muted mt-1 fw-bold fs-7">bse.belajar.kemdikbud.go.id</p>
         </div>
         <div class="px-4">
-          <div class="w-100 rounded-3" style="height: 200px; background-size: cover; background-image: url('https://bse.belajar.kemdikbud.go.id/images/banner2.jpg')">
+          <div class="w-100 rounded-3" style="height: 190px; background-size: cover; background-image: url('/media/sumber-belajar/BukuSekolahElektronik.jpg')">
 
           </div>
         </div>
@@ -44,7 +44,7 @@ onMounted(() => {
           <p class="text-muted mt-1 fw-bold fs-7">sumber.belajar.kemdikbud.go.id</p>
         </div>
         <div class="px-4">
-          <div class="w-100 rounded-3" style="height: 200px; background-size: cover; background-image: url('https://bse.belajar.kemdikbud.go.id/images/banner2.jpg')">
+          <div class="w-100 rounded-3" style="height: 190px; background-size: cover; background-image: url('/media/sumber-belajar/SumberBelajar.jpg')">
 
           </div>
         </div>
@@ -69,7 +69,7 @@ onMounted(() => {
           <p class="text-muted mt-1 fw-bold fs-7">banksoal.belajar.kemdikbud.go.id</p>
         </div>
         <div class="px-4">
-          <div class="w-100 rounded-3" style="height: 200px; background-size: cover; background-image: url('https://bse.belajar.kemdikbud.go.id/images/banner2.jpg')">
+          <div class="w-100 rounded-3" style="height: 190px; background-size: cover; background-image: url('/media/sumber-belajar/BankSoal.jpg')">
 
           </div>
         </div>
@@ -94,7 +94,7 @@ onMounted(() => {
           <p class="text-muted mt-1 fw-bold fs-7">learnenglish.britishcouncil.org</p>
         </div>
         <div class="px-4">
-          <div class="w-100 rounded-3" style="height: 200px; background-size: cover; background-image: url('https://bse.belajar.kemdikbud.go.id/images/banner2.jpg')">
+          <div class="w-100 rounded-3" style="height: 190px; background-size: cover; background-image: url('/media/sumber-belajar/BritishCouncilLearnEnglish.jpg')">
 
           </div>
         </div>
@@ -119,7 +119,7 @@ onMounted(() => {
           <p class="text-muted mt-1 fw-bold fs-7">learningx.com</p>
         </div>
         <div class="px-4">
-          <div class="w-100 rounded-3" style="height: 200px; background-size: cover; background-image: url('https://bse.belajar.kemdikbud.go.id/images/banner2.jpg')">
+          <div class="w-100 rounded-3" style="height: 190px; background-size: cover; background-image: url('/media/sumber-belajar/LearningX.jpg')">
 
           </div>
         </div>
@@ -144,7 +144,7 @@ onMounted(() => {
           <p class="text-muted mt-1 fw-bold fs-7">quizizz.com</p>
         </div>
         <div class="px-4">
-          <div class="w-100 rounded-3" style="height: 200px; background-size: cover; background-image: url('https://bse.belajar.kemdikbud.go.id/images/banner2.jpg')">
+          <div class="w-100 rounded-3" style="height: 190px; background-size: cover; background-image: url('/media/sumber-belajar/Quizizz.jpg')">
 
           </div>
         </div>
