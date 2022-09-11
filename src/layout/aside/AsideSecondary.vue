@@ -620,9 +620,14 @@ const emit = defineEmits(['togglePin', 'openAside', 'closeAside'])
 
                   <div class="mb-10">
                     <router-link to="/dashboard" class="custom-list d-flex align-items-center px-5 py-4">
-                      <div class="symbol symbol-40px me-5">
-                        <span class="symbol-label">
-                          <img src="media/svg/brand-logos/bebo.svg" class="h-50 align-self-center" alt="" />
+                      <div class="symbol symbol-50px me-5">
+                        <span :class="`bg-light-success`" class="symbol-label">
+                          <span
+                            :class="`svg-icon-success`"
+                            class="svg-icon svg-icon-2x"
+                          >
+                            <inline-svg src="media/icons/duotune/technology/teh004.svg" />
+                          </span>
                         </span>
                       </div>
 
@@ -636,9 +641,14 @@ const emit = defineEmits(['togglePin', 'openAside', 'closeAside'])
                     </router-link>
 
                     <router-link to="/dashboard" class="custom-list d-flex align-items-center px-5 py-4">
-                      <div class="symbol symbol-40px me-5">
-                        <span class="symbol-label">
-                          <img src="media/svg/brand-logos/vimeo.svg" class="h-50 align-self-center" alt="" />
+                      <div class="symbol symbol-50px me-5">
+                        <span :class="`bg-light-danger`" class="symbol-label">
+                          <span
+                            :class="`svg-icon-danger`"
+                            class="svg-icon svg-icon-2x"
+                          >
+                            <inline-svg src="media/icons/duotune/electronics/elc004.svg" />
+                          </span>
                         </span>
                       </div>
 
@@ -652,9 +662,14 @@ const emit = defineEmits(['togglePin', 'openAside', 'closeAside'])
                     </router-link>
 
                     <router-link to="/dashboard" class="custom-list d-flex align-items-center px-5 py-4">
-                      <div class="symbol symbol-40px me-5">
-                        <span class="symbol-label">
-                          <img src="media/svg/brand-logos/kickstarter.svg" class="h-50 align-self-center" alt="" />
+                      <div class="symbol symbol-50px me-5">
+                        <span :class="`bg-light-primary`" class="symbol-label">
+                          <span
+                            :class="`svg-icon-primary`"
+                            class="svg-icon svg-icon-2x"
+                          >
+                            <inline-svg src="media/icons/duotune/technology/teh009.svg" />
+                          </span>
                         </span>
                       </div>
 

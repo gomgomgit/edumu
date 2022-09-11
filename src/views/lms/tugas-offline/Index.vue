@@ -169,7 +169,7 @@ import moment from "moment";
             </div>
             
             <div class="d-flex w-100 w-lg-50 w-xl-25 gap-4">
-                <el-input
+                <!-- <el-input
                   v-model="searchTugas"
                   clearable
                   class="m-2"
@@ -179,7 +179,7 @@ import moment from "moment";
                   <template #append>
                     <el-button aria-disabled="true" class="pe-none" :icon="Search" />
                   </template>
-                </el-input>
+                </el-input> -->
             </div>
           </div>
           <div class="mb-5 mb-xxl-8">

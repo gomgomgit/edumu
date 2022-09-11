@@ -57,7 +57,7 @@ function getJenisIuran () {
         key: tipe.tipe_id,
         groupId: form.group_id,
         value: tipe.tipe_nama,
-        nominal: "",
+        nominal: tipe.nominal,
         due: moment().format('YYYY-MM-DD')
       })
     });

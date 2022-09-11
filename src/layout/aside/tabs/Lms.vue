@@ -92,6 +92,13 @@ export default defineComponent({
         description: "Rekap nilai tugas dan ujian",
         route: "/lms/laporan-nilai"
       },
+      {
+        icon: "media/icons/duotune/general/gen017.svg",
+        color: "warning",
+        title: "Sumber Belajar",
+        description: "Kumpulan sumber pembelajaran external dan nasional",
+        route: "/lms/external"
+      },
     ];
 
     return {
