@@ -133,11 +133,11 @@ function handleChangeTime (row) {
 }
 
 async function changeExamStatus (row, status) {
-	const invalidExamDate = Date.now() > new Date(row.exam_start_date).getTime()
-	if (invalidExamDate) return Swal.fire(
-		'Tanggal ujian telah lewat!',
-		'Status ujian yang telah berlalu tidak boleh diubah',
-		'warning')
+	// const invalidExamDate = Date.now() > new Date(row.exam_start_date).getTime()
+	// if (invalidExamDate) return Swal.fire(
+	// 	'Tanggal ujian telah lewat!',
+	// 	'Status ujian yang telah berlalu tidak boleh diubah',
+	// 	'warning')
 
 	const confirmTitle = status ? 'Tetap Aktifkan?' : 'Tetap Nonaktifkan?'
 	const confirmButton = status ? 'Aktifkan' : 'Nonaktifkan'
