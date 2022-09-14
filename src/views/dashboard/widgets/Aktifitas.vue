@@ -14,7 +14,7 @@
     <!--begin::Body-->
     <div class="card-body pt-5">
       <!--begin::Timeline-->
-      <div style="height: 220px; overflow: scroll">
+      <div style="max-height: 350px; overflow: scroll">
         <div class="timeline-label">
           <!--begin::Item-->
           <template v-for="data in aktifitas" :key="data.jadwal_id" >
