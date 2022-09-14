@@ -21,7 +21,7 @@ const activeChangeTimeData = ref({})
 const isSaving = ref(false)
 const isLoading = ref(false)
 const isLoadingTableData = ref(false)
-const isDeleting = ref(false)
+const isAction = ref(false)
 
 const filterData = reactive({
 	options: {
@@ -183,14 +183,26 @@ async function handleDeleteExam (row) {
 
 	if (!confirmDelete.isConfirmed) return
 
-	isDeleting.value = row.exam_id
+	isAction.value = row.exam_id
 	request.post('deleteujian', qs.stringify({
 		exam_id: row.exam_id,
 		user_id: row.user_id,
 	})).then(() => {
 		getTableData()
 	}).finally(() => {
-		isDeleting.value = false
+		isAction.value = false
+	})
+}
+
+async function handleExportExam (row) {
+	isAction.value = row.exam_id
+	request.post('ujian/soal/export-word/' + row.exam_id, qs.stringify({
+		exam_id: row.exam_id,
+		user_id: row.user_id
+	})).then(res => {
+		window.open(res.data.data.url)
+	}).finally(() => {
+		isAction.value = false
 	})
 }
 
@@ -337,7 +349,7 @@ onMounted(async () => {
 							</div>
 						</div>
 						<div v-if="column.field == 'action'">
-							<div v-if="isDeleting == row.exam_id" class="d-flex justify-content-center">
+							<div v-if="isAction == row.exam_id" class="d-flex justify-content-center">
 								<Spinner />
 							</div>
 
@@ -394,6 +406,10 @@ onMounted(async () => {
 									</button>
 									<template #dropdown>
 										<el-dropdown-menu>
+											<el-dropdown-item @click="handleExportExam(row)">
+												<i class="uil uil-file-export me-4 fs-3"></i>
+												Export Ujian
+											</el-dropdown-item>
 											<el-dropdown-item @click="handleChangeTime(row)">
 												<i class="uil uil-clock me-4 fs-3"></i>
 												Atur Ulang Waktu
