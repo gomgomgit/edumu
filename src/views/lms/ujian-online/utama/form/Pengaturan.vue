@@ -145,6 +145,7 @@ onMounted(() => {
 							v-model="examData.exam_cat_id"
 							@change="isChanged = true"
 							class="w-100"
+							filterable
 							placeholder="Pilih kategori">
 							<el-option
 								v-for="category in optionData.categoryList"
@@ -160,6 +161,7 @@ onMounted(() => {
 							v-model="examData.user_id"
 							@change="isChanged = true"
 							class="w-100"
+							filterable
 							placeholder="Pilih Guru">
 							<el-option
 								v-for="guru in optionData.guruList"
@@ -248,6 +250,7 @@ onMounted(() => {
 							v-model="examData.kelas"
 							@change="isChanged = true"
 							multiple
+							filterable
 							placeholder="Penetapan kelas peserta ujian online"
 							class="w-100">
 							<el-option
