@@ -53,8 +53,8 @@ function openSubMenu(menu) {
             <a
               class="nav-link btn btn-icon btn-active-color-primary btn-color-gray-400 btn-active-light active"
               data-bs-toggle="tab"
-              href="#kt_aside_nav_tab_projects"
-              @mouseenter="openSubMenu('kt_aside_nav_tab_projects')"
+              href="#kt_aside_nav_tab_edumu"
+              @mouseenter="openSubMenu('kt_aside_nav_tab_edumu')"
             >
               <span class="svg-icon svg-icon-2x">
                 <inline-svg src="media/icons/duotune/general/gen025.svg" />
