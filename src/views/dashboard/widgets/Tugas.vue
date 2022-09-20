@@ -90,7 +90,7 @@
                   <div class="d-flex flex-column w-100 me-2">
                     <div class="d-flex flex-stack mb-2">
                       <span class="text-muted me-2 fs-7 fw-bold">
-                        {{getProgress(item.siswaCount, item.siswaAnswerCount)}}%
+                        {{getProgress(item.siswaCount, item.siswaAnswerCount)}}% | <span class="fw-bolder">{{item.siswaAnswerCount}} dari {{item.siswaCount}} siswa</span>
                       </span>
                     </div>
 
