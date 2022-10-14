@@ -30,7 +30,7 @@ function handleScoreChange () {
 }
 
 // watch(
-// 	props.question.score,
+// 	props.question,
 // 	console.log
 // )
 </script>
@@ -41,19 +41,19 @@ function handleScoreChange () {
 		:class="isError ? 'bg-danger bg-opacity-10' : 'bg-light'">
 		<div class="row">
 			<div class="col-9 question-text-wrapper">
-				<div
-					v-if="!isShowEditor"
-					class="question-editor form-control test"
-					v-html="question.question_text"
-					@click="isShowEditor = true">
-				</div>
-				<InlineEditor
-					v-else
-					class="question-editor"
-					v-model="question.question_text"
-					@input="isChanged = true">
-					<!-- @blur="$event.type === 'blur' && cacheQuestionsData()" -->
-				</InlineEditor>
+        <div
+            v-if="!isShowEditor"
+            class="question-editor form-control test"
+            v-html="question.question_text"
+            @click="isShowEditor = true">
+        </div>
+        <InlineEditor
+            v-else
+            class="question-editor"
+            v-model="question.question_text"
+            @input="isChanged = true">
+          <!-- @blur="$event.type === 'blur' && cacheQuestionsData()" -->
+        </InlineEditor>
 
 				<el-tag
 					v-if="question.attachment_id"

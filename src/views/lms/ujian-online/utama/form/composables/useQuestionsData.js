@@ -53,7 +53,7 @@ function formatQuestionsData (data) {
 			keterangan: type.questions?.length ? type.questions[0].keterangan : null,
 			questions: type.questions.map(question => ({
 				...question,
-				question_text: sanitizeHtml(question.question_text),
+				question_text: question.question_text,
 				options: !question.options ? [] : question.options.map(option => ({
 					...option,
 					option_text: sanitizeHtml(option.option_text),

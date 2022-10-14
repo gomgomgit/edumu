@@ -203,7 +203,7 @@ onUnmounted(() => {
 
 					<div class="d-flex flex-column gap-8">
 						<template v-for="(question, questionIndex) in questionsWrapper.questions" :key="question.question_id">
-							<component
+              <component
 								v-if="questionComponentMap.hasOwnProperty(questionsWrapper.question_type)"
 								:is="questionComponentMap[questionsWrapper.question_type]"
 								:order-number="resolveOrderNumber(wrapperIndex, questionIndex)"
